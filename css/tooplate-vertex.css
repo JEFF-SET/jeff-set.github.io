@@ -274,7 +274,7 @@ span, footer {  line-height: 1.8; }
 }
 
 .tm-brand-icon { margin-bottom: 25px; }
-.tm-brand-text { font-size: 32px; }
+.tm-brand-text { font-size: 16px; }
 
 /* Nav */
 .navbar-toggler { display: none; }
