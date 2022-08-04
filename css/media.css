@@ -384,7 +384,7 @@ http://www.templatemo.com/tm-473-november
 	.Get_sec .Leftside p { margin: 0 0 20px; } 
 	.Get_sec .Leftside input.field { padding: 10px 20px; }
 	.Get_sec .Leftside textarea { padding: 10px 20px; height: 125px; }
-	.Get_sec .Leftside .button { margin: 0px; padding: 12px 0px; -webkit-appearance: none; }
+	.Get_sec .Leftside .button { margin: 0px; padding: 12px 0px; -webkit-appearance: none; background: #5C6D6A;}
 
 	.Get_sec .Rightside { padding-top: 0px; width: 100%; }
 	.Get_sec .Rightside h3 { font-size: 30px; padding-bottom: 10px; }
