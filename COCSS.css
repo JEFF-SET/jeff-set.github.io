@@ -1,0 +1,194 @@
+html {
+  scroll-behavior: smooth;
+}
+
+:target {
+  scroll-margin-top: 100px;
+}
+
+h1[id] {
+  scroll-margin-top: 100px;
+}
+
+h1[id]::before {
+  content: "";
+  display: block;
+  height: 40px;
+  margin-top: -40px;
+  visibility: hidden;
+}
+
+.flex.items-center>h1 {
+  margin: 0 !important;
+  line-height: 3rem;
+}
+
+section {
+  margin-bottom: 80px;
+}
+
+.toc-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  text-decoration: none;
+}
+
+.toc-item:hover {
+  background-color: #f9fafb;
+}
+
+.toc-icon {
+  width: 2rem;
+  height: 2rem;
+  background-color: #00C2A6;
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.toc-body {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #08131E;
+  transition: color 0.2s;
+}
+
+.toc-line {
+  flex: 1;
+  border-bottom: 1px dotted #D1D5DB;
+  margin: 0 1rem;
+}
+
+.toc-item.interactive .toc-body {
+  color: #00C2A6 !important;
+}
+
+.badge {
+  font-size: 0.625rem;
+  background-color: #03D6B6;
+  color: white;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+h1 {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #08131E;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #00C2A6;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #08131E;
+  margin-bottom: 0.5rem;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background-color: #ffffff;
+  color: #08131E;
+  line-height: 1.6;
+}
+
+p {
+  font-size: 11pt;
+  color: #08131E;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+table {
+  width: 100%;
+  font-size: 10pt;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #00C2A6;
+  color: white;
+}
+
+th,
+td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.divider {
+  height: 4px;
+  background: linear-gradient(to right, #00C2A6, #03D6B6);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.playbook-summary {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  /* Provides gap between the evaluator block and the following table */
+  padding: 1rem;
+  /* Reduced padding for a more compact background */
+  background-color: #E6FFFA;
+  border-left: 4px solid #00C2A6;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.eligibility-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 120mm;
+  height: 60mm;
+  padding: 1.5rem;
+  background-color: #F9FAFB;
+  border: 2px dashed #D1D5DB;
+  border-radius: 0.5rem;
+  margin-bottom: 20px;
+}
+
+.eligibility-placeholder p {
+  margin-bottom: 0.25rem;
+  font-size: 9px;
+}
+
+
+.step-badge {
+  width: 3rem;
+  height: 3rem;
+  background-color: #00C2A6;
+  color: white;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
