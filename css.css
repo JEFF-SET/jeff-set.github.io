@@ -84,13 +84,14 @@
     margin-top: 2rem;
     margin-bottom: 1rem;
     line-height: 1.1;
+    text-transform: uppercase;
   }
-  h1 { font-size: 2.7rem; }
-  h2 { font-size: 2.1rem; }
-  h3 { font-size: 1.5rem; }
-  h4 { font-size: 1.2rem; }
-  h5 { font-size: 1rem; }
-  h6 { font-size: 0.9rem; }
+  h1 { font-size: 5.4rem; }  /* x2 */
+  h2 { font-size: 4.2rem; }
+  h3 { font-size: 3.0rem; }
+  h4 { font-size: 2.4rem; }
+  h5 { font-size: 2.0rem; }
+  h6 { font-size: 1.8rem; }
   
   p, ul, ol {
     font-size: 1rem;
@@ -115,9 +116,12 @@
     .header-logo {
       font-size: 1.6rem;
     }
-    h1 { font-size: 1.6rem; }
-    h2 { font-size: 1.35rem; }
-    h3 { font-size: 1.1rem; }
+    h1 { font-size: 3.2rem; }
+    h2 { font-size: 2.7rem; }
+    h3 { font-size: 2.2rem; }
+    h4 { font-size: 1.7rem; }
+    h5 { font-size: 1.4rem; }
+    h6 { font-size: 1.2rem; }
   }
   
   ::selection {
