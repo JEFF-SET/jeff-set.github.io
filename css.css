@@ -6,7 +6,91 @@
     font-style: normal;
   }
   
-  /* Пример применения шрифта ко всему документу */
-  body, h1, h2, h3, h4, p, button {
-    font-family: 'Rubik Doodle Shadow', Arial, sans-serif;
+  :root {
+    --background-light: #fcf9f6;
+    --background-dark: #080808;
+    --text-light: #080808;
+    --text-dark: #fcf9f6;
+    --accent: #18dfa6;
+    --header-font: 'Rubik Doodle Shadow', Arial, sans-serif;
+    --body-font: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  body {
+    background: var(--background-light);
+    color: var(--text-light);
+    font-family: var(--body-font);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    transition: background 0.4s, color 0.4s;
+  }
+  
+  .header-logo {
+    font-family: var(--header-font);
+    font-size: 2.5rem;
+    color: var(--accent);
+    letter-spacing: 0.125rem;
+    margin: 2rem 0 2rem 0;
+    text-align: center;
+    user-select: none;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--header-font);
+    color: var(--accent);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+  h1 { font-size: 2.7rem; }
+  h2 { font-size: 2.1rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.2rem; }
+  h5 { font-size: 1rem; }
+  h6 { font-size: 0.9rem; }
+  
+  p, ul, ol {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  
+  main, section {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background: transparent;
+  }
+  
+  @media (max-width: 700px) {
+    :root {
+      font-size: 13px;
+    }
+    main, section {
+      padding: 0.7rem;
+    }
+    .header-logo {
+      font-size: 1.6rem;
+    }
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.35rem; }
+    h3 { font-size: 1.1rem; }
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: var(--background-dark);
+      color: var(--text-dark);
+    }
+    h1, h2, h3, h4, h5, h6,
+    .header-logo {
+      color: var(--accent);
+    }
+  }
+  
+  ::selection {
+    background: var(--accent);
+    color: #fff;
   }
