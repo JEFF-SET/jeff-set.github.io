@@ -1,4 +1,3 @@
-// Theme toggle logic (dark by default, two colors only)
 const toggle = document.getElementById('toggle-dark');
 const THEME_KEY = 'theme';
 
@@ -11,7 +10,6 @@ if (toggle) {
   toggle.addEventListener('change', () => setTheme(toggle.checked));
 }
 
-// On load: dark mode by default (even для первого захода)
 (function () {
   const saved = localStorage.getItem(THEME_KEY);
   if (saved === 'light') {
