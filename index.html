@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>JEFF-SET: Typography & Modes Demo</title>
+  <title>JEFF-SET: Theme Switch Demo</title>
   <link rel="stylesheet" href="css.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+  <form class="theme-toggle" autocomplete="off">
+    <input type="checkbox" id="toggle-dark" aria-label="Toggle dark mode">
+    <label for="toggle-dark" class="theme-toggle-label"></label>
+  </form>
   <div class="header-logo">JEFF-SET</div>
   <main>
     <h1>Heading 1 (h1)</h1>
@@ -17,7 +21,8 @@
     <h6>Heading 6 (h6)</h6>
     <p>
       This is a sample paragraph to demonstrate your chosen font and color palette.<br>
-      Light and dark mode are automatic based on your system settings.
+      Use the toggle above to switch between Light and Dark mode.<br>
+      Only two colors: #080808 (black) and #fcf9f6 (almost white).
     </p>
     <ul>
       <li>Unordered list item 1</li>
@@ -28,5 +33,6 @@
       <li>Ordered list item 2</li>
     </ol>
   </main>
+  <script src="js.js"></script>
 </body>
 </html>
