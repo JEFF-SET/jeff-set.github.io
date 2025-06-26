@@ -7,7 +7,7 @@
   }
   
   :root {
-    --background: #fcf9f6;
+    --background: #663399;
     --text: #080808;
     --header-font: 'Rubik Doodle Shadow', Arial, sans-serif;
     --body-font: Arial, sans-serif;
@@ -103,32 +103,4 @@
   footer {
     font-family: var(--body-font);
     color: var(--text);
-    text-align: center;
-    padding: 2rem 1rem 1.5rem 1rem;
-    font-size: 1rem;
-    background: transparent;
-    flex-shrink: 0;
-    opacity: 0.7;
-  }
-  
-  @media (max-width: 700px) {
-    :root {
-      font-size: 13px;
-    }
-    main {
-      padding: 0.7rem;
-    }
-    .header-logo {
-      font-size: 2.6rem;
-    }
-    h1 { font-size: 2.6rem; }
-    h2 { font-size: 2rem; }
-    h3 { font-size: 1.5rem; }
-    h4 { font-size: 1.2rem; }
-    h5 { font-size: 1rem; }
-    h6 { font-size: 0.9rem; }
-    footer {
-      font-size: 0.95rem;
-      padding: 1rem 0.5rem;
-    }
   }
