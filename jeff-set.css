@@ -32,6 +32,52 @@ body {
   flex-direction: column;
 }
 
+.theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.theme-toggle input[type="checkbox"] {
+  display: none;
+}
+.theme-toggle-label {
+  display: inline-block;
+  width: 3.2rem;
+  height: 1.6rem;
+  background: var(--main);
+  border-radius: 1.1rem;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s;
+  box-shadow: 0 0 4px rgba(0,0,0,0.07);
+}
+.theme-toggle-label::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0.18rem;
+  top: 0.18rem;
+  width: 1.24rem;
+  height: 1.24rem;
+  background: var(--alt);
+  border-radius: 50%;
+  transition: transform 0.3s, background 0.3s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.theme-toggle input[type="checkbox"]:checked + .theme-toggle-label {
+  background: var(--alt);
+}
+.theme-toggle input[type="checkbox"]:checked + .theme-toggle-label::after {
+  background: var(--main);
+  transform: translateX(1.6rem);
+}
+
 .header-logo {
   font-family: var(--header-font);
   font-size: clamp(2.5rem, 10vw, 5rem);
@@ -54,6 +100,7 @@ h1, h2, h3 {
 h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
 h2 { font-size: clamp(1.7rem, 6vw, 2.7rem); }
 h3 { font-size: clamp(1.3rem, 4vw, 1.8rem); }
+h4, h5, h6 { font-size: 1rem; font-family: var(--body-font); color: var(--text); font-weight: 700; margin: 1rem 0 0.5rem 0; text-transform: none; line-height: 1.2; }
 
 main {
   width: 100%;
