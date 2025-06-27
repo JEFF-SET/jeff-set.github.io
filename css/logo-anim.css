@@ -22,7 +22,7 @@
     z-index: 2;
   }
   .logo-j {
-    fill: var(--text);
+    fill: var(--accent);
     user-select: none;
   }
   .logo-full {
@@ -37,11 +37,11 @@
     z-index: 1;
   }
   .logo-word {
-    fill: var(--text);
+    fill: var(--accent);
     user-select: none;
   }
   .logo-border {
-    stroke: var(--text);
+    stroke: var(--accent);
     stroke-width: 5;
     fill: var(--background);
   }
