@@ -214,20 +214,44 @@ input[type="submit"]:hover {
   border: 2px solid var(--btn-bg);
 }
 
-.main-link {
-  display: inline;
+.main-link,
+a {
+  display: inline-block;
   font-weight: bold;
-  color: var(--text);
-  background: none;
-  border: 2px solid var(--text);
+  color: #080808 !important;    /* всегда тёмный текст */
+  background: var(--accent);    /* акцентный фон */
+  border: none;                 /* без рамки */
   border-radius: 4px;
-  padding: 2px 6px;
+  padding: 2px 10px;
   text-decoration: none;
   vertical-align: baseline;
   line-height: var(--lineheight);
   word-break: break-word;
   overflow-wrap: anywhere;
-  transition: none;
+  transition: background .2s, color .2s;
+  font-family: var(--main-font);
+}
+
+/* Hover: светлее фон */
+.main-link:hover,
+a:hover {
+  background: #7a47c2;
+  color: #080808 !important;
+}
+
+/* Мобильная адаптация — не обрезается, центрируется */
+@media (max-width:600px) {
+  .main-link,
+  a {
+    display: block;
+    margin: 0.5em auto;
+    width: fit-content;
+    max-width: 98vw;
+    white-space: normal;
+    text-align: center;
+    padding: 6px 16px;
+    font-size: 1.09em;
+  }
 }
 
 html {
