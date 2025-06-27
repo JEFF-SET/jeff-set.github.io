@@ -46,44 +46,48 @@
     fill: var(--background);
   }
   
-  /* --- Hover-анимация --- */
-  .logo-animated-wrap:hover {
-    width: 540px;
-    height: 140px;
-    transition: width 0.6s, height 0.6s;
-  }
-  .logo-animated-wrap:hover .logo-single {
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
-  }
-  .logo-animated-wrap:hover .logo-full {
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity 0.4s 0.2s;
+  /* --- Анимация только на десктопе --- */
+  @media (min-width: 701px) {
+    .logo-animated-wrap:hover {
+      width: 540px;
+      height: 140px;
+      transition: width 0.6s, height 0.6s;
+    }
+    .logo-animated-wrap:hover .logo-single {
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .logo-animated-wrap:hover .logo-full {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.4s 0.2s;
+    }
   }
   
-  /* Адаптив: максимальный размер на мобильных - не больше 90vw */
+  /* --- Мобильная версия: маленький квадрат, без анимации и без раскрытия --- */
   @media (max-width: 700px) {
     .logo-animated-wrap {
-      width: 90vw !important;
-      height: 90vw !important;
-      min-width: 90px;
-      min-height: 90px;
-      max-width: 98vw;
-      max-height: 98vw;
+      width: 70px !important;
+      height: 70px !important;
+      min-width: 70px;
+      min-height: 70px;
+      max-width: 90vw;
+      max-height: 90vw;
+      cursor: default;
     }
-    .logo-single svg,
-    .logo-full svg {
-      width: 100% !important;
-      height: 100% !important;
-      max-width: 100vw;
-      max-height: 100vw;
+    .logo-single {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      position: relative;
+      width: 70px;
+      height: 70px;
     }
-    .logo-animated-wrap:hover {
-      width: 98vw !important;
-      height: 25vw !important;
-      min-height: 60px;
-      max-height: 40vw;
+    .logo-single .logo-svg {
+      width: 70px !important;
+      height: 70px !important;
+    }
+    .logo-full {
+      display: none !important;
     }
   }
