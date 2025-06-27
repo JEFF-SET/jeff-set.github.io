@@ -10,7 +10,6 @@
     cursor: pointer;
     position: relative;
   }
-  
   .logo-single {
     display: block;
     position: absolute;
@@ -42,9 +41,8 @@
     stroke: var(--text);
     stroke-width: 5;
     fill: var(--background);
+    /* no rx for path! */
   }
-  
-  /* --- Hover-анимация --- */
   .logo-animated-wrap:hover {
     width: 540px;
     height: 140px;
@@ -60,8 +58,6 @@
     pointer-events: auto;
     transition: opacity 0.4s 0.2s;
   }
-  
-  /* Центрируем обёртку на мобильных */
   @media (max-width: 700px) {
     .logo-animated-wrap {
       width: 98vw !important;

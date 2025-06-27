@@ -18,10 +18,18 @@
   </div>
   
   <div class="logo-animated-wrap">
-    <!-- Квадрат с J -->
+    <!-- Квадрат с J и скругленным нижним правым углом -->
     <div class="logo-single">
       <svg width="140" height="140" viewBox="0 0 140 140">
-        <rect x="5" y="5" width="130" height="130" rx="0" class="logo-border"/>
+        <path class="logo-border"
+          d="
+            M5,5 
+            H135 
+            V115 
+            Q135,135 115,135 
+            H5 
+            Z
+          " />
         <text x="70" y="105" text-anchor="middle"
           font-size="90" font-family="'Rubik', Arial, sans-serif" font-weight="700" class="logo-j">J</text>
       </svg>
@@ -37,7 +45,7 @@
   </div>
 
   <main>
-    <h1>User Friendly Design/Development</h1>
+    <h1>User Friendly Design/ Development</h1>
     <h2>Heading 2</h2>
     <h3>Heading 3</h3>
     <h4>Heading 4</h4>
