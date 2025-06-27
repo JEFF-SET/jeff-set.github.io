@@ -1,28 +1,37 @@
 .logo-animated-wrap {
-    position: relative;
-    margin: 42px auto 0 auto;
-    width: 112px;
+    width: 540px;
+    max-width: 98vw;
+    margin: 48px auto 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
     transition: width 0.7s cubic-bezier(.7,0,.3,1);
     cursor: pointer;
-    text-align: left;
   }
-  .logo-animated-wrap .logo-svg {
+  
+  .logo-svg {
     width: 100%;
     height: auto;
     display: block;
-  }
-  .logo-border {
-    stroke: #d0c4b3;
-    stroke-width: 6;
-    fill: none;
-    transition: width 0.7s cubic-bezier(.7,0,.3,1);
+    margin: 0 auto;
   }
   
-  /* Только J видна сразу */
+  .logo-border {
+    stroke: var(--text);
+    stroke-width: 6;
+    fill: var(--background);
+    transition: rx 0.7s cubic-bezier(.7,0,.3,1);
+  }
+  
+  /* J всегда видна, по центру квадрата */
   .logo-letter {
     opacity: 0;
-    transition: opacity 0.34s cubic-bezier(.4,2,.2,1), filter 0.33s;
-    filter: drop-shadow(0 1px 0 #2b2824);
+    fill: var(--text);
+    transition: opacity 0.33s cubic-bezier(.4,2,.2,1);
+    font-family: 'Rubik', Arial, sans-serif;
+    font-weight: 700;
   }
   .letter-j {
     opacity: 1 !important;
@@ -37,12 +46,12 @@
   /* Tagline (подпись) */
   .logo-tagline {
     width: 100%;
-    text-align: left;
-    font-family: 'Lato', Arial, sans-serif;
-    font-weight: 400;
+    text-align: center;
+    font-family: 'Rubik', Arial, sans-serif;
+    font-weight: 700;
     font-size: 1.1em;
     letter-spacing: 0.06em;
-    color: rgba(208,196,179,0.17);
+    color: var(--text);
     opacity: 0;
     margin-top: 0.5rem;
     transition: opacity 0.7s;
@@ -51,9 +60,8 @@
   .logo-tagline .filler { opacity: 0; transition: opacity 0.7s; }
   
   /* --- Hover-анимация --- */
-  .logo-animated-wrap:hover {
-    width: 520px;
-    transition: width 0.8s cubic-bezier(.7,0,.3,1);
+  .logo-animated-wrap:hover .logo-border {
+    rx: 18;
   }
   .logo-animated-wrap:hover .logo-tagline {
     opacity: 1;
@@ -64,14 +72,14 @@
   
   /* Плавное появление букв поочередно */
   .logo-animated-wrap:hover .letter-e   { opacity: 1; transition-delay: 0.13s; }
-  .logo-animated-wrap:hover .letter-f   { opacity: 1; transition-delay: 0.25s; }
-  .logo-animated-wrap:hover .letter-f2  { opacity: 1; transition-delay: 0.37s; }
-  .logo-animated-wrap:hover .letter-dash{ opacity: 1; transition-delay: 0.49s; }
-  .logo-animated-wrap:hover .letter-s   { opacity: 1; transition-delay: 0.61s; }
-  .logo-animated-wrap:hover .letter-e2  { opacity: 1; transition-delay: 0.73s; }
-  .logo-animated-wrap:hover .letter-t   { opacity: 1; transition-delay: 0.85s; }
+  .logo-animated-wrap:hover .letter-f   { opacity: 1; transition-delay: 0.26s; }
+  .logo-animated-wrap:hover .letter-f2  { opacity: 1; transition-delay: 0.39s; }
+  .logo-animated-wrap:hover .letter-dash{ opacity: 1; transition-delay: 0.52s; }
+  .logo-animated-wrap:hover .letter-s   { opacity: 1; transition-delay: 0.65s; }
+  .logo-animated-wrap:hover .letter-e2  { opacity: 1; transition-delay: 0.78s; }
+  .logo-animated-wrap:hover .letter-t   { opacity: 1; transition-delay: 0.91s; }
   
+  /* Адаптив */
   @media (max-width:700px) {
-    .logo-animated-wrap { width: 98vw !important; }
-    .logo-animated-wrap:hover { width: 98vw !important; }
+    .logo-animated-wrap, .logo-svg { width: 98vw !important; }
   }
