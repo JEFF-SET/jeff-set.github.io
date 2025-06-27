@@ -7,11 +7,11 @@ function setTheme(isDark) {
 if (toggle) toggle.addEventListener('change', () => setTheme(toggle.checked));
 (function () {
   const saved = localStorage.getItem(THEME_KEY);
-  if (saved === 'light') {
-    if (toggle) toggle.checked = false;
-    setTheme(false);
-  } else {
+  if (saved === 'dark') {
     if (toggle) toggle.checked = true;
     setTheme(true);
+  } else {
+    if (toggle) toggle.checked = false;
+    setTheme(false);
   }
 })();
