@@ -7,14 +7,6 @@
 }
 
 @font-face {
-  font-family: 'Rubik';
-  src: url('../font/Rubik-Bold.woff2') format('woff2'),
-       url('../font/Rubik-Bold.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
 	font-family: 'Comfortaa';
 	src: url('../font/Comfortaa-Bold.woff2') format('woff2'), url('../font/Comfortaa-Bold.woff') format('woff');
 	font-weight: 700;
@@ -30,7 +22,7 @@
   --accentc: #F48120;
   --accentd: #0080FF;
   --header-font: 'Rubik Doodle Shadow';
-  --main-font: 'Rubik';
+  --main-font: 'Comfortaa';
   --body-font: 'Comfortaa';
   --background: var(--light);
   --text: var(--dark);
