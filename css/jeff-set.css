@@ -1,14 +1,14 @@
 @font-face {
   font-family: 'Rubik Doodle Shadow';
-  src: url('RubikDoodleShadow-Regular.woff2') format('woff2'),
-       url('RubikDoodleShadow-Regular.woff') format('woff');
+  src: url('../font/RubikDoodleShadow-Regular.woff2') format('woff2'),
+       url('../font/RubikDoodleShadow-Regular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: 'Rubik';
-  src: url('Rubik-Bold.woff2') format('woff2'),
-       url('Rubik-Bold.woff') format('woff');
+  src: url('../font/Rubik-Bold.woff2') format('woff2'),
+       url('../font/Rubik-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
 }
