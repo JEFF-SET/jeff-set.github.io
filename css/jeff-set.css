@@ -147,7 +147,6 @@ h6 {
   color: var(--text);
   line-height: 1.2;
   margin: 1.2rem 0 .8rem;
-  text-transform: none;
   letter-spacing: .01em;
 }
 
