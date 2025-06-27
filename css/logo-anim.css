@@ -82,7 +82,7 @@
     }
     .logo-animated-wrap:hover {
       width: 98vw !important;
-      height: 25vw !important; /* Прямоугольник: 540x140 ≈ 3.85:1 */
+      height: 25vw !important;
       min-height: 60px;
       max-height: 40vw;
     }
