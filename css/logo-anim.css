@@ -14,16 +14,16 @@
     display: block;
   }
   
-  /* Квадратная рамка — по центру при загрузке, расширяется при hover */
+  /* Рамка */
   .logo-border {
     stroke: var(--text);
     stroke-width: 6;
     fill: var(--background);
-    transition: x 0.6s, width 0.6s;
+    transition: all 0.6s cubic-bezier(.7,0,.3,1);
     rx: 0;
   }
   
-  /* Буква J строго по центру квадрата */
+  /* Все буквы на старте по центру (x=270), но кроме J — прозрачные */
   .logo-letter {
     opacity: 0;
     fill: var(--text);
@@ -31,33 +31,27 @@
     font-weight: 700;
     transition: opacity 0.3s, x 0.6s;
   }
-  
   .letter-j {
     opacity: 1;
+    x: 270;
     transition: x 0.6s, opacity 0.3s;
   }
+  
+  /* Остальные буквы — невидимы и в центре */
   .letter-e, .letter-f, .letter-f2, .letter-dash, .letter-s, .letter-e2, .letter-t {
+    x: 270;
     opacity: 0;
   }
   
   /* --- Hover-анимация --- */
-  .logo-animated-wrap:hover .logo-border {
-    x: 0;
-    width: 540px;
-  }
-  
-  .logo-animated-wrap:hover .letter-j {
-    x: 60;
-  }
-  
-  /* Плавное появление остальных букв — они уже размещены по X как надо */
-  .logo-animated-wrap:hover .letter-e   { opacity: 1; transition-delay: 0.11s; }
-  .logo-animated-wrap:hover .letter-f   { opacity: 1; transition-delay: 0.22s; }
-  .logo-animated-wrap:hover .letter-f2  { opacity: 1; transition-delay: 0.33s; }
-  .logo-animated-wrap:hover .letter-dash{ opacity: 1; transition-delay: 0.44s; }
-  .logo-animated-wrap:hover .letter-s   { opacity: 1; transition-delay: 0.55s; }
-  .logo-animated-wrap:hover .letter-e2  { opacity: 1; transition-delay: 0.66s; }
-  .logo-animated-wrap:hover .letter-t   { opacity: 1; transition-delay: 0.77s; }
+  .logo-animated-wrap:hover .letter-j     { x: 60;  }
+  .logo-animated-wrap:hover .letter-e     { x: 130; opacity: 1; transition-delay: 0.10s;}
+  .logo-animated-wrap:hover .letter-f     { x: 200; opacity: 1; transition-delay: 0.20s;}
+  .logo-animated-wrap:hover .letter-f2    { x: 270; opacity: 1; transition-delay: 0.30s;}
+  .logo-animated-wrap:hover .letter-dash  { x: 340; opacity: 1; transition-delay: 0.40s;}
+  .logo-animated-wrap:hover .letter-s     { x: 410; opacity: 1; transition-delay: 0.50s;}
+  .logo-animated-wrap:hover .letter-e2    { x: 480; opacity: 1; transition-delay: 0.60s;}
+  .logo-animated-wrap:hover .letter-t     { x: 550; opacity: 1; transition-delay: 0.70s;}
   
   @media (max-width:700px) {
     .logo-animated-wrap, .logo-svg { width: 98vw !important; }
