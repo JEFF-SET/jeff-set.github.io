@@ -7,6 +7,14 @@
 }
 
 @font-face {
+  font-family: 'Rubik Doodle Shadow';
+  src: url('../font/RubikDoodleShadow-Regular.woff2') format('woff2'),
+    url('../font/RubikDoodleShadow-Regular.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
 	font-family: 'Comfortaa';
 	src: url('../font/Comfortaa-Bold.woff2') format('woff2'), url('../font/Comfortaa-Bold.woff') format('woff');
 	font-weight: 700;
