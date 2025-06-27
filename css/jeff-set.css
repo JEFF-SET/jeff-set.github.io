@@ -204,7 +204,7 @@ input[type="submit"]:hover {
 /* Новая версия .main-link */
 .main-link {
   display: inline-block;
-  font-weight: bold;
+  font-weight: normal;
   color: #080808;
   background-color: var(--accent);
   padding: 6px 10px;
