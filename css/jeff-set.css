@@ -209,14 +209,12 @@ input[type="submit"]:hover {
 }
 
 .main-link:hover {
-  background-color: var(--accentc);
-  color: #080808;
+
 }
 
 /* Общий стиль ссылок */
 a {
   color: #080808;
-  text-decoration: underline;
 }
 
 a:hover {
