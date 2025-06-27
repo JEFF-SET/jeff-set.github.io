@@ -1,37 +1,69 @@
 .logo-animated-wrap {
-    width: 140px;
-    height: 140px;
-    max-width: 90vw;
-    max-height: 90vw;
-    min-width: 100px;
-    min-height: 100px;
-    margin: 48px auto 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 48px auto 0 auto;
+    width: 140px;
+    height: 140px;
     transition: width 0.6s, height 0.6s;
     cursor: pointer;
     position: relative;
+    max-width: 100vw;
+    max-height: 100vw;
   }
   
-  .logo-single svg,
-  .logo-full svg {
-    width: 100%;
-    height: 100%;
+  .logo-single {
     display: block;
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    transition: opacity 0.4s;
+    z-index: 2;
+  }
+  .logo-j {
+    fill: var(--text);
+    user-select: none;
+  }
+  .logo-full {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1;
+  }
+  .logo-word {
+    fill: var(--text);
+    user-select: none;
+  }
+  .logo-border {
+    stroke: var(--text);
+    stroke-width: 5;
+    fill: var(--background);
   }
   
   /* --- Hover-анимация --- */
   .logo-animated-wrap:hover {
     width: 540px;
     height: 140px;
-    max-width: 98vw;
-    max-height: 30vw;
     transition: width 0.6s, height 0.6s;
   }
+  .logo-animated-wrap:hover .logo-single {
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .logo-animated-wrap:hover .logo-full {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.4s 0.2s;
+  }
   
-  /* Мобильная адаптация */
+  /* Адаптив: максимальный размер на мобильных - не больше 90vw */
   @media (max-width: 700px) {
     .logo-animated-wrap {
       width: 90vw !important;
@@ -48,10 +80,9 @@
       max-width: 100vw;
       max-height: 100vw;
     }
-    /* При hover (или если хотите сделать адаптивный прямоугольник на мобильном) */
     .logo-animated-wrap:hover {
       width: 98vw !important;
-      height: 28vw !important; /* Прямоугольник: 540x140 ≈ 3.8:1 => 28vw = 98vw/3.5 */
+      height: 25vw !important; /* Прямоугольник: 540x140 ≈ 3.85:1 */
       min-height: 60px;
       max-height: 40vw;
     }
