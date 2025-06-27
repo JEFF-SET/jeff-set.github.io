@@ -42,7 +42,7 @@
   }
   .logo-border {
     stroke: var(--accent);
-    stroke-width: 5;
+    stroke-width: 10;
     fill: var(--background);
   }
   
