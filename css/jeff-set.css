@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'Rubik Doodle Shadow';
   src: url('../font/RubikDoodleShadow-Regular.woff2') format('woff2'),
-    url('../font/RubikDoodleShadow-Regular.woff') format('woff');
+       url('../font/RubikDoodleShadow-Regular.woff') format('woff');
   font-weight: 500;
   font-style: normal;
 }
@@ -9,7 +9,7 @@
 @font-face {
   font-family: 'Rubik';
   src: url('../font/Rubik-Bold.woff2') format('woff2'),
-    url('../font/Rubik-Bold.woff') format('woff');
+       url('../font/Rubik-Bold.woff') format('woff');
   font-weight: 500;
   font-style: normal;
 }
@@ -107,11 +107,11 @@ body {
   transition: transform .3s, background .3s;
 }
 
-.theme-toggle input[type="checkbox"]:checked+.theme-toggle-label {
+.theme-toggle input[type="checkbox"]:checked + .theme-toggle-label {
   background: var(--light);
 }
 
-.theme-toggle input[type="checkbox"]:checked+.theme-toggle-label::after {
+.theme-toggle input[type="checkbox"]:checked + .theme-toggle-label::after {
   background: var(--dark);
   transform: translateX(1.6rem);
 }
@@ -144,22 +144,10 @@ h6 {
   letter-spacing: .01em;
 }
 
-h2 {
-  font-size: 2.5rem;
-}
-
-h3 {
-  font-size: 1.5rem;
-}
-
-h4 {
-  font-size: 1.2rem;
-}
-
-h5,
-h6 {
-  font-size: 1rem;
-}
+h2 { font-size: 2.5rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.2rem; }
+h5, h6 { font-size: 1rem; }
 
 main {
   width: 100%;
@@ -180,18 +168,6 @@ p {
 }
 
 .btn,
-.main-link,
-button,
-input[type="submit"] {
-  border-radius: 4px;
-  font-weight: bold;
-  text-align: center;
-  box-sizing: border-box;
-  outline: none;
-  font-family: var(--body-font);
-}
-
-.btn,
 button,
 input[type="submit"] {
   display: inline-block;
@@ -200,10 +176,13 @@ input[type="submit"] {
   border: none;
   padding: 10px 24px;
   font-size: 1.2rem;
-  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
   cursor: pointer;
-  transition: background .2s, color .2s, border .2s;
+  font-family: var(--body-font);
   max-width: 100%;
+  transition: background .2s, color .2s, border .2s;
 }
 
 .btn:hover,
@@ -214,44 +193,34 @@ input[type="submit"]:hover {
   border: 2px solid var(--btn-bg);
 }
 
-.main-link,
-a {
+/* Новая версия .main-link */
+.main-link {
   display: inline-block;
   font-weight: bold;
-  color: #080808 !important;    /* всегда тёмный текст */
-  background: var(--accent);    /* акцентный фон */
-  border: none;                 /* без рамки */
+  color: #080808;
+  background-color: var(--accent);
+  padding: 6px 10px;
+  border: none;
   border-radius: 4px;
-  padding: 2px 10px;
   text-decoration: none;
-  vertical-align: baseline;
   line-height: var(--lineheight);
-  word-break: break-word;
-  overflow-wrap: anywhere;
-  transition: background .2s, color .2s;
   font-family: var(--main-font);
+  transition: background-color .2s;
 }
 
-/* Hover: светлее фон */
-.main-link:hover,
+.main-link:hover {
+  background-color: var(--accentc);
+  color: #080808;
+}
+
+/* Общий стиль ссылок */
+a {
+  color: #080808;
+  text-decoration: underline;
+}
+
 a:hover {
-  background: #7a47c2;
-  color: #080808 !important;
-}
-
-/* Мобильная адаптация — не обрезается, центрируется */
-@media (max-width:600px) {
-  .main-link,
-  a {
-    display: block;
-    margin: 0.5em auto;
-    width: fit-content;
-    max-width: 98vw;
-    white-space: normal;
-    text-align: center;
-    padding: 6px 16px;
-    font-size: 1.09em;
-  }
+  color: var(--accent);
 }
 
 html {
@@ -288,7 +257,7 @@ html {
   }
 
   .main-link {
-    padding: 2px 2px;
+    padding: 4px 8px;
     font-size: 1em;
   }
 }
