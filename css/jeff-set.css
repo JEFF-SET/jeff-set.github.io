@@ -191,6 +191,7 @@ input[type="submit"]:hover {
   background: var(--background);
   color: var(--btn-bg);
   border: 2px solid var(--btn-bg);
+  text-decoration: none;
 }
 
 /* Новая версия .main-link */
