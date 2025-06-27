@@ -1,8 +1,8 @@
-// jQuery пример, если нужно запускать анимацию по клику или событию
+// Пока не требуется логика на JS для hover, но заготовка для будущих анимаций с jQuery:
 $(function() {
-    $('.logo-animated-wrap').on('mouseenter', function(){
-      $(this).addClass('hovered');
-    }).on('mouseleave', function(){
-      $(this).removeClass('hovered');
-    });
+    // Можно использовать для запуска анимации по клику или другим событиям
+    // Пример:
+    // $('.logo-animated-wrap').on('mouseenter', function() {
+    //   $(this).addClass('hovered');
+    // });
   });
