@@ -2,7 +2,7 @@
   font-family: 'Rubik Doodle Shadow';
   src: url('../font/RubikDoodleShadow-Regular.woff2') format('woff2'),
     url('../font/RubikDoodleShadow-Regular.woff') format('woff');
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
 }
 
@@ -136,7 +136,7 @@ h4,
 h5,
 h6 {
   font-family: var(--main-font);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text);
   line-height: 1.2;
   margin: 1.2rem 0 .8rem;
