@@ -231,7 +231,7 @@ body[data-theme="dark"] {
 .custom-table th {
   font-weight: 900;
 }
-
+98
 /* Полосы (зебра) */
 .custom-table tbody tr:nth-child(even) {
   background-color: rgba(102, 51, 153, 0.03);
