@@ -555,3 +555,15 @@ html {
     font-size: 1em;
   }
 }
+
+
+<style>
+  /* Скрываем ссылку-баннер Elfsight */
+  a[href*="elfsight.com/twitter-feed-widget"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+  }
+</style>
