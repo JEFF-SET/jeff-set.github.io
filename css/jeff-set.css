@@ -371,7 +371,7 @@ footer {
   text-align: center;
   font-size: var(--font-sm);
   width: 100%;
-  padding: 5rem 1rem;
+  padding: 0.5rem 1rem;
   background: var(--accent);
   box-sizing: border-box;
 }
@@ -381,7 +381,7 @@ footer {
   justify-content: center;
   align-items: center;
   background: var(--background);
-  padding: 0.5rem;
+  padding: 2rem;
   font-size: var(--font-sm, 0.85rem);
   color: var(--text);
 }
