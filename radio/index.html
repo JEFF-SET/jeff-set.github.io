@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,7 @@
     <style>
         /* Робимо фон напівпрозорим сірим, щоб бачити інтерфейс Telegram позаду */
         body {
-            background: rgba(30, 30, 30, 0.6); 
+            background: rgba(30, 30, 30, 0.6);
             color: white;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
@@ -66,15 +67,16 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="player-container">
         <h3>Тест Радіо 📻</h3>
         <p id="status">Натисніть Play для старту</p>
 
-        <!-- Аудіотег. Атрибут 'loop' автоматично ставить пісню на репіт -->
-        <audio id="radio-audio" src="/radio/radio.mp3" loop></audio>
-        
+        <!-- Правильний варіант для папки всередині репозиторію -->
+        <audio id="radio-audio" src="radio/radio.mp3" loop></audio>
+
         <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">▶</button>
     </div>
 
@@ -102,4 +104,5 @@
     </script>
 
 </body>
+
 </html>
