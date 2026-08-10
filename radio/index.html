@@ -4,17 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <title>JEFF-SET: Radio Station &amp; Web Development</title>
-    <!-- ПРАВИЛЬНІ ВІДНОСНІ ШЛЯХИ БЕЗ СЛЄША НА ПОЧАТКУ -->
-    <link rel="stylesheet" href="css/jeff-set.css">
-    <link rel="stylesheet" href="css/logo-anim.css">
+    <!-- АБСОЛЮТНІ ПОСИЛАННЯ НА СТИЛІ -->
+    <link rel="stylesheet" href="https://github.io">
+    <link rel="stylesheet" href="https://github.io">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cloudflare.com"></script>
     <!-- Підключаємо Telegram Web App скрипт -->
     <script src="https://telegram.org"></script>
-    <script src="js/logo-anim.js"></script>
+    <!-- АБСОЛЮТНЕ ПОСИЛАННЯ НА СКРИПТ АНІМАЦІЇ ЛОГО -->
+    <script src="https://github.io"></script>
 
     <style>
-        /* Стильний адаптивний блок для Радіо */
+        /* Блок радіоплеєра всередині вашого шаблону */
         .radio-container {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
@@ -42,7 +43,7 @@
             margin-bottom: 20px;
         }
 
-        /* Велика кругла кнопка управління у стилі Jeff-Set */
+        /* Кругла кнопка у стилі Jeff-Set */
         .radio-btn {
             background: #2481cc;
             color: white;
@@ -74,7 +75,7 @@
 
 <body>
     <div class="topbar">
-        <a href="./" class="logo-mini">
+        <a href="https://jeff-set.github.io/" class="logo-mini">
             <svg class="logo-svg-mini" width="40" height="40" viewBox="0 0 140 140">
                 <path class="logo-border" d="
                 M5,5
@@ -95,7 +96,7 @@
     </div>
 
     <div class="logo-animated-wrap">
-        <!-- Квадрат с J (и скруглённым нижним правым углом) -->
+        <!-- Квадрат с J -->
         <div class="logo-single">
             <svg class="logo-svg" width="140" height="140" viewBox="0 0 140 140">
                 <path class="logo-border" d="
@@ -110,7 +111,7 @@
                     class="logo-j">J</text>
             </svg>
         </div>
-        <!-- Прямоугольник с JEFF-SET (только на десктопе) -->
+        <!-- Прямоугольник с JEFF-SET -->
         <div class="logo-full">
             <svg width="540" height="140" viewBox="0 0 540 140">
                 <rect x="5" y="5" width="530" height="130" rx="0" class="logo-border" />
@@ -121,12 +122,12 @@
     </div> 
 
     <main>         
-        <!-- НАШЕ НОВЕ РАДІО ВСЕРЕДИНІ ШАБЛОНУ -->
+        <!-- НАШЕ РАДІО ВСЕРЕДИНІ ШАБЛОНУ -->
         <div class="radio-container">
             <h2 class="radio-title">JEFF-SET RADIO</h2>
             <div class="radio-status" id="status">Натисніть Play для початку мовлення</div>
             
-            <!-- Пряме залізобетонне посилання на ваш MP3 -->
+            <!-- ПОВНЕ ПРЯМЕ ПОСИЛАННЯ НА ВАШ MP3-ФАЙЛ -->
             <audio id="radio-audio" src="https://github.io" loop preload="auto"></audio>
             
             <button class="radio-btn" id="ctrl-btn" onclick="togglePlayback()">▶</button>
@@ -152,19 +153,19 @@
         &copy; 2026 Jeff-Set &amp; Vitalii K. All rights reserved.
     </footer>
 
-    <!-- Ваші оригінальні скрипти -->
-    <script src="js/jeff-set.js"></script>
+    <!-- АБСОЛЮТНЕ ПОСИЛАННЯ НА ГОЛОВНИЙ СКРИПТ САЙТУ -->
+    <script src="https://github.io"></script>
 
-    <!-- Плеєр та Telegram Web App інтеграція -->
+    <!-- Скрипт плеєра -->
     <script>
         let tg = null;
         try {
             if (window.Telegram && window.Telegram.WebApp) {
                 tg = window.Telegram.WebApp;
                 tg.ready();
-                tg.expand(); // Авто-розгортання шторки в месенджері
+                tg.expand();
             }
-        } catch(e) { console.log("Відкрито у звичайному браузері"); }
+        } catch(e) { console.log("Відкрито поза Telegram"); }
 
         const audio = document.getElementById('radio-audio');
         const btn = document.getElementById('ctrl-btn');
