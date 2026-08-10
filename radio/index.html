@@ -1,163 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>JEFF-SET: Radio Station &amp; Web Development</title>
-    <!-- АБСОЛЮТНІ ПОСИЛАННЯ НА СТИЛІ -->
-    <link rel="stylesheet" href="https://github.io">
-    <link rel="stylesheet" href="https://github.io">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cloudflare.com"></script>
-    <!-- Підключаємо Telegram Web App скрипт -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Radio Test</title>
+    <!-- Скрипт для Telegram, браузер його просто проігнорує -->
     <script src="https://telegram.org"></script>
-    <!-- АБСОЛЮТНЕ ПОСИЛАННЯ НА СКРИПТ АНІМАЦІЇ ЛОГО -->
-    <script src="https://github.io"></script>
-
     <style>
-        /* Блок радіоплеєра всередині вашого шаблону */
-        .radio-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 35px 20px;
-            border-radius: 24px;
+        body {
+            background: rgba(30, 30, 30, 0.6); 
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .player-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
-            max-width: 380px;
-            margin: 40px auto;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 250px;
         }
 
-        .radio-title {
-            font-size: 22px;
-            letter-spacing: 2px;
-            margin-top: 0;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
+        h3 { margin: 0 0 5px 0; font-size: 18px; }
+        p { font-size: 14px; color: #b0b0b0; margin-bottom: 25px; }
 
-        .radio-status {
-            font-size: 15px;
-            color: #b0b0b0;
-            margin-bottom: 20px;
-        }
-
-        /* Кругла кнопка у стилі Jeff-Set */
-        .radio-btn {
+        .play-btn {
             background: #2481cc;
             color: white;
             border: none;
-            width: 74px;
-            height: 74px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            font-size: 28px;
+            font-size: 24px;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, background 0.2s;
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 6px 20px rgba(36, 129, 204, 0.35);
         }
-
-        .radio-btn:active {
-            transform: scale(0.92);
-            background: #1c6aa8;
-        }
-
-        .radio-log {
-            font-size: 11px;
-            opacity: 0.5;
-            margin-top: 15px;
-        }
+        .play-btn:active { transform: scale(0.9); background: #1c6aa8; }
+        #log { margin-top: 15px; font-size: 11px; color: #b0b0b0; }
     </style>
 </head>
-
 <body>
-    <div class="topbar">
-        <a href="https://jeff-set.github.io/" class="logo-mini">
-            <svg class="logo-svg-mini" width="40" height="40" viewBox="0 0 140 140">
-                <path class="logo-border" d="
-                M5,5
-                H135
-                V105
-                A30,30 0 0 1 105,135
-                H5
-                Z
-              " />
-                <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="700"
-                    class="logo-j">J</text>
-            </svg>
-        </a>
-        <form class="theme-toggle" autocomplete="off">
-            <input type="checkbox" id="toggle-dark" aria-label="Toggle dark mode">
-            <label for="toggle-dark" class="theme-toggle-label"></label>
-        </form>
+
+    <div class="player-container">
+        <h3>Тест Радіо 📻</h3>
+        <p id="status">Натисніть Play для старту</p>
+
+        <!-- ВСТАВТЕ ВАШЕ ПРЯМЕ ПОСИЛАННЯ НИЖЧЕ У СТРОКУ src="..." -->
+        <audio id="radio-audio" src="https://jeff-set.github.io/radio/radio.mp3" loop preload="auto"></audio>
+        
+        <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">▶</button>
+        <div id="log">Статус: Очікування дії</div>
     </div>
 
-    <div class="logo-animated-wrap">
-        <!-- Квадрат с J -->
-        <div class="logo-single">
-            <svg class="logo-svg" width="140" height="140" viewBox="0 0 140 140">
-                <path class="logo-border" d="
-                M5,5
-                H135
-                V105
-                A30,30 0 0 1 105,135
-                H5
-                Z
-          " />
-                <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik" font-weight="600"
-                    class="logo-j">J</text>
-            </svg>
-        </div>
-        <!-- Прямоугольник с JEFF-SET -->
-        <div class="logo-full">
-            <svg width="540" height="140" viewBox="0 0 540 140">
-                <rect x="5" y="5" width="530" height="130" rx="0" class="logo-border" />
-                <text x="270" y="105" text-anchor="middle" font-size="90" font-family="'Rubik" font-weight="700"
-                    class="logo-word">Jeff-Set</text>
-            </svg>
-        </div>
-    </div> 
-
-    <main>         
-        <!-- НАШЕ РАДІО ВСЕРЕДИНІ ШАБЛОНУ -->
-        <div class="radio-container">
-            <h2 class="radio-title">JEFF-SET RADIO</h2>
-            <div class="radio-status" id="status">Натисніть Play для початку мовлення</div>
-            
-            <!-- ПОВНЕ ПРЯМЕ ПОСИЛАННЯ НА ВАШ MP3-ФАЙЛ -->
-            <audio id="radio-audio" src="https://github.io" loop preload="auto"></audio>
-            
-            <button class="radio-btn" id="ctrl-btn" onclick="togglePlayback()">▶</button>
-            <div class="radio-log" id="log">Статус: Очікування дії</div>
-        </div>
-
-        <blockquote class="quote">Design is not just what it looks like and feels like. Design is how it works.
-        </blockquote>
-    </main>
-
-    <div class="footer-meta">
-        <span class="location-flag">
-            <span class="flag-label">Kyiv</span>
-            <svg viewBox="0 0 36 36" xmlns="http://w3.org" aria-hidden="true">
-                <path fill="#005BBB" d="M32 5H4a4 4 0 0 0-4 4v9h36V9a4 4 0 0 0-4-4z" />
-                <path fill="#FFD500" d="M36 27a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4v-9h36v9z" />
-            </svg>
-            <span class="flag-label">Ukraine</span>
-        </span>
-    </div>
-
-    <footer>
-        &copy; 2026 Jeff-Set &amp; Vitalii K. All rights reserved.
-    </footer>
-
-    <!-- АБСОЛЮТНЕ ПОСИЛАННЯ НА ГОЛОВНИЙ СКРИПТ САЙТУ -->
-    <script src="https://github.io"></script>
-
-    <!-- Скрипт плеєра -->
     <script>
+        // Ініціалізація Telegram Web App (якщо відкриваємо в ТГ)
         let tg = null;
         try {
             if (window.Telegram && window.Telegram.WebApp) {
@@ -165,7 +73,7 @@
                 tg.ready();
                 tg.expand();
             }
-        } catch(e) { console.log("Відкрито поза Telegram"); }
+        } catch(e) { console.log("Відкрито в звичайному браузері"); }
 
         const audio = document.getElementById('radio-audio');
         const btn = document.getElementById('ctrl-btn');
@@ -174,12 +82,12 @@
 
         function togglePlayback() {
             if (audio.paused) {
-                log.textContent = 'З'єднання з аудіосервером...';
+                log.textContent = 'Завантаження потоку...';
                 audio.play()
                     .then(() => {
                         btn.textContent = '⏸';
-                        statusText.textContent = 'ЗАРАЗ В ЕФІРІ 📻';
-                        log.textContent = 'Потік успішно відтворюється';
+                        statusText.textContent = 'Зараз грає (Репіт)';
+                        log.textContent = 'Успішно відтворюється!';
                     })
                     .catch((error) => {
                         log.textContent = 'Помилка: ' + error.message;
@@ -187,10 +95,116 @@
             } else {
                 audio.pause();
                 btn.textContent = '▶';
-                statusText.textContent = 'Ефір зупинено';
-                log.textContent = 'Пауза';
+                statusText.textContent = 'Пауза';
+                log.textContent = 'Потік зупинено';
             }
         }
     </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Radio Test</title>
+    <!-- Скрипт для Telegram, браузер його просто проігнорує -->
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            background: rgba(30, 30, 30, 0.6); 
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .player-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 250px;
+        }
+
+        h3 { margin: 0 0 5px 0; font-size: 18px; }
+        p { font-size: 14px; color: #b0b0b0; margin-bottom: 25px; }
+
+        .play-btn {
+            background: #2481cc;
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .play-btn:active { transform: scale(0.9); background: #1c6aa8; }
+        #log { margin-top: 15px; font-size: 11px; color: #b0b0b0; }
+    </style>
+</head>
+<body>
+
+    <div class="player-container">
+        <h3>Тест Радіо 📻</h3>
+        <p id="status">Натисніть Play для старту</p>
+
+        <!-- ВСТАВТЕ ВАШЕ ПРЯМЕ ПОСИЛАННЯ НИЖЧЕ У СТРОКУ src="..." -->
+        <audio id="radio-audio" src="https://ваше_ім'я.github.io/назва_репозиторію/radio/radio.mp3" loop preload="auto"></audio>
+        
+        <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">▶</button>
+        <div id="log">Статус: Очікування дії</div>
+    </div>
+
+    <script>
+        // Ініціалізація Telegram Web App (якщо відкриваємо в ТГ)
+        let tg = null;
+        try {
+            if (window.Telegram && window.Telegram.WebApp) {
+                tg = window.Telegram.WebApp;
+                tg.ready();
+                tg.expand();
+            }
+        } catch(e) { console.log("Відкрито в звичайному браузері"); }
+
+        const audio = document.getElementById('radio-audio');
+        const btn = document.getElementById('ctrl-btn');
+        const statusText = document.getElementById('status');
+        const log = document.getElementById('log');
+
+        function togglePlayback() {
+            if (audio.paused) {
+                log.textContent = 'Завантаження потоку...';
+                audio.play()
+                    .then(() => {
+                        btn.textContent = '⏸';
+                        statusText.textContent = 'Зараз грає (Репіт)';
+                        log.textContent = 'Успішно відтворюється!';
+                    })
+                    .catch((error) => {
+                        log.textContent = 'Помилка: ' + error.message;
+                    });
+            } else {
+                audio.pause();
+                btn.textContent = '▶';
+                statusText.textContent = 'Пауза';
+                log.textContent = 'Потік зупинено';
+            }
+        }
+    </script>
+
 </body>
 </html>
