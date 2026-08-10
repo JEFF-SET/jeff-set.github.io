@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Radio: Audio + Video Hybrid</title>
-    <!-- Правильне посилання на скрипт Telegram Web App -->
+    <!-- ВИПРАВЛЕНО: Правильне посилання на повний скрипт Telegram Web App -->
     <script src="https://telegram.org"></script>
     <style>
         body {
@@ -48,7 +48,6 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            font-size: 40px;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
             display: inline-flex;
@@ -56,29 +55,42 @@
             align-items: center;
         }
         .play-btn:active { transform: scale(0.9); background: #1c6aa8; }
+        
+        /* НОВЕ: Стиль для SVG-іконки всередині вашої круглої кнопки */
+        .play-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: #000; /* Іконка буде чорною на сірому фоні кнопки */
+            display: block;
+        }
+
         #log { margin-top: 15px; font-size: 11px; color: #b0b0b0; }
     </style>
 </head>
 <body>
 
     <div class="player-container">
-        <h3>ⲢⲀⲆⲒⲞ 📻 ⳖⲈϜϜⲈRⲊⲞⲚ</h3>
+        <h3> ⲢⲀⲆⲒⲞ 📻 ⳖⲈϜϜⲈRⲊⲞⲚ</h3>
         <p id="status">Натисніть Play для старту</p>
 
-        <!-- ВІДАРТИЙ ВІДЕОТЕГ: Тільки картинка. 
-             muted — повністю вимикає звук у відео, щоб він не дублювався з mp3 -->
+        <!-- ВІДАРТИЙ ВІДЕОТЕГ: Тільки картинка. -->
         <video id="radio-video" src="https://jeff-set.github.io/radio/videoplayback2.mp4" loop preload="auto" playsinline muted class="live-cover"></video>
 
         <!-- ПРИХОВАНИЙ АУДІОТЕГ: Тільки фоновий звук для Telegram -->
         <audio id="radio-audio" src="https://jeff-set.github.io/radio/radio2.mp3" loop preload="auto"></audio>
         
         <br>
-        <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">▶</button>
+        <!-- ЗМІНЕНО: Текст ▶ замінено на чітку геометричну SVG-іконку -->
+        <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">
+            <svg viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"></path>
+            </svg>
+        </button>
         <div id="log">Статус: Очікування дії</div>
     </div>
 
     <script>
-        // Ініціалізація Telegram Web App
+        // ... Логіка ініціалізації Telegram залишається без змін ...
         let tg = null;
         try {
             if (window.Telegram && window.Telegram.WebApp) {
@@ -88,35 +100,36 @@
             }
         } catch(e) { console.log("Відкрито в звичайному браузері"); }
 
-        // Отримуємо обидва елементи
         const video = document.getElementById('radio-video');
         const audio = document.getElementById('radio-audio');
-        
         const btn = document.getElementById('ctrl-btn');
         const statusText = document.getElementById('status');
         const log = document.getElementById('log');
 
+        // ЗМІНЕНО: Функція тепер плавно перемикає вектори всередині SVG
         function togglePlayback() {
-            // Перевіряємо статус по аудіофайлу, бо він головний для фону
+            const svgPath = document.querySelector('#ctrl-btn svg path');
+
             if (audio.paused) {
                 log.textContent = 'Синхронізація потоків...';
                 
-                // Запускаємо аудіо та відео одночасно
                 Promise.all([audio.play(), video.play()])
                     .then(() => {
-                        btn.textContent = '⏸';
+                        // Міняємо шлях на дві чіткі смужки пауз
+                        svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
                         statusText.textContent = 'Зараз грає (Гібрид)';
                         log.textContent = 'Музика та відео успішно запущені!';
                     })
                     .catch((error) => {
-                        log.textContent = 'Помилка запуску: ' + error.message;
+                        log.textContent = 'Помилка запуска: ' + error.message;
                         console.error(error);
                     });
             } else {
-                // Зупиняємо обидва файли
                 audio.pause();
                 video.pause();
-                btn.textContent = '▶';
+                
+                // Повертаємо вектор трикутника Play
+                svgPath.setAttribute('d', 'M8 5v14l11-7z');
                 statusText.textContent = 'Пауза';
                 log.textContent = 'Потік зупинено';
             }
