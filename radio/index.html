@@ -104,7 +104,7 @@
                 // Запускаємо аудіо та відео одночасно
                 Promise.all([audio.play(), video.play()])
                     .then(() => {
-                        btn.textContent = '▶';
+                        btn.textContent = '⏸';
                         statusText.textContent = 'Зараз грає (Гібрид)';
                         log.textContent = 'Музика та відео успішно запущені!';
                     })
@@ -116,7 +116,7 @@
                 // Зупиняємо обидва файли
                 audio.pause();
                 video.pause();
-                btn.textContent = '⏸';
+                btn.textContent = '▶';
                 statusText.textContent = 'Пауза';
                 log.textContent = 'Потік зупинено';
             }
