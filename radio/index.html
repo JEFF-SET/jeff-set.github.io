@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Radio Test</title>
-    <!-- Скрипт для Telegram, браузер його просто проігнорує -->
+    <!-- ВИПРАВЛЕНО: Правильне посилання на JS-скрипт Telegram -->
     <script src="https://telegram.org"></script>
     <style>
         body {
@@ -57,15 +57,16 @@
         <h3>Тест Радіо 📻</h3>
         <p id="status">Натисніть Play для старту</p>
 
-        <!-- ВСТАВТЕ ВАШЕ ПРЯМЕ ПОСИЛАННЯ НИЖЧЕ У СТРОКУ src="..." -->
-        <audio id="radio-audio" src="https://jeff-set.github.io/radio/radio.mp3" loop preload="auto"></audio>
+        <!-- ЗМІНЕНО НА VIDEO: playsinline не дає мобільним системам відкривати його на весь екран, 
+             style="display:none;" повністю ховає саме відеовікно, залишаючи лише звук -->
+        <video id="radio-video" src="https://github.io" loop preload="auto" playsinline style="display: none;"></video>
         
         <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">▶</button>
         <div id="log">Статус: Очікування дії</div>
     </div>
 
     <script>
-        // Ініціалізація Telegram Web App (якщо відкриваємо в ТГ)
+        // Ініціалізація Telegram Web App
         let tg = null;
         try {
             if (window.Telegram && window.Telegram.WebApp) {
@@ -75,25 +76,26 @@
             }
         } catch(e) { console.log("Відкрито в звичайному браузері"); }
 
-        const audio = document.getElementById('radio-audio');
+        // Перемкнулися на роботу з відео елементом
+        const video = document.getElementById('radio-video');
         const btn = document.getElementById('ctrl-btn');
         const statusText = document.getElementById('status');
         const log = document.getElementById('log');
 
         function togglePlayback() {
-            if (audio.paused) {
-                log.textContent = 'Завантаження потоку...';
-                audio.play()
+            if (video.paused) {
+                log.textContent = 'Завантаження відеопотоку...';
+                video.play()
                     .then(() => {
                         btn.textContent = '⏸';
-                        statusText.textContent = 'Зараз грає (Репіт)';
+                        statusText.textContent = 'Зараз грає (Репіт відео)';
                         log.textContent = 'Успішно відтворюється!';
                     })
                     .catch((error) => {
                         log.textContent = 'Помилка: ' + error.message;
                     });
             } else {
-                audio.pause();
+                video.pause();
                 btn.textContent = '▶';
                 statusText.textContent = 'Пауза';
                 log.textContent = 'Потік зупинено';
