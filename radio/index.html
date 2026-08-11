@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Radio: True Endless Non-Stop</title>
+    <!-- ВИПРАВЛЕНО: Повне посилання на скрипт Telegram -->
     <script src="https://telegram.org"></script>
     <style>
         body {
@@ -31,16 +32,8 @@
             max-width: 400px;
         }
 
-        h3 {
-            margin: 0 0 5px 0;
-            font-size: 18px;
-        }
-
-        p {
-            font-size: 14px;
-            color: #b0b0b0;
-            margin-bottom: 20px;
-        }
+        h3 { margin: 0 0 5px 0; font-size: 18px; }
+        p { font-size: 14px; color: #b0b0b0; margin-bottom: 20px; }
 
         .live-cover {
             width: 100%;
@@ -93,8 +86,7 @@
 
         <!-- ІНФОРМАЦІЯ ПРО ТРЕК -->
         <div style="margin: 15px 0; padding: 0 10px;">
-            <div id="track-artist" style="font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 4px;">
-                Завантаження...</div>
+            <div id="track-artist" style="font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 4px;">Завантаження...</div>
             <div id="track-title" style="font-size: 14px; color: #b0b0b0;">...</div>
         </div>
 
@@ -132,22 +124,16 @@
         let playlist = [];
         let currentTrackIndex = 0;
 
-        // ПРЯМЕ ОДИНАКОВЕ ПОСИЛАННЯ НА ЦІЛИЙ МІКС-ФАЙЛ
-        const SINGLE_STREAM_URL = "https://jeff-set.github.io/radio/playlist.json";
-
         async function loadPlaylist() {
             try {
-                log.textContent = 'Підключення до єдиної хвилі...';
+                log.textContent = 'Отримання ефірного списку...';
                 const response = await fetch('https://jeff-set.github.io/radio/playlist.json');
                 playlist = await response.json();
 
                 if (playlist.length > 0) {
-                    // Встановлюємо єдине посилання раз і назавжди
-                    audio.src = SINGLE_STREAM_URL;
-
                     // Рандомний трек при старті
                     currentTrackIndex = Math.floor(Math.random() * playlist.length);
-                    setupTrack(currentTrackIndex, true); // true означає, що це перший запуск
+                    setupTrack(currentTrackIndex, true); // true = перша ініціалізація
                 }
             } catch (error) {
                 document.getElementById('track-artist').textContent = "Помилка мережі";
@@ -164,55 +150,57 @@
             document.getElementById('track-title').textContent = track.title + ` (${track.year})`;
             document.getElementById('track-cover').src = track.image_url;
 
-            // Стрибаємо на секунду початку треку всередині великого файлу
-            audio.currentTime = track.start_time;
+            // Змінюємо посилання на окремий файл із вашого JSON
+            audio.src = track.audio_url;
+            audio.load(); // Повне скидання аудіо-рушія під новий файл
 
             log.textContent = 'В ефірі новий трек';
 
-            // Якщо це автоперемикання під час гри — граємо далі без зупинок
+            // Якщо це автоперемикання під час гри — запускаємо потік з мікро-затримкою
             if (!isFirstInit) {
-                audio.play().catch(e => console.log("Мобільний блок:", e));
+                setTimeout(() => {
+                    playRadio();
+                }, 300); // 300мс дають мобільному WebView час підготувати новий файл
             }
         }
 
         function togglePlayback() {
-            const svgPath = document.querySelector('#ctrl-btn svg path');
-
             if (audio.paused) {
                 log.textContent = 'З'єднання з супутником...';
-                audio.play()
-                    .then(() => {
-                        svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-                        statusText.textContent = 'ЗАРАЗ В ЕФІРІ 📻';
-                        log.textContent = 'Радіо Jefferson транслює!';
-                    })
-                    .catch((error) => {
-                        log.textContent = 'Помилка: ' + error.message;
-                    });
+                playRadio();
             } else {
                 audio.pause();
+                const svgPath = document.querySelector('#ctrl-btn svg path');
                 svgPath.setAttribute('d', 'M8 5v14l11-7z');
                 statusText.textContent = 'Радіо на паузі';
                 log.textContent = 'Ефір зупинено';
             }
         }
 
-        // СЛІДКУЄМО ЗА КОЖНОЮ СЕКУНДОЮ ЕФІРУ (Таємна зброя проти багів Telegram)
-        audio.addEventListener('timeupdate', () => {
-            if (playlist.length === 0) return;
+        // Окрема надійна функція запуску з обробкою фонового блокування
+        function playRadio() {
+            const svgPath = document.querySelector('#ctrl-btn svg path');
+            audio.play()
+                .then(() => {
+                    svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
+                    statusText.textContent = 'ЗАРАЗ В ЕФІРІ 📻';
+                    log.textContent = 'Радіо Jefferson транслює!';
+                })
+                .catch((error) => {
+                    log.textContent = 'Помилка фону: ' + error.message + '. Відкрийте додаток.';
+                    console.error("Блокування відтворення:", error);
+                });
+        }
 
-            const currentTrack = playlist[currentTrackIndex];
-
-            // Якщо час відтворення перейшов за кінцеву секунду треку — вмикаємо наступний рандомний
-            if (audio.currentTime >= currentTrack.end_time) {
-                playNextRandom();
-            }
+        // АВТОПЕРЕХІД ПРИ ЗАКІНЧЕННІ ТРЕКУ (Для окремих файлів)
+        audio.addEventListener('ended', () => {
+            log.textContent = 'Перехід на наступну хвилю...';
+            playNextRandom();
         });
 
         function playNextRandom() {
             if (playlist.length <= 1) {
-                // Якщо трек один, просто повертаємо на його початок
-                audio.currentTime = playlist[0].start_time;
+                setupTrack(currentTrackIndex, false);
                 return;
             }
 
@@ -226,9 +214,7 @@
         }
 
         loadPlaylist();
-
     </script>
-
 </body>
 
 </html>
