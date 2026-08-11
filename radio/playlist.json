@@ -22,5 +22,13 @@
         "year": "2026",
         "audio_url": "https://jeff-set.github.io/radio/tracks/holosy-nimykh/kamenyaka.aac",
         "image_url": "https://jeff-set.github.io/radio/videos/holosy-nimykh/kamenyaka.webp"
+    },
+    {
+        "id": 3,
+        "artist": "Голоси Німих",
+        "title": "Каменяка",
+        "year": "2026",
+        "audio_url": "https://jeff-set.github.io/radio/tracks/holosy-nimykh/drugijsvitanok.aac",
+        "image_url": "https://jeff-set.github.io/radio/videos/holosy-nimykh/drugijsvitanok.webp"
     }
 ]
