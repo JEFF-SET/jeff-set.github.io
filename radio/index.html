@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <script src="https://telegram.org"></script>
     <style>
         body {
-            background: #000; 
+            background: #000;
             color: #b0b0b0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
@@ -30,14 +31,22 @@
             max-width: 400px;
         }
 
-        h3 { margin: 0 0 5px 0; font-size: 18px; }
-        p { font-size: 14px; color: #b0b0b0; margin-bottom: 20px; }
+        h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #b0b0b0;
+            margin-bottom: 20px;
+        }
 
         .live-cover {
             width: 100%;
             border-radius: 0px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
 
         .play-btn {
@@ -54,22 +63,28 @@
             align-items: center;
             margin-top: 10px;
         }
-        
-        .play-btn:active { 
-            transform: scale(0.9); 
-            background: #8e8e8e; 
+
+        .play-btn:active {
+            transform: scale(0.9);
+            background: #8e8e8e;
         }
-        
+
         .play-btn svg {
             width: 34px;
             height: 34px;
-            fill: #000; 
+            fill: #000;
             display: block;
         }
 
-        #log { margin-top: 15px; font-size: 11px; color: #b0b0b0; padding: 0 10px; }
+        #log {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #b0b0b0;
+            padding: 0 10px;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="player-container">
@@ -78,16 +93,18 @@
 
         <!-- ІНФОРМАЦІЯ ПРО ТРЕК -->
         <div style="margin: 15px 0; padding: 0 10px;">
-            <div id="track-artist" style="font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 4px;">Завантаження...</div>
+            <div id="track-artist" style="font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 4px;">
+                Завантаження...</div>
             <div id="track-title" style="font-size: 14px; color: #b0b0b0;">...</div>
         </div>
 
         <!-- ОБКЛАДИНКА -->
-        <img id="track-cover" src="" alt="Cover" class="live-cover" style="width: 100%; max-width: 85%; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); display: block; margin-left: auto; margin-right: auto;">
+        <img id="track-cover" src="" alt="Cover" class="live-cover"
+            style="width: 100%; max-width: 85%; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); display: block; margin-left: auto; margin-right: auto;">
 
         <!-- ПРИХОВАНИЙ АУДІОТЕГ -->
         <audio id="radio-audio" preload="auto"></audio>
-        
+
         <!-- ТІЛЬКИ ОДНА ГОЛОВНА КНОПКА РАДІО -->
         <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">
             <svg viewBox="0 0 24 24">
@@ -98,122 +115,120 @@
     </div>
 
     <script>
-    let tg = null;
-    try {
-        if (window.Telegram && window.Telegram.WebApp) {
-            tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
-        }
-    } catch(e) { console.log("Відкрито поза Telegram"); }
-
-    const audio = document.getElementById('radio-audio');
-    const btn = document.getElementById('ctrl-btn');
-    const statusText = document.getElementById('status');
-    const log = document.getElementById('log');
-
-    let playlist = [];
-    let currentTrackIndex = 0;
-
-    // Завантаження плейлиста
-    async function loadPlaylist() {
+        let tg = null;
         try {
-            log.textContent = 'Отримання ефірного списку...';
-            const response = await fetch('https://jeff-set.github.io/radio/playlist.json');
-            playlist = await response.json();
-            
-            if (playlist.length > 0) {
-                // Вибираємо перший випадковий трек при старті
-                currentTrackIndex = Math.floor(Math.random() * playlist.length);
-                setupTrack(currentTrackIndex);
+            if (window.Telegram && window.Telegram.WebApp) {
+                tg = window.Telegram.WebApp;
+                tg.ready();
+                tg.expand();
             }
-        } catch (error) {
-            console.error("Помилка JSON:", error);
-            document.getElementById('track-artist').textContent = "Помилка мережі";
-            log.textContent = "Не вдалося підключитися до бази";
+        } catch (e) { console.log("Відкрито поза Telegram"); }
+
+        const audio = document.getElementById('radio-audio');
+        const btn = document.getElementById('ctrl-btn');
+        const statusText = document.getElementById('status');
+        const log = document.getElementById('log');
+
+        let playlist = [];
+        let currentTrackIndex = 0;
+
+        // ПРЯМЕ ОДИНАКОВЕ ПОСИЛАННЯ НА ЦІЛИЙ МІКС-ФАЙЛ
+        const SINGLE_STREAM_URL = "https://github.io";
+
+        async function loadPlaylist() {
+            try {
+                log.textContent = 'Підключення до єдиної хвилі...';
+                const response = await fetch('https://github.io');
+                playlist = await response.json();
+
+                if (playlist.length > 0) {
+                    // Встановлюємо єдине посилання раз і назавжди
+                    audio.src = SINGLE_STREAM_URL;
+
+                    // Рандомний трек при старті
+                    currentTrackIndex = Math.floor(Math.random() * playlist.length);
+                    setupTrack(currentTrackIndex, true); // true означає, що це перший запуск
+                }
+            } catch (error) {
+                document.getElementById('track-artist').textContent = "Помилка мережі";
+                log.textContent = "Не вдалося завантажити ефір";
+            }
         }
-    }
 
-    // Налаштування поточного треку
-    function setupTrack(index) {
-        if (playlist.length === 0) return;
-        
-        const track = playlist[index];
-        
-        document.getElementById('track-artist').textContent = track.artist;
-        document.getElementById('track-title').textContent = track.title + ` (${track.year})`;
-        document.getElementById('track-cover').src = track.image_url; 
-        
-        // Зміна джерела звуку
-        audio.src = track.audio_url;
-        audio.load(); // Примусово перезавантажуємо аудіо-движок під новий файл
-        
-        log.textContent = 'Радіо готове до мовлення';
-    }
+        function setupTrack(index, isFirstInit = false) {
+            if (playlist.length === 0) return;
 
-    // Головна кнопка Play/Pause
-    function togglePlayback() {
-        const svgPath = document.querySelector('#ctrl-btn svg path');
+            const track = playlist[index];
 
-        if (audio.paused) {
-            log.textContent = 'Вхід в ефір...';
-            playStream();
-        } else {
-            audio.pause();
-            svgPath.setAttribute('d', 'M8 5v14l11-7z');
-            statusText.textContent = 'Радіо на паузі';
-            log.textContent = 'Потік зупинено';
+            document.getElementById('track-artist').textContent = track.artist;
+            document.getElementById('track-title').textContent = track.title + ` (${track.year})`;
+            document.getElementById('track-cover').src = track.image_url;
+
+            // Стрибаємо на секунду початку треку всередині великого файлу
+            audio.currentTime = track.start_time;
+
+            log.textContent = 'В ефірі новий трек';
+
+            // Якщо це автоперемикання під час гри — граємо далі без зупинок
+            if (!isFirstInit) {
+                audio.play().catch(e => console.log("Мобільний блок:", e));
+            }
         }
-    }
 
-    // Окрема надійна функція для запуску звуку
-    function playStream() {
-        const svgPath = document.querySelector('#ctrl-btn svg path');
-        
-        audio.play()
-            .then(() => {
-                svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-                statusText.textContent = 'ЗАРАЗ В ЕФІРІ 📻';
-                log.textContent = 'Прямий ефір без зупинок!';
-            })
-            .catch((error) => {
-                log.textContent = 'Помилка ефіру: ' + error.message;
-                console.error(error);
-            });
-    }
+        function togglePlayback() {
+            const svgPath = document.querySelector('#ctrl-btn svg path');
 
-    // Функція переходу на наступний випадковий трек
-    function playNextRandom() {
-        if (playlist.length <= 1) {
-            // Якщо пісня одна — просто запускаємо її заново
-            audio.currentTime = 0;
-            playStream();
-            return;
+            if (audio.paused) {
+                log.textContent = 'З'єднання з супутником...';
+                audio.play()
+                    .then(() => {
+                        svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
+                        statusText.textContent = 'ЗАРАЗ В ЕФІРІ 📻';
+                        log.textContent = 'Радіо Jefferson транслює!';
+                    })
+                    .catch((error) => {
+                        log.textContent = 'Помилка: ' + error.message;
+                    });
+            } else {
+                audio.pause();
+                svgPath.setAttribute('d', 'M8 5v14l11-7z');
+                statusText.textContent = 'Радіо на паузі';
+                log.textContent = 'Ефір зупинено';
+            }
         }
-        
-        let newIndex;
-        do {
-            newIndex = Math.floor(Math.random() * playlist.length);
-        } while (newIndex === currentTrackIndex);
-        
-        currentTrackIndex = newIndex;
-        setupTrack(currentTrackIndex);
-        
-        // Робимо мікро-паузу в 200 мілісекунд, щоб мобільний браузер встиг 
-        // «перетравити» новий src файлу, і примусово запускаємо потік
-        setTimeout(() => {
-            playStream();
-        }, 200);
-    }
 
-    // НАДІЙНИЙ АВТОПЕРЕХІД: Коли пісня закінчилася
-    audio.addEventListener('ended', () => {
-        log.textContent = 'Шукаємо наступну хвилю...';
-        playNextRandom();
-    });
+        // СЛІДКУЄМО ЗА КОЖНОЮ СЕКУНДОЮ ЕФІРУ (Таємна зброя проти багів Telegram)
+        audio.addEventListener('timeupdate', () => {
+            if (playlist.length === 0) return;
 
-    loadPlaylist();
+            const currentTrack = playlist[currentTrackIndex];
+
+            // Якщо час відтворення перейшов за кінцеву секунду треку — вмикаємо наступний рандомний
+            if (audio.currentTime >= currentTrack.end_time) {
+                playNextRandom();
+            }
+        });
+
+        function playNextRandom() {
+            if (playlist.length <= 1) {
+                // Якщо трек один, просто повертаємо на його початок
+                audio.currentTime = playlist[0].start_time;
+                return;
+            }
+
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * playlist.length);
+            } while (newIndex === currentTrackIndex);
+
+            currentTrackIndex = newIndex;
+            setupTrack(currentTrackIndex, false);
+        }
+
+        loadPlaylist();
+
     </script>
 
 </body>
+
 </html>
