@@ -70,19 +70,19 @@
 <body>
 
     <div class="player-container">
-        <!-- Назва вашого радіо залишається -->
-        <h3>ⲢⲀⲆⲒⲞ 📻 ⳖⲈϜϜⲈRⲊⲞⲚ</h3>
-        
-        <!-- НОВЕ: Блок, де автоматично з'являться назва гурту та пісні -->
+        <h3> ⲢⲀⲆⲒⲞ 📻 ⳖⲈϜϜⲈRⲊⲞⲚ</h3>
+        <p id="status">Натисніть Play для старту</p>
+
+        <!-- НОВЕ: Ці два рядки обов'язково мають бути тут, щоб помилка зникла -->
         <div style="margin: 15px 0; padding: 0 10px;">
             <div id="track-artist" style="font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 4px;">Завантаження...</div>
             <div id="track-title" style="font-size: 14px; color: #b0b0b0;">...</div>
         </div>
-    
-        <!-- Відеовікно (жива обкладинка) — тепер src пустий, його заповнить JS -->
+
+        <!-- ВІДАРТИЙ ВІДЕОТЕГ: Тільки картинка -->
         <video id="radio-video" src="" loop preload="auto" playsinline muted class="live-cover"></video>
-    
-        <!-- Аудіопотік — src теж заповниться автоматично -->
+
+        <!-- ПРИХОВАНИЙ АУДІОТЕГ: Тільки фоновий звук для Telegram -->
         <audio id="radio-audio" src="" loop preload="auto"></audio>
         
         <br>
@@ -93,6 +93,7 @@
         </button>
         <div id="log">Статус: Очікування дії</div>
     </div>
+
 
     <script>
         // 1. Ініціалізація Telegram Web App
