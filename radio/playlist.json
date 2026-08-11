@@ -7,4 +7,13 @@
         "audio_url": "https://jeff-set.github.io/radio/tracks/holosy-nimykh/chortypiatnil.aac",
         "image_url": "https://jeff-set.github.io/radio/videos/holosy-nimykh/chortypiatnil.webp"
     }
+
+    {
+        "id": 2,
+        "artist": "Голоси Німих",
+        "title": "Діти Машин",
+        "year": "2026",
+        "audio_url": "https://jeff-set.github.io/radio/tracks/holosy-nimykh/ditumashin.aac",
+        "image_url": "https://jeff-set.github.io/radio/videos/holosy-nimykh/ditumashin.webp"
+    }
 ]
