@@ -70,19 +70,19 @@
 <body>
 
     <div class="player-container">
-        <h3> ⲢⲀⲆⲒⲞ 📻 ⳖⲈϜϜⲈRⲊⲞⲚ</h3>
+        <h3>ⲢⲀⲆⲒⲞ 📻 ⳖⲈϜϜⲈRⲊⲞⲚ</h3>
         <p id="status">Натисніть Play для старту</p>
 
-        <!-- НОВЕ: Ці два рядки обов'язково мають бути тут, щоб помилка зникла -->
+        <!-- ТЕКСТОВА ІНФОРМАЦІЯ ПРО ТРЕК -->
         <div style="margin: 15px 0; padding: 0 10px;">
             <div id="track-artist" style="font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 4px;">Завантаження...</div>
             <div id="track-title" style="font-size: 14px; color: #b0b0b0;">...</div>
         </div>
 
-        <!-- ВІДАРТИЙ ВІДЕОТЕГ: Тільки картинка -->
-        <video id="radio-video" src="" loop preload="auto" playsinline muted class="live-cover"></video>
+        <!-- НОВЕ: Звичайна статична обкладинка треку замість відео -->
+        <img id="track-cover" src="" alt="Cover" class="live-cover" style="width: 100%; max-width: 220px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); display: block; margin-left: auto; margin-right: auto;">
 
-        <!-- ПРИХОВАНИЙ АУДІОТЕГ: Тільки фоновий звук для Telegram -->
+        <!-- ПРИХОВАНИЙ АУДІОТЕГ: Тепер він відтворює ваш надлегкий AAC -->
         <audio id="radio-audio" src="" loop preload="auto"></audio>
         
         <br>
@@ -95,92 +95,88 @@
     </div>
 
 
+
     <script>
-        // 1. Ініціалізація Telegram Web App
-        let tg = null;
+    // 1. Ініціалізація Telegram Web App
+    let tg = null;
+    try {
+        if (window.Telegram && window.Telegram.WebApp) {
+            tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+        }
+    } catch(e) { console.log("Відкрито в звичайному браузері"); }
+
+    // 2. Отримуємо елементи
+    const audio = document.getElementById('radio-audio');
+    const btn = document.getElementById('ctrl-btn');
+    const statusText = document.getElementById('status');
+    const log = document.getElementById('log');
+
+    let playlist = [];
+    let currentTrackIndex = 0;
+
+    // 3. Завантаження JSON з GitHub
+    async function loadPlaylist() {
         try {
-            if (window.Telegram && window.Telegram.WebApp) {
-                tg = window.Telegram.WebApp;
-                tg.ready();
-                tg.expand();
-            }
-        } catch(e) { console.log("Відкрито в звичайному браузері"); }
-
-        // 2. Отримуємо елементи інтерфейсу та плеєра
-        const video = document.getElementById('radio-video');
-        const audio = document.getElementById('radio-audio');
-        const btn = document.getElementById('ctrl-btn');
-        const statusText = document.getElementById('status');
-        const log = document.getElementById('log');
-
-        // 3. Налаштування системи плейлиста
-        let playlist = [];
-        let currentTrackIndex = 0;
-
-        // Функція, яка завантажує наш JSON-список з вашого GitHub
-        async function loadPlaylist() {
-            try {
-                log.textContent = 'Отримання списку треків...';
-                const response = await fetch('https://jeff-set.github.io/radio/playlist.json');
-                playlist = await response.json();
-                
-                // Як тільки список завантажився — готуємо перший трек
-                setupTrack(currentTrackIndex);
-            } catch (error) {
-                console.error("Помилка завантаження плейлиста:", error);
-                document.getElementById('track-artist').textContent = "Помилка мережі";
-                log.textContent = "Не вдалося завантажити плейлист";
-            }
+            log.textContent = 'Отримання списку треків...';
+            const response = await fetch('https://github.io');
+            playlist = await response.json();
+            
+            setupTrack(currentTrackIndex);
+        } catch (error) {
+            console.error("Помилка завантаження плейлиста:", error);
+            document.getElementById('track-artist').textContent = "Помилка мережі";
+            log.textContent = "Не вдалося завантажити плейлист";
         }
+    }
 
-        // Функція, яка підставляє тексти та посилання поточного треку в плеєр
-        function setupTrack(index) {
-            if (playlist.length === 0) return;
+    // 4. Підстановка даних поточного треку
+    function setupTrack(index) {
+        if (playlist.length === 0) return;
+        
+        const track = playlist[index];
+        
+        // Виводимо тексти
+        document.getElementById('track-artist').textContent = track.artist;
+        document.getElementById('track-title').textContent = track.title + ` (${track.year})`;
+        
+        // Автоматично підставляємо посилання на картинку обкладинки та AAC звук
+        document.getElementById('track-cover').src = track.image_url; // Перевірте, щоб у JSON цей ключ називався саме image_url або змініть тут
+        audio.src = track.audio_url;
+        
+        log.textContent = 'Радіо готове до ефіру';
+    }
+
+    // 5. Просте та надійне керування Play/Pause
+    function togglePlayback() {
+        const svgPath = document.querySelector('#ctrl-btn svg path');
+
+        if (audio.paused) {
+            log.textContent = 'Підключення до ефіру...';
             
-            const track = playlist[index];
-            
-            // Оновлюємо назви гурту та треку на екрані
-            document.getElementById('track-artist').textContent = track.artist;
-            document.getElementById('track-title').textContent = track.title + ` (${track.year})`;
-            
-            // Автоматично прописуємо адреси у приховані теги audio та video
-            audio.src = track.audio_url;
-            video.src = track.video_url;
-            
-            log.textContent = 'Трек завантажено й готово';
+            audio.play()
+                .then(() => {
+                    // Зміна іконки на паузу
+                    svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
+                    statusText.textContent = 'Зараз грає 📻';
+                    log.textContent = 'Ефір успішно запущено!';
+                })
+                .catch((error) => {
+                    log.textContent = 'Помилка запуска: ' + error.message;
+                });
+        } else {
+            audio.pause();
+            // Зміна іконки на Play
+            svgPath.setAttribute('d', 'M8 5v14l11-7z');
+            statusText.textContent = 'Пауза';
+            log.textContent = 'Ефір зупинено';
         }
+    }
 
-        // 4. Керування кнопкою Play/Pause з SVG-анімацією
-        function togglePlayback() {
-            const svgPath = document.querySelector('#ctrl-btn svg path');
+    // Запуск системи
+    loadPlaylist();
 
-            if (audio.paused) {
-                log.textContent = 'Синхронізація потоків...';
-                
-                Promise.all([audio.play(), video.play()])
-                    .then(() => {
-                        // Міняємо шлях на дві чіткі смужки пауз
-                        svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-                        statusText.textContent = 'Зараз грає (Гібрид)';
-                        log.textContent = 'Музика та відео успішно запущені!';
-                    })
-                    .catch((error) => {
-                        log.textContent = 'Помилка запуска: ' + error.message;
-                        console.error(error);
-                    });
-            } else {
-                audio.pause();
-                video.pause();
-                
-                // Повертаємо вектор трикутника Play
-                svgPath.setAttribute('d', 'M8 5v14l11-7z');
-                statusText.textContent = 'Пауза';
-                log.textContent = 'Потік зупинено';
-            }
-        }
-
-        // Запускаємо завантаження бази даних радіо відразу при старті сторінки
-        loadPlaylist();
     </script>
 
 
