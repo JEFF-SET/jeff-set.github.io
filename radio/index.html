@@ -133,12 +133,12 @@
         let currentTrackIndex = 0;
 
         // ПРЯМЕ ОДИНАКОВЕ ПОСИЛАННЯ НА ЦІЛИЙ МІКС-ФАЙЛ
-        const SINGLE_STREAM_URL = "https://jeff-set.github.io/radio/index.html";
+        const SINGLE_STREAM_URL = "https://jeff-set.github.io/radio/playlist.json";
 
         async function loadPlaylist() {
             try {
                 log.textContent = 'Підключення до єдиної хвилі...';
-                const response = await fetch('https://jeff-set.github.io/radio/index.html');
+                const response = await fetch('https://jeff-set.github.io/radio/playlist.json');
                 playlist = await response.json();
 
                 if (playlist.length > 0) {
