@@ -69,6 +69,23 @@
             display: block;
         }
 
+                /* Стиль для додаткових бічних кнопок */
+                .side-btn {
+            width: 45px !important;
+            height: 45px !important;
+            background: #4a4a4a !important;
+        }
+        .side-btn svg {
+            width: 20px !important;
+            height: 20px !important;
+            fill: #b0b0b0 !important;
+        }
+        .side-btn:active {
+            transform: scale(0.9) !important;
+            background: #333333 !important;
+        }
+
+
         #log { margin-top: 15px; font-size: 11px; color: #b0b0b0; padding: 0 10px; }
     </style>
 </head>
@@ -84,23 +101,36 @@
             <div id="track-title" style="font-size: 14px; color: #b0b0b0;">...</div>
         </div>
 
-        <!-- Звичайна статична обкладинка треку замість відео -->
-        <img id="track-cover" src="" alt="Cover" class="live-cover" style="width: 100%; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: block; margin-left: auto; margin-right: auto;">
+        <!-- СТАТИЧНА ОБКЛАДИНКА -->
+        <img id="track-cover" src="" alt="Cover" class="live-cover" style="width: 100%; max-width: 220px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); display: block; margin-left: auto; margin-right: auto;">
 
-        <!-- ПРИХОВАНИЙ АУДІОТЕГ: Для вашого легкого AAC -->
-        <audio id="radio-audio" src="" loop preload="auto"></audio>
+        <!-- ПРИХОВАНИЙ АУДІОТЕГ (Прибрано атрибут loop, щоб пісні могли перемикатися самі) -->
+        <audio id="radio-audio" src="" preload="auto"></audio>
         
-        <br>
-        <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">
-            <svg viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"></path>
-            </svg>
-        </button>
+        <!-- БЛОК КЕРУВАННЯ З ТРЬОМА SVG-КНОПКАМИ -->
+        <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 10px;">
+            
+            <!-- Кнопка Назад -->
+            <button class="play-btn side-btn" onclick="prevTrack()">
+                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+
+            <!-- Головна кнопка Play/Pause -->
+            <button class="play-btn" id="ctrl-btn" onclick="togglePlayback()">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </button>
+
+            <!-- Кнопка Вперед -->
+            <button class="play-btn side-btn" onclick="nextTrack()">
+                <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6zm9-12v12h2V6z"/></svg>
+            </button>
+            
+        </div>
         <div id="log">Статус: Очікування дії</div>
     </div>
 
+
     <script>
-    // 1. Ініціалізація Telegram Web App
     let tg = null;
     try {
         if (window.Telegram && window.Telegram.WebApp) {
@@ -110,7 +140,6 @@
         }
     } catch(e) { console.log("Відкрито в звичайному браузері"); }
 
-    // 2. Отримуємо елементи
     const audio = document.getElementById('radio-audio');
     const btn = document.getElementById('ctrl-btn');
     const statusText = document.getElementById('status');
@@ -119,15 +148,18 @@
     let playlist = [];
     let currentTrackIndex = 0;
 
-    // 3. Завантаження JSON з GitHub
+    // Завантаження JSON з GitHub
     async function loadPlaylist() {
         try {
             log.textContent = 'Отримання списку треків...';
-            // ВИПРАВЛЕНО: Повна реальна адреса до вашого файлу на GitHub Pages
             const response = await fetch('https://jeff-set.github.io/radio/playlist.json');
             playlist = await response.json();
             
-            setupTrack(currentTrackIndex);
+            if (playlist.length > 0) {
+                // НОВЕ: При старті вибираємо РАНДОМНИЙ індекс треку
+                currentTrackIndex = Math.floor(Math.random() * playlist.length);
+                setupTrack(currentTrackIndex);
+            }
         } catch (error) {
             console.error("Помилка завантаження плейлиста:", error);
             document.getElementById('track-artist').textContent = "Помилка мережі";
@@ -135,33 +167,34 @@
         }
     }
 
-    // 4. Підстановка даних поточного треку
+    // Підстановка даних поточного треку
     function setupTrack(index) {
         if (playlist.length === 0) return;
         
         const track = playlist[index];
+        const wasPlaying = !audio.paused; // Запам'ятовуємо, чи грала музика до перемикання
         
-        // Виводимо тексти
         document.getElementById('track-artist').textContent = track.artist;
         document.getElementById('track-title').textContent = track.title + ` (${track.year})`;
-        
-        // Автоматично підставляємо посилання на картинку та AAC звук з вашого JSON
         document.getElementById('track-cover').src = track.image_url; 
         audio.src = track.audio_url;
         
         log.textContent = 'Радіо готове до ефіру';
+
+        // Якщо музика вже грала — автоматично запускаємо новий трек після перемикання
+        if (wasPlaying) {
+            audio.play().catch(e => console.log("Помилка автостарту:", e));
+        }
     }
 
-    // 5. Просте та надійне керування Play/Pause
+    // Керування Play/Pause
     function togglePlayback() {
         const svgPath = document.querySelector('#ctrl-btn svg path');
 
         if (audio.paused) {
             log.textContent = 'Підключення до ефіру...';
-            
             audio.play()
                 .then(() => {
-                    // Зміна іконки на паузу
                     svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
                     statusText.textContent = 'Зараз грає 📻';
                     log.textContent = 'Ефір успішно запущено!';
@@ -171,15 +204,44 @@
                 });
         } else {
             audio.pause();
-            // Зміна іконки на Play
             svgPath.setAttribute('d', 'M8 5v14l11-7z');
             statusText.textContent = 'Пауза';
             log.textContent = 'Ефір зупинено';
         }
     }
 
-    // Запуск системи
+    // НОВЕ: Функція для перемикання на ВИПАДКОВИЙ наступний трек
+    function playRandomTrack() {
+        if (playlist.length <= 1) return;
+        
+        let newIndex;
+        // Цикл гарантує, що новий випадковий трек не буде збігатися з поточним
+        do {
+            newIndex = Math.floor(Math.random() * playlist.length);
+        } while (newIndex === currentTrackIndex);
+        
+        currentTrackIndex = newIndex;
+        setupTrack(currentTrackIndex);
+    }
+
+    // Кнопка Вперед (вмикає випадкову пісню)
+    function nextTrack() {
+        playRandomTrack();
+    }
+
+    // Кнопка Назад (вмикає випадкову пісню)
+    function prevTrack() {
+        playRandomTrack();
+    }
+
+    // НОВЕ: Коли пісня закінчується, автоматично вмикається НАСТУПНА РАНДОМНА
+    audio.addEventListener('ended', () => {
+        log.textContent = 'Перехід на наступний трек...';
+        playRandomTrack();
+    });
+
     loadPlaylist();
+
     </script>
 
 </body>
