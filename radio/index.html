@@ -72,8 +72,8 @@
         }
 
         .play-btn svg {
-            width: 34px;
-            height: 34px;
+            width: 45px;
+            height: 45px;
             fill: #000;
             display: block;
         }
@@ -159,7 +159,7 @@
                 // ВИПРАВЛЕНО: Повертаємо іконку Play (трикутник)
                 svgPath.setAttribute('d', 'M8 5v14l11-7z');
                 statusText.textContent = 'Радіо на паузі';
-                log.textContent = 'Ефір зупинено';
+                log.textContent = 'Етер зупинено';
             }
         }
 
@@ -169,7 +169,7 @@
                 .then(() => {
                     // ВИПРАВЛЕНО: Ставимо стильні дві смужки Паузи
                     svgPath.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-                    statusText.textContent = 'ЗАРАЗ В ЕФІРІ 📻';
+                    statusText.textContent = 'ЗАРАЗ В ЕТЕРІ';
                     log.textContent = 'Радіо Jefferson транслює!';
                 })
                 .catch((error) => {
