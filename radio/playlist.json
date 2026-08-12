@@ -54,5 +54,13 @@
         "year": "1993",
         "audio_url": "https://jeff-set.github.io/radio/tracks/vika/tomoemore.aac",
         "image_url": "https://jeff-set.github.io/radio/videos/vika/tomoemore.webp"
+    },
+    {
+        "id": 8,
+        "artist": "Notalka xP",
+        "title": "в серпні",
+        "year": "2026",
+        "audio_url": "https://jeff-set.github.io/radio/tracks/notalkaxp/vserpni.aac",
+        "image_url": "https://jeff-set.github.io/radio/videos/notalkaxp/vserpni.webp"
     }
 ]
