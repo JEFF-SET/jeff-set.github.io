@@ -46,5 +46,13 @@
         "year": "2025",
         "audio_url": "https://jeff-set.github.io/radio/tracks/holosy-nimykh/dvasviti.aac",
         "image_url": "https://jeff-set.github.io/radio/videos/holosy-nimykh/dvasviti.webp"
+    },
+    {
+        "id": 7,
+        "artist": "ВІКА",
+        "title": "То моє море",
+        "year": "1993",
+        "audio_url": "https://jeff-set.github.io/radio/tracks/vika/tomoemore.aac",
+        "image_url": "https://jeff-set.github.io/radio/videos/vika/tomoemore.webp"
     }
 ]
