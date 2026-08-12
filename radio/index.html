@@ -140,7 +140,7 @@
 
             audio.src = track.audio_url;
             audio.load();
-            log.textContent = 'Етерна хвиля налаштована';
+            log.textContent = 'Супутник «Січ-2-30» законектився - Етерна хвиля налаштована';
 
             // Якщо це автоперемикання під час гри — запускаємо ПРЯМО ЗАРАЗ без таймаутів
             if (!isFirstInit) {
@@ -151,7 +151,7 @@
         function togglePlayback() {
             const svgPath = document.querySelector('#ctrl-btn svg path');
             if (audio.paused) {
-                log.textContent = 'З\'єднання з супутником...';
+                log.textContent = 'З\'єднання з супутником «Січ-2-30»';
                 playRadio();
             } else {
                 audio.pause();
