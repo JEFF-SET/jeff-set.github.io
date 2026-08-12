@@ -24,7 +24,7 @@
         "image_url": "https://jeff-set.github.io/radio/videos/holosy-nimykh/kamenyaka.webp"
     },
     {
-        "id": 3,
+        "id": 4,
         "artist": "Голоси Німих",
         "title": "Другий Світанок",
         "year": "2026",
@@ -32,11 +32,19 @@
         "image_url": "https://jeff-set.github.io/radio/videos/holosy-nimykh/drugijsvitanok.webp"
     },
     {
-        "id": 3,
+        "id": 5,
         "artist": "Ssseruy",
         "title": "Золоті хрести",
         "year": "2025",
         "audio_url": "https://jeff-set.github.io/radio/tracks/ssseruy/zolotihresti.aac",
         "image_url": "https://jeff-set.github.io/radio/videos/ssseruy/zolotihresti.webp"
+    },
+    {
+        "id": 6,
+        "artist": "Голоси Німих",
+        "title": "Два світи",
+        "year": "2025",
+        "audio_url": "https://jeff-set.github.io/radio/tracks/holosy-nimykh/drugijsvitanok.aac",
+        "image_url": "https://jeff-set.github.io/radio/videos/holosy-nimykh/drugijsvitanok.webp"
     }
 ]
