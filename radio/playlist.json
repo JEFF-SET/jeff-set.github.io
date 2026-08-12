@@ -62,5 +62,13 @@
         "year": "2026",
         "audio_url": "https://jeff-set.github.io/radio/tracks/notalkaxp/vserpni.aac",
         "image_url": "https://jeff-set.github.io/radio/videos/notalkaxp/vserpni.webp"
+    },
+    {
+        "id": 9,
+        "artist": "Гражданин Топинамбур ",
+        "title": "Пісня про дівчат",
+        "year": "2019",
+        "audio_url": "https://jeff-set.github.io/radio/tracks/gromadyanintopnambur/psnyaprodvchat.aac",
+        "image_url": "https://jeff-set.github.io/radio/videos/gromadyanintopnambur/psnyaprodvchat.webp"
     }
 ]
