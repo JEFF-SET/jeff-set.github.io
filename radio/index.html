@@ -34,7 +34,7 @@
         .player-container {
             background: #000;
             padding: 25px 0px;
-            border-radius: 20px;
+            border-radius: 15px;
             text-align: center;
             width: 85%;
             max-width: 500px;
@@ -124,7 +124,7 @@
                     currentTrackIndex = Math.floor(Math.random() * playlist.length);
                     setupTrack(currentTrackIndex, true);
                 }
-            } catch (error) { log.textContent = "Не вдалося завантажити ефір"; }
+            } catch (error) { log.textContent = "Не вдалося завантажити етер"; }
         }
 
         function setupTrack(index, isFirstInit = false) {
@@ -140,7 +140,7 @@
 
             audio.src = track.audio_url;
             audio.load();
-            log.textContent = 'Супутник «Січ-2-30» законектився - Етерна хвиля налаштована';
+            log.textContent = 'Супутник «Січ-2-30» - Етерна хвиля налаштована';
 
             // Якщо це автоперемикання під час гри — запускаємо ПРЯМО ЗАРАЗ без таймаутів
             if (!isFirstInit) {
