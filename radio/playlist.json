@@ -65,10 +65,18 @@
     },
     {
         "id": 9,
-        "artist": "Гражданин Топинамбур ",
+        "artist": "Гражданин Топинамбур",
         "title": "Пісня про дівчат",
         "year": "2019",
         "audio_url": "https://jeff-set.github.io/radio/tracks/gromadyanintopnambur/psnyaprodvchat.aac",
         "image_url": "https://jeff-set.github.io/radio/videos/gromadyanintopnambur/psnyaprodvchat.webp"
+    },
+    {
+        "id": 10,
+        "artist": "Харцизи",
+        "title": "Шибеник",
+        "year": "2019",
+        "audio_url": "https://jeff-set.github.io/radio/tracks/hartsyzy/shibenik.aac",
+        "image_url": "https://jeff-set.github.io/radio/videos/hartsyzy/shibenik.webp"
     }
 ]
