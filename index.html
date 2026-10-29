@@ -198,21 +198,40 @@
 
         <h2>Secure Contact Terminal</h2>
         <p>
-            ENGINEER: <b>Vitalii Kartashov</b></a>
+            ENGINEER: <b>Vitalii Kartashov</b>
         </p>
-
+        
         <p>
-            EMAIL: <a href="mailto:12121982ve@gmail.com" class="main-link"
-                target="_blank"><b>12121982ve@gmail.com</b></a>
+            EMAIL: <a href="mailto:info@jeff-set.com" class="main-link" target="_blank"><b>info@jeff-set.com</b></a>
         </p>
-
+        
         <p>
-            PHONE: <b>+380951993795</b></a>
+            PHONE: <b id="secure-phone">Завантаження...</b>
         </p>
-
+        
         <p>
             LIVE RELAY: <a href="https://jeff-set.com" class="main-link" target="_blank"><b>jeff-set.com</b></a>
         </p>
+        
+        <script>
+        (function() {
+            // Номер розбитий на частини та зашифрований у Base64, щоб боти не зчитали його з коду
+            const p1 = "KzM4MDk5"; // +38099
+            const p2 = "NzM4MTI4Mw=="; // 7381283
+            
+            // Функція безпечного декодування
+            try {
+                const fullNumber = atob(p1) + atob(p2);
+                const target = document.getElementById('secure-phone');
+                if (target) {
+                    target.textContent = fullNumber;
+                }
+            } catch (e) {
+                console.error("Initialization error");
+            }
+        })();
+        </script>
+        
 
     </main>
 
