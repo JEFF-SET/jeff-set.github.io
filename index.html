@@ -6,117 +6,177 @@
     <title>Vitalii Kartashov | Lead Systems Architect & DevOps Engineer</title>
     <meta name="description"
         content="Official professional portfolio of Vitalii Kartashov. Web Design, Infrastructure Development, and Systems Optimization. Verified Freelance IT Services.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/jeff-set.css">
     <link rel="stylesheet" href="css/logo-anim.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="js/logo-anim.js"></script>
 </head>
 
 <body>
-    <div class="topbar">
-        <a href="/" class="logo-mini">
-            <svg class="logo-svg-mini" width="40" height="40" viewBox="0 0 140 140">
-                <path class="logo-border" d="
-                M5,5
-                H135
-                V105
-                A30,30 0 0 1 105,135
-                H5
-                Z
-              " />
-                <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="700"
-                    class="logo-j">J</text>
-            </svg>
-        </a>
-        <form class="theme-toggle" autocomplete="off">
-            <input type="checkbox" id="toggle-dark" aria-label="Toggle dark mode">
-            <label for="toggle-dark" class="theme-toggle-label"></label>
-        </form>
-    </div>
+    <!-- Cursor glow (desktop only, dark theme) -->
+    <div class="cursor-glow" aria-hidden="true"></div>
 
-    <div class="logo-animated-wrap">
-        <!-- Квадрат с J (и скруглённым нижним правым углом) -->
-        <div class="logo-single">
-            <svg class="logo-svg" width="140" height="140" viewBox="0 0 140 140">
-                <path class="logo-border" d="
-                M5,5
-                H135
-                V105
-                A30,30 0 0 1 105,135
-                H5
-                Z
-          " />
-                <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik" font-weight="600"
-                    class="logo-j">J</text>
-            </svg>
-        </div>
-        <!-- Прямоугольник с JEFF-SET (только на десктопе) -->
-        <div class="logo-full">
-            <svg width="540" height="140" viewBox="0 0 540 140">
-                <rect x="5" y="5" width="530" height="130" rx="0" class="logo-border" />
-                <text x="270" y="105" text-anchor="middle" font-size="90" font-family="'Rubik" font-weight="700"
-                    class="logo-word">Jeff-Set</text>
-            </svg>
-        </div>
-    </div>
-
-    <main>
-        <h1>Vitalii Kartashov</h1>
-        <h2 class="cloudflare">Lead Systems Architect</h2>
-        <h2 class="shopify">& DevOps Engineer</h2>
-        <blockquote class="quote">Welcome to the official static node infrastructure hub. I specialize in
-            high-performance web development,
-            cross-platform architecture migration, cloud hosting engineering, and low-level content delivery network
-            (CDN) speed optimization.</blockquote>
-
-        <div class="legal-notice">
-            <p>Verified Service Merchant Status:</p>
-            <p>All international contractor operations, technical sprints, and
-                digital development services are officially managed, invoiced, and validated directly through registered
-                corporate payment networks (Payoneer Business Node Integration).</p>
+    <!-- ======== NAVIGATION ======== -->
+    <header class="topbar" role="banner">
+        <div class="nav-left">
+            <a href="/" class="logo-mini" aria-label="Jeff-Set Home">
+                <svg class="logo-svg-mini" width="36" height="36" viewBox="0 0 140 140">
+                    <path class="logo-border" d="M5,5 H135 V105 A30,30 0 0 1 105,135 H5 Z" />
+                    <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="700"
+                        class="logo-j">J</text>
+                </svg>
+            </a>
+            <span class="nav-brand">jeff-set.com</span>
         </div>
 
-        <h2>Core Infrastructure</h2>
-        <h2 class="digitalocean">& Deployment Stack</h2>
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="#about">About</a>
+            <a href="#stack">Stack</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+        </nav>
 
-        <div class="grid-logos">
-            <div class="logo-card wordpress">
-                <img src="/logo/wordpress.svg" alt="WordPress logo" />
+        <div class="nav-right">
+            <form class="theme-toggle" autocomplete="off">
+                <input type="checkbox" id="toggle-dark" aria-label="Toggle dark mode">
+                <label for="toggle-dark" class="theme-toggle-label"></label>
+            </form>
+            <button class="burger" aria-label="Open navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile nav overlay -->
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <a href="#about">About</a>
+        <a href="#stack">Stack</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- ======== HERO ======== -->
+    <section class="hero" id="hero">
+        <canvas class="hero-canvas" aria-hidden="true"></canvas>
+        <div class="hero-content">
+            <div class="logo-animated-wrap">
+                <div class="logo-single">
+                    <svg class="logo-svg" width="140" height="140" viewBox="0 0 140 140">
+                        <path class="logo-border" d="M5,5 H135 V105 A30,30 0 0 1 105,135 H5 Z" />
+                        <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="600"
+                            class="logo-j">J</text>
+                    </svg>
+                </div>
+                <div class="logo-full">
+                    <svg width="540" height="140" viewBox="0 0 540 140">
+                        <rect x="5" y="5" width="530" height="130" rx="0" class="logo-border" />
+                        <text x="270" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="700"
+                            class="logo-word">Jeff-Set</text>
+                    </svg>
+                </div>
             </div>
-            <div class="logo-card shopify">
-                <img src="/logo/shopify.svg" alt="Shopify logo" />
+
+            <h1 class="hero-name reveal">Vitalii Kartashov</h1>
+
+            <div class="hero-title reveal">
+                <span id="typing-text"></span><span class="typing-cursor"></span>
             </div>
-            <div class="logo-card cloudflare">
-                <img src="/logo/cloudflare.svg" alt="Cloudflare logo" />
+
+            <p class="hero-desc reveal">
+                High-performance web development, cross-platform architecture migration, cloud hosting engineering,
+                and low-level CDN speed optimization.
+            </p>
+
+            <div class="legal-notice reveal">
+                <p>Verified Service Merchant Status</p>
+                <p>All international contractor operations, technical sprints, and
+                    digital development services are officially managed, invoiced, and validated directly through
+                    registered corporate payment networks (Payoneer Business Node Integration).</p>
             </div>
-            <div class="logo-card digitalocean">
-                <img src="/logo/digital-ocean.svg" alt="DigitalOcean logo" />
-            </div>
+
+            <a href="#contact" class="hero-cta reveal">
+                <span>Get in Touch</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
         </div>
 
-        <h1 class="with-tag">WordPress</h1>
-        <blockquote class="quote">Advanced backend configuration, customized theme hardcoding, Core Web Vitals
-            optimization, database cleaning, and headless CMS architecture alignment.</blockquote>
+        <div class="hero-scroll-hint" aria-hidden="true">
+            <span>scroll</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
 
-        <h1 class="with-tag">Shopify</h1>
-        <blockquote class="quote">Complete digital storefront setup, API synchronization, custom Liquid script
-            modification, and automated
-            sales-funnel routing integration.</blockquote>
+    <!-- ======== ABOUT (brief intro + stack intro) ======== -->
+    <section id="about">
+        <div class="section-header reveal">
+            <span class="section-label">// who am I</span>
+            <h2 class="section-title">About</h2>
+            <p class="section-subtitle">Sovereign Static Node Infrastructure Hub — Kyiv, Ukraine</p>
+        </div>
+        <blockquote class="quote-block reveal">
+            Welcome to the official static node infrastructure hub. I specialize in
+            high-performance web development, cross-platform architecture migration, cloud hosting engineering, and
+            low-level content delivery network (CDN) speed optimization.
+        </blockquote>
+    </section>
 
-        <h1 class="with-tag">Cloudflare</h1>
-        <blockquote class="quote">Low-level DNS shield integration, 92%+ data edge-caching optimization, Rocket Loader
-            calibration, Page Rules
-            configuration, and DDoS threat neutralization.</blockquote>
+    <!-- ======== STACK ======== -->
+    <section id="stack">
+        <div class="section-header reveal">
+            <span class="section-label">// core infrastructure</span>
+            <h2 class="section-title">Deployment Stack</h2>
+        </div>
 
-        <h1 class="with-tag">DigitalOcean</h1>
-        <blockquote class="quote">VPS / Cloud Droplet allocation, Linux server security hardening, reverse proxy
-            implementation, and custom
-            scalable application hosting setups.</blockquote>
+        <div class="stack-grid stagger">
+            <article class="stack-card">
+                <div class="stack-card-logo wordpress">
+                    <img src="/logo/wordpress.svg" alt="WordPress logo" width="40" height="40">
+                </div>
+                <h3>WordPress</h3>
+                <p>Advanced backend configuration, customized theme hardcoding, Core Web Vitals optimization,
+                    database cleaning, and headless CMS architecture alignment.</p>
+                <span class="dev-tag">.dev</span>
+            </article>
 
+            <article class="stack-card">
+                <div class="stack-card-logo shopify">
+                    <img src="/logo/shopify.svg" alt="Shopify logo" width="40" height="40">
+                </div>
+                <h3>Shopify</h3>
+                <p>Complete digital storefront setup, API synchronization, custom Liquid script modification,
+                    and automated sales-funnel routing integration.</p>
+                <span class="dev-tag">.dev</span>
+            </article>
 
-        <div class="table-scroll">
-            <table class="custom-table">
+            <article class="stack-card">
+                <div class="stack-card-logo cloudflare">
+                    <img src="/logo/cloudflare.svg" alt="Cloudflare logo" width="40" height="40">
+                </div>
+                <h3>Cloudflare</h3>
+                <p>Low-level DNS shield integration, 92%+ data edge-caching optimization, Rocket Loader
+                    calibration, Page Rules configuration, and DDoS threat neutralization.</p>
+                <span class="dev-tag">.dev</span>
+            </article>
+
+            <article class="stack-card">
+                <div class="stack-card-logo digitalocean">
+                    <img src="/logo/digital-ocean.svg" alt="DigitalOcean logo" width="40" height="40">
+                </div>
+                <h3>DigitalOcean</h3>
+                <p>VPS / Cloud Droplet allocation, Linux server security hardening, reverse proxy implementation,
+                    and custom scalable application hosting setups.</p>
+                <span class="dev-tag">.dev</span>
+            </article>
+        </div>
+
+        <!-- Comparison table -->
+        <div class="table-wrapper reveal">
+            <table class="comparison-table">
                 <thead>
                     <tr>
                         <th>Platform</th>
@@ -158,80 +218,170 @@
                 </tbody>
             </table>
         </div>
+    </section>
 
-        <h2 class="cloudflare">Recent Global Infrastructure Deployments</h2>
-        <p>
-            Cynthia Grafton-Holt Couture (London, UK): <b>Complete Wix Stores optimization, CRM database
-                synchronization, and Klaviyo automated flow integration.</b></a>
-            <a href="https://www.cynthiagraftonholt.com" class="main-link"
-                target="_blank"><b>cynthiagraftonholt.com</b></a>
-        </p>
+    <!-- ======== PROJECTS ======== -->
+    <section id="projects">
+        <div class="section-header reveal">
+            <span class="section-label">// recent deployments</span>
+            <h2 class="section-title">Global Infrastructure</h2>
+            <p class="section-subtitle">Recent projects from around the world</p>
+        </div>
 
-        <p>
-            Dragoni Partners LLP (Mayfair, London, UK): <b>Offline-to-online AI marketing funnel deployment, Bluehost
-                cPanel routing calibration, and secure custom CTA lead-capture systems.</b></a>
-            <a href="https://dragonipartnersllp.com" class="main-link" target="_blank"><b>dragonipartnersllp.com</b></a>
-        </p>
+        <div class="projects-grid stagger">
+            <article class="project-card">
+                <div class="project-card-header">
+                    <span class="project-location">London, UK</span>
+                </div>
+                <h3>Cynthia Grafton-Holt Couture</h3>
+                <p>Complete Wix Stores optimization, CRM database synchronization, and Klaviyo automated flow
+                    integration.</p>
+                <a href="https://www.cynthiagraftonholt.com" class="project-link" target="_blank"
+                    rel="noopener noreferrer">
+                    cynthiagraftonholt.com
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17L17 7M7 7h10v10" />
+                    </svg>
+                </a>
+            </article>
 
-        <p>
-            Fashion designer Lusine Bonfield (Park Royal, London, UK): <b>Optimizing Shopify Online Store - SEO,
-                Marketing, and Klaviyo Integration</b></a>
-            <a href="https://theloussine.com" class="main-link" target="_blank"><b>theloussine.com</b></a>
-        </p>
+            <article class="project-card">
+                <div class="project-card-header">
+                    <span class="project-location">Mayfair, London, UK</span>
+                </div>
+                <h3>Dragoni Partners LLP</h3>
+                <p>Offline-to-online AI marketing funnel deployment, Bluehost cPanel routing calibration, and secure
+                    custom CTA lead-capture systems.</p>
+                <a href="https://dragonipartnersllp.com" class="project-link" target="_blank"
+                    rel="noopener noreferrer">
+                    dragonipartnersllp.com
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17L17 7M7 7h10v10" />
+                    </svg>
+                </a>
+            </article>
 
-        <p>
-            Premium Food Brand Owner Patryk Surmacki (Warsaw, Poland): <b>Full-scale Shopify e-commerce infrastructure
-                configuration under strict global performance standards. Deployment of custom responsive HTML/CSS
-                liquid-modules for laboratory analysis data alignment, payment gateway routing, and advanced mobile
-                WebView layout speed optimization.</b></a>
-            <a href="https://numa.bio" class="main-link" target="_blank"><b>numa.bio</b></a>
-        </p>
+            <article class="project-card">
+                <div class="project-card-header">
+                    <span class="project-location">Park Royal, London, UK</span>
+                </div>
+                <h3>Fashion designer Lusine Bonfield</h3>
+                <p>Optimizing Shopify Online Store — SEO, Marketing, and Klaviyo Integration.</p>
+                <a href="https://theloussine.com" class="project-link" target="_blank" rel="noopener noreferrer">
+                    theloussine.com
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17L17 7M7 7h10v10" />
+                    </svg>
+                </a>
+            </article>
 
-        <p>
-            Luxury bridal designer Cynthia Holt at Oui Madam (Gorst Road, London, UK): <b>High-End WordPress Optimization - Advanced Core Web Vitals, Template Core Code Reconstruction, and Enterprise PageSpeed Acceleration</b>
-            <a href="https://www.ouimadam.com" class="main-link" target="_blank"><b>ouimadam.com</b></a>
-        </p>
-        
+            <article class="project-card">
+                <div class="project-card-header">
+                    <span class="project-location">Warsaw, Poland</span>
+                </div>
+                <h3>Premium Food Brand — Patryk Surmacki</h3>
+                <p>Full-scale Shopify e-commerce infrastructure configuration under strict global performance
+                    standards. Deployment of custom responsive HTML/CSS liquid-modules for laboratory analysis data
+                    alignment, payment gateway routing, and advanced mobile WebView layout speed optimization.</p>
+                <a href="https://numa.bio" class="project-link" target="_blank" rel="noopener noreferrer">
+                    numa.bio
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17L17 7M7 7h10v10" />
+                    </svg>
+                </a>
+            </article>
 
-        <blockquote class="quote">Design is not just what it looks like and feels like. Design is how it works.
+            <article class="project-card">
+                <div class="project-card-header">
+                    <span class="project-location">Gorst Road, London, UK</span>
+                </div>
+                <h3>Luxury bridal designer — Oui Madam</h3>
+                <p>High-End WordPress Optimization — Advanced Core Web Vitals, Template Core Code Reconstruction,
+                    and Enterprise PageSpeed Acceleration.</p>
+                <a href="https://www.ouimadam.com" class="project-link" target="_blank" rel="noopener noreferrer">
+                    ouimadam.com
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17L17 7M7 7h10v10" />
+                    </svg>
+                </a>
+            </article>
+        </div>
+    </section>
+
+    <!-- ======== QUOTE ======== -->
+    <section class="quote-section">
+        <blockquote class="quote-block reveal">
+            Design is not just what it looks like and feels like. Design is how it works.
         </blockquote>
+    </section>
 
-        <h2>Secure Contact Terminal</h2>
-        <p>
-            ENGINEER: <b>Vitalii Kartashov</b>
-        </p>
-        
-        <p>
-            EMAIL: <a href="mailto:info@jeff-set.com" class="main-link" target="_blank"><b>info@jeff-set.com</b></a>
-        </p>
-        
-        <p>
-            PHONE: <b id="secure-phone">Завантаження...</b>
-        </p>
-        
-        <p>
-            LIVE RELAY: <a href="https://jeff-set.com" class="main-link" target="_blank"><b>jeff-set.com</b></a>
-        </p>
-        
+    <!-- ======== CONTACT ======== -->
+    <section id="contact">
+        <div class="section-header reveal">
+            <span class="section-label">// secure contact terminal</span>
+            <h2 class="section-title">Get in Touch</h2>
+        </div>
+
+        <div class="contact-terminal reveal">
+            <div class="terminal-bar">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+                <span class="terminal-title">contact@jeff-set — bash</span>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$&nbsp;</span>
+                    <span class="terminal-key">ENGINEER=</span>
+                    <span class="terminal-value">"Vitalii Kartashov"</span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$&nbsp;</span>
+                    <span class="terminal-key">EMAIL=</span>
+                    <span class="terminal-value"><a href="mailto:info@jeff-set.com">info@jeff-set.com</a></span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$&nbsp;</span>
+                    <span class="terminal-key">PHONE=</span>
+                    <span class="terminal-value" id="secure-phone">Loading...</span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$&nbsp;</span>
+                    <span class="terminal-key">RELAY=</span>
+                    <span class="terminal-value"><a href="https://jeff-set.com"
+                            target="_blank">jeff-set.com</a></span>
+                </div>
+                <div class="terminal-line terminal-cursor-line">
+                    <span class="terminal-prompt">$&nbsp;</span>
+                    <span class="terminal-cursor-blink"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phone decode (same as original) -->
         <script>
-        (function() {
-            const p1 = "KzM4MDk5"; // +38099
-            const p2 = "NzM4MTI4Mw=="; // 7381283
-            try {
-                const fullNumber = atob(p1) + atob(p2);
-                const target = document.getElementById('secure-phone');
-                if (target) {
-                    target.textContent = fullNumber;
+            (function () {
+                const p1 = "KzM4MDk5";
+                const p2 = "NzM4MTI4Mw==";
+                try {
+                    const fullNumber = atob(p1) + atob(p2);
+                    const target = document.getElementById('secure-phone');
+                    if (target) {
+                        target.textContent = fullNumber;
+                    }
+                } catch (e) {
+                    console.error("Initialization error");
                 }
-            } catch (e) {
-                console.error("Initialization error");
-            }
-        })();
+            })();
         </script>
-        
+    </section>
 
-    </main>
-
+    <!-- ======== FOOTER ======== -->
     <div class="footer-meta">
         <span class="location-flag">
             <span class="flag-label">Kyiv</span>
@@ -244,12 +394,11 @@
     </div>
 
     <footer>
-        &copy; 2026 Jeff-Set &amp; JEFFERSON &amp; Vitalii Kartashov - All rights reserved.
+        &copy; 2026 Jeff-Set &amp; JEFFERSON &amp; Vitalii Kartashov — All rights reserved.
         Sovereign Static Node deployed directly via GitHub Pages Infrastructure Network.
     </footer>
 
     <script src="js/jeff-set.js"></script>
-
 </body>
 
 </html>
