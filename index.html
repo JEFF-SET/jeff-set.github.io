@@ -3,9 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Vitalii Kartashov | Lead Systems Architect & DevOps Engineer</title>
+    <title>Vitalii Kartashov | Systems Architect &amp; Full-Stack Web Engineer</title>
     <meta name="description"
-        content="Official professional portfolio of Vitalii Kartashov. Web Design, Infrastructure Development, and Systems Optimization. Verified Freelance IT Services.">
+        content="Personal portfolio of Vitalii Kartashov (Jeff-Set). Custom WordPress &amp; Shopify engineering, Cloudflare edge performance, and DigitalOcean cloud infrastructure.">
+    <meta property="og:title" content="Vitalii Kartashov | Systems Architect &amp; Full-Stack Web Engineer">
+    <meta property="og:description"
+        content="Personal portfolio of Vitalii Kartashov (Jeff-Set). Custom WordPress &amp; Shopify engineering, Cloudflare edge performance, and DigitalOcean cloud infrastructure.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/jeff-set.css">
     <link rel="stylesheet" href="css/logo-anim.css">
@@ -13,21 +16,29 @@
     <script src="js/logo-anim.js"></script>
 </head>
 
-<body>
+<body data-theme="dark">
+    <!-- Ambient Kinetic Background (full-page) -->
+    <div class="bg-ambient" aria-hidden="true">
+        <div class="bg-grid-pattern"></div>
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+        <canvas class="bg-canvas"></canvas>
+    </div>
+
     <!-- Cursor glow (desktop only, dark theme) -->
     <div class="cursor-glow" aria-hidden="true"></div>
 
     <!-- ======== NAVIGATION ======== -->
     <header class="topbar" role="banner">
         <div class="nav-left">
-            <a href="/" class="logo-mini" aria-label="Jeff-Set Home">
-                <svg class="logo-svg-mini" width="36" height="36" viewBox="0 0 140 140">
+            <a href="#hero" class="logo-mini" aria-label="Jeff-Set Home">
+                <svg class="logo-svg-mini" width="38" height="38" viewBox="0 0 140 140" aria-hidden="true">
                     <path class="logo-border" d="M5,5 H135 V105 A30,30 0 0 1 105,135 H5 Z" />
                     <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="700"
                         class="logo-j">J</text>
                 </svg>
             </a>
-            <span class="nav-brand">jeff-set.com</span>
         </div>
 
         <nav class="nav-links" aria-label="Main navigation">
@@ -35,14 +46,27 @@
             <a href="#stack">Stack</a>
             <a href="#projects">Projects</a>
             <a href="#contact">Contact</a>
+            <a href="#building">In Progress</a>
         </nav>
 
         <div class="nav-right">
-            <form class="theme-toggle" autocomplete="off">
-                <input type="checkbox" id="toggle-dark" aria-label="Toggle dark mode">
-                <label for="toggle-dark" class="theme-toggle-label"></label>
-            </form>
-            <button class="burger" aria-label="Open navigation menu" aria-expanded="false">
+            <button type="button" id="toggle-dark" class="theme-toggle-btn" aria-label="Switch to light mode"
+                aria-pressed="true" title="Toggle color theme">
+                <!-- Sun icon (shown when switching to light / in dark mode) -->
+                <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4" fill="currentColor" fill-opacity="0.2" />
+                    <path
+                        d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                </svg>
+                <!-- Moon icon (shown when switching to dark / in light mode) -->
+                <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"
+                        fill-opacity="0.2" />
+                </svg>
+            </button>
+            <button type="button" class="burger" aria-label="Open navigation menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -56,330 +80,557 @@
         <a href="#stack">Stack</a>
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
+        <a href="#building">In Progress</a>
     </nav>
 
-    <!-- ======== HERO ======== -->
-    <section class="hero" id="hero">
-        <canvas class="hero-canvas" aria-hidden="true"></canvas>
-        <div class="hero-content">
-            <div class="logo-animated-wrap">
-                <div class="logo-single">
-                    <svg class="logo-svg" width="140" height="140" viewBox="0 0 140 140">
-                        <path class="logo-border" d="M5,5 H135 V105 A30,30 0 0 1 105,135 H5 Z" />
-                        <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="600"
-                            class="logo-j">J</text>
-                    </svg>
+    <main>
+        <!-- ======== HERO ======== -->
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <div class="logo-animated-wrap" role="button" tabindex="0"
+                    aria-label="Animate Jeff-Set signature mark">
+                    <div class="logo-single">
+                        <svg class="logo-svg" width="140" height="140" viewBox="0 0 140 140" aria-hidden="true">
+                            <path class="logo-border" d="M5,5 H135 V105 A30,30 0 0 1 105,135 H5 Z" />
+                            <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'"
+                                font-weight="600" class="logo-j">J</text>
+                        </svg>
+                    </div>
+                    <div class="logo-full">
+                        <svg width="540" height="140" viewBox="0 0 540 140" aria-hidden="true">
+                            <rect x="5" y="5" width="530" height="130" rx="0" class="logo-border" />
+                            <text x="270" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'"
+                                font-weight="700" class="logo-word">Jeff-Set</text>
+                        </svg>
+                    </div>
                 </div>
-                <div class="logo-full">
-                    <svg width="540" height="140" viewBox="0 0 540 140">
-                        <rect x="5" y="5" width="530" height="130" rx="0" class="logo-border" />
-                        <text x="270" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="700"
-                            class="logo-word">Jeff-Set</text>
-                    </svg>
+
+                <h1 class="hero-name reveal">Vitalii Kartashov</h1>
+
+                <div class="hero-title reveal">
+                    <span id="typing-text"></span><span class="typing-cursor" aria-hidden="true"></span>
+                </div>
+
+                <p class="hero-desc reveal">
+                    Independent Systems Architect and Full-Stack Web Engineer based in Kyiv. I build custom
+                    WordPress &amp; Shopify platforms, engineer cloud hosting environments, and optimize global
+                    websites for sub-second speed.
+                </p>
+
+                <div class="hero-actions reveal">
+                    <a href="#contact" class="hero-cta">
+                        <span>Get in Touch</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                    <a href="#stack" class="hero-secondary-cta">Explore Stack</a>
+                </div>
+
+                <div class="legal-notice reveal">
+                    <p class="legal-kicker">Verified Independent Contractor</p>
+                    <p>All international engagements, technical sprints, and retainer services are officially
+                        managed, invoiced, and settled through registered corporate payment channels.</p>
+                </div>
+
+                <!-- Quantitative highlight bar -->
+                <div class="hero-metrics reveal" aria-label="Engineering highlights">
+                    <div class="metric-item">
+                        <span class="metric-value">8+ yrs</span>
+                        <span class="metric-label">Production Web &amp; Infra</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">95+</span>
+                        <span class="metric-label">Core Web Vitals Target</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">92%+</span>
+                        <span class="metric-label">Edge Cache Hit Ratio</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-value">UK · EU · US</span>
+                        <span class="metric-label">Client Geography</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-scroll-hint" aria-hidden="true">
+                <span>scroll</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <!-- ======== ABOUT ======== -->
+        <section id="about">
+            <div class="section-header reveal">
+                <span class="section-label">Profile</span>
+                <h2 class="section-title">About Me</h2>
+                <p class="section-subtitle">Engineering fast, reliable digital products from Kyiv to the world</p>
+            </div>
+
+            <div class="about-layout reveal">
+                <div class="about-story">
+                    <p class="about-lead">
+                        My work sits at the intersection of clean frontend craftsmanship and low-level systems
+                        engineering. Instead of treating design, CMS code, and server infrastructure as separate
+                        worlds, I architect them as a single cohesive system.
+                    </p>
+                    <p class="about-body">
+                        Whether you need a bespoke WordPress platform built from scratch, a high-converting Shopify
+                        storefront with automated marketing flows, or a hardened Linux cloud environment behind
+                        Cloudflare, I take full ownership from initial architecture to production launch and
+                        long-term speed tuning.
+                    </p>
+                </div>
+
+                <div class="about-pillars">
+                    <div class="pillar-item">
+                        <span class="pillar-index">01.</span>
+                        <div>
+                            <h3>Performance First</h3>
+                            <p>Clean markup, zero bloat, tuned database queries, and aggressive edge caching built
+                                for Core Web Vitals.</p>
+                        </div>
+                    </div>
+                    <div class="pillar-item">
+                        <span class="pillar-index">02.</span>
+                        <div>
+                            <h3>Full-Cycle Ownership</h3>
+                            <p>From UI templates and custom plugins to DNS records, SSL certificates, and server-level
+                                security.</p>
+                        </div>
+                    </div>
+                    <div class="pillar-item">
+                        <span class="pillar-index">03.</span>
+                        <div>
+                            <h3>Direct Collaboration</h3>
+                            <p>Clear communication, transparent milestones, and reliable post-launch engineering
+                                support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======== STACK ======== -->
+        <section id="stack">
+            <div class="section-header reveal">
+                <span class="section-label">Core Infrastructure</span>
+                <h2 class="section-title">Deployment Stack</h2>
+                <p class="section-subtitle">Deep specialization across CMS engineering, e-commerce, edge networking,
+                    and cloud infrastructure</p>
+            </div>
+
+            <div class="stack-grid stagger">
+                <!-- WordPress -->
+                <article class="stack-card stack-card-wordpress">
+                    <div class="stack-card-top">
+                        <div class="stack-card-logo wordpress" aria-hidden="true">
+                            <span class="logo-orbit"></span>
+                            <svg class="stack-svg stack-svg-wp" viewBox="0 0 1920 1920"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" fill-rule="evenodd"
+                                    d="m1243.561 1811.41-238.305-636.197-272.866 638.118c-103.229-2.598-163.087-64.828-163.087-64.828L162.6 471.59s-16.037-63.36-106.842-63.36H-.034l37.045-96.226h519.755v96.226s-51.614 41.562-39.53 99.162c12.198 57.6 220.236 887.266 220.236 887.266l200.584-443.972-93.064-293.647c-35.69-90.24-65.054-177.205-88.433-200.245-32.979-35.802-93.063-48.564-93.063-48.564v-96.226h640.376v96.226h-105.939s-55.793 11.18-60.65 93.176c-1.016 16.49 8.584 73.864 8.584 73.864l248.47 816.903s255.248-468.706 258.862-570.805c3.727-101.872-35.802-268.687-147.275-335.322-178.334-107.407-133.27-321.092 4.179-396.65 58.729-32.188 111.02-33.43 170.54-33.43 209.845 0 233.45 237.854 233.45 237.854 13.892 81.996 4.066 221.478-35.463 344.47-103.229 319.85-358.702 895.286-457.638 1114.391-79.51 78.946-177.43 58.73-177.43 58.73" />
+                            </svg>
+                        </div>
+                        <div class="stack-heading-wrap">
+                            <h3 class="stack-title stack-title-wordpress">WordPress</h3>
+                            <span class="stack-meta">Themes · Plugins · Speed · Security</span>
+                        </div>
+                    </div>
+                    <p class="stack-desc">
+                        Complete end-to-end WordPress engineering — from clean custom themes and bespoke plugin
+                        architecture to deep Core Web Vitals optimization and zero-downtime migrations.
+                    </p>
+                    <ul class="stack-capabilities">
+                        <li>Custom theme development &amp; legacy template refactoring</li>
+                        <li>Bespoke plugins, REST API integrations &amp; WooCommerce</li>
+                        <li>PageSpeed 95+ tuning, asset cleanup &amp; database indexing</li>
+                        <li>Malware hardening, headless CMS &amp; multisite setup</li>
+                    </ul>
+                </article>
+
+                <!-- Shopify -->
+                <article class="stack-card stack-card-shopify">
+                    <div class="stack-card-top">
+                        <div class="stack-card-logo shopify" aria-hidden="true">
+                            <span class="logo-orbit"></span>
+                            <svg class="stack-svg stack-svg-shopify" viewBox="-3 -2 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor"
+                                    d="M12.338 2.395a.228.228 0 0 1 .032.027l1.18 1.171 1.6.12c.073.006.16.061.174.161l2.172 14.693-6.148 1.33L0 17.771S1.456 6.509 1.511 6.11c.073-.524.091-.541.648-.716l1.796-.557C4.339 3.208 5.565 0 8.13 0c.335 0 .723.18 1.037.594L9.26.591c1.101 0 1.727.939 2.082 1.96l.595-.184c.08-.024.278-.056.4.028zM9.261 7.11s-.513-.297-1.55-.297c-2.692 0-4.026 1.798-4.026 3.656 0 2.208 2.203 2.268 2.203 3.611 0 .325-.23.77-.795.77-.864 0-1.888-.88-1.888-.88l-.521 1.724s.996 1.212 2.944 1.212c1.623 0 2.827-1.222 2.827-3.12 0-2.413-2.685-2.807-2.685-3.837 0-.19.06-.938 1.254-.938.814 0 1.478.354 1.478.354l.759-2.255zm1.455-4.366c-.243-.743-.621-1.389-1.189-1.46.141.405.23.916.23 1.55l-.001.208.96-.298zM8.823 1.41c-.626.268-1.342.98-1.723 2.454l1.983-.614v-.111c0-.766-.102-1.334-.26-1.73zM8.061.688c-1.844 0-2.879 2.42-3.315 3.905l1.567-.486C6.686 2.161 7.567 1.187 8.39.8a.58.58 0 0 0-.33-.11z" />
+                            </svg>
+                        </div>
+                        <div class="stack-heading-wrap">
+                            <h3 class="stack-title stack-title-shopify">Shopify</h3>
+                            <span class="stack-meta">Liquid · Storefronts · CRM · CRO</span>
+                        </div>
+                    </div>
+                    <p class="stack-desc">
+                        High-converting e-commerce storefronts engineered for mobile speed, seamless API
+                        synchronization, and automated retention pipelines.
+                    </p>
+                    <ul class="stack-capabilities">
+                        <li>Custom Liquid sections, theme architecture &amp; UX polish</li>
+                        <li>Klaviyo automated email flows &amp; CRM inventory sync</li>
+                        <li>Payment gateway routing, multi-currency &amp; localization</li>
+                        <li>Mobile WebView acceleration &amp; technical e-commerce SEO</li>
+                    </ul>
+                </article>
+
+                <!-- Cloudflare -->
+                <article class="stack-card stack-card-cloudflare">
+                    <div class="stack-card-top">
+                        <div class="stack-card-logo cloudflare" aria-hidden="true">
+                            <span class="logo-orbit"></span>
+                            <svg class="stack-svg stack-svg-cf" viewBox="0 0 32 32"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor"
+                                    d="M25.079 15.102c-0.015-0-0.032-0.001-0.049-0.001-0.087 0-0.174 0.005-0.258 0.016l0.010-0.001c-0.074 0.004-0.136 0.054-0.158 0.121l-0 0.001-0.422 1.468c-0.068 0.187-0.108 0.402-0.108 0.627 0 0.378 0.112 0.731 0.305 1.026l-0.004-0.007c0.309 0.397 0.786 0.649 1.323 0.649 0.002 0 0.004 0 0.005 0h-0l2.304 0.142c0.001-0 0.003-0 0.004-0 0.067 0 0.127 0.035 0.161 0.087l0 0.001c0.022 0.037 0.035 0.082 0.035 0.129 0 0.023-0.003 0.046-0.009 0.068l0-0.002c-0.040 0.107-0.138 0.184-0.254 0.194l-0.001 0-2.401 0.14c-1.447 0.159-2.644 1.089-3.18 2.366l-0.010 0.026-0.176 0.448c-0.006 0.015-0.010 0.032-0.010 0.050 0 0.070 0.057 0.127 0.127 0.127 0.002 0 0.004-0 0.006-0h8.244c0.001 0 0.002 0 0.002 0 0.099 0 0.182-0.066 0.208-0.156l0-0.002c0.138-0.479 0.218-1.030 0.22-1.599v-0.001c-0.009-3.262-2.653-5.903-5.916-5.907h-0zM21.634 22.054c0.068-0.186 0.107-0.401 0.107-0.625 0-0.379-0.112-0.731-0.306-1.026l0.004 0.007c-0.308-0.397-0.785-0.65-1.322-0.65-0.002 0-0.003 0-0.005 0h0l-10.821-0.14c-0.001 0-0.002 0-0.003 0-0.068 0-0.128-0.035-0.163-0.088l-0-0.001c-0.022-0.036-0.036-0.080-0.036-0.127 0-0.024 0.003-0.047 0.010-0.069l-0 0.002c0.040-0.107 0.137-0.184 0.253-0.195l0.001-0 10.917-0.14c1.447-0.16 2.643-1.090 3.182-2.366l0.010-0.026 0.624-1.626c0.017-0.039 0.027-0.085 0.027-0.133 0-0.027-0.003-0.054-0.009-0.079l0 0.002c-0.735-3.203-3.561-5.555-6.936-5.555-3.109 0-5.751 1.996-6.717 4.776l-0.015 0.050c-0.528-0.399-1.195-0.64-1.919-0.64-1.651 0-3.010 1.252-3.179 2.859l-0.001 0.014c-0.010 0.097-0.016 0.21-0.016 0.324 0 0.281 0.035 0.555 0.1 0.816l-0.005-0.023c-2.452 0.071-4.413 2.076-4.413 4.539 0 0.002 0 0.004 0 0.006v-0c0.002 0.234 0.018 0.463 0.047 0.687l-0.003-0.028c0.017 0.104 0.104 0.182 0.211 0.184h19.971c0.12-0.003 0.22-0.083 0.253-0.192l0-0.002 0.15-0.533z" />
+                            </svg>
+                        </div>
+                        <div class="stack-heading-wrap">
+                            <h3 class="stack-title stack-title-cloudflare">Cloudflare</h3>
+                            <span class="stack-meta">DNS · Edge Cache · WAF · Workers</span>
+                        </div>
+                    </div>
+                    <p class="stack-desc">
+                        Edge-level speed acceleration and perimeter defense ensuring instant global TTFB, resilient
+                        DNS routing, and zero-trust traffic filtering.
+                    </p>
+                    <ul class="stack-capabilities">
+                        <li>Low-level DNS architecture, DNSSEC &amp; redirect routing</li>
+                        <li>92%+ edge cache rules, APO &amp; Tiered Cache calibration</li>
+                        <li>WAF rulesets, bot protection &amp; DDoS neutralization</li>
+                        <li>Cloudflare Workers, Pages &amp; strict SSL/TLS tuning</li>
+                    </ul>
+                </article>
+
+                <!-- DigitalOcean -->
+                <article class="stack-card stack-card-digitalocean">
+                    <div class="stack-card-top">
+                        <div class="stack-card-logo digitalocean" aria-hidden="true">
+                            <span class="logo-orbit"></span>
+                            <svg class="stack-svg stack-svg-do" viewBox="0 0 32 32"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor"
+                                    d="M5.438 30.113h4.606v-4.6h-4.606zM1.587 21.663v3.85h3.85v-3.85zM30.725 11.056c-1.438-4.637-5.15-8.331-9.788-9.787-10.631-3.319-20.438 4.587-20.438 14.725h5.988c0-6.362 6.312-11.281 13.006-8.856 2.481 0.894 4.469 2.881 5.363 5.356 2.444 6.688-2.481 12.988-8.837 13v0.019h-0.019v5.988c10.163 0 18.050-9.8 14.725-20.444zM16.019 25.494v-5.956h-5.975v5.975h5.956v-0.019z" />
+                            </svg>
+                        </div>
+                        <div class="stack-heading-wrap">
+                            <h3 class="stack-title stack-title-digitalocean">DigitalOcean</h3>
+                            <span class="stack-meta">VPS · Nginx · Docker · Linux Ops</span>
+                        </div>
+                    </div>
+                    <p class="stack-desc">
+                        Dedicated cloud hosting, hardened Linux servers, and automated deployment pipelines tailored
+                        for custom web applications and high-traffic sites.
+                    </p>
+                    <ul class="stack-capabilities">
+                        <li>Droplet sizing, managed databases &amp; Spaces CDN setup</li>
+                        <li>Nginx / Caddy reverse proxy &amp; HTTP/3 configuration</li>
+                        <li>Docker containerization, CI/CD &amp; automated backups</li>
+                        <li>SSH hardening, UFW firewalls &amp; 24/7 uptime monitoring</li>
+                    </ul>
+                </article>
+            </div>
+
+            <!-- Solutions & Services Matrix (replaces placeholder comparison table) -->
+            <div class="matrix-header reveal">
+                <h3>How I Help Clients Ship</h3>
+                <p>Practical engineering engagements tailored to your product stage and performance goals</p>
+            </div>
+
+            <div class="table-wrapper reveal">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Engagement</th>
+                            <th>Core Stack</th>
+                            <th>What Gets Built</th>
+                            <th>Target Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Engagement">Custom WordPress Platform</td>
+                            <td data-label="Core Stack">WordPress · Custom PHP · Cloudflare</td>
+                            <td data-label="What Gets Built">Bespoke theme, custom plugins, structured ACF content,
+                                technical SEO</td>
+                            <td data-label="Target Outcome">95+ PageSpeed &amp; clean editorial workflow</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Engagement">Shopify Storefront &amp; Growth</td>
+                            <td data-label="Core Stack">Shopify · Liquid · Klaviyo CRM</td>
+                            <td data-label="What Gets Built">Custom storefront modules, CRM sync, automated retention
+                                flows</td>
+                            <td data-label="Target Outcome">Higher conversion rate &amp; mobile fluidity</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Engagement">Speed &amp; Core Web Vitals Audit</td>
+                            <td data-label="Core Stack">Cloudflare · Asset &amp; DB Profiling</td>
+                            <td data-label="What Gets Built">Render-blocking removal, edge caching, image &amp; query
+                                optimization</td>
+                            <td data-label="Target Outcome">Sub-1.5s LCP &amp; instant perceived load</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Engagement">Cloud Migration &amp; Hardening</td>
+                            <td data-label="Core Stack">DigitalOcean · Nginx · Docker</td>
+                            <td data-label="What Gets Built">Zero-downtime VPS migration, SSL, firewall &amp; automated
+                                backups</td>
+                            <td data-label="Target Outcome">99.9% uptime &amp; predictable scaling</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ======== PROJECTS ======== -->
+        <section id="projects">
+            <div class="section-header reveal">
+                <span class="section-label">Selected Work</span>
+                <h2 class="section-title">Client Deployments</h2>
+                <p class="section-subtitle">Production platforms, luxury e-commerce, and performance architecture
+                    delivered across Europe and the UK</p>
+            </div>
+
+            <div class="projects-grid stagger">
+                <article class="project-card">
+                    <div class="project-card-header">
+                        <span class="project-location">London, UK · E-Commerce &amp; CRM</span>
+                    </div>
+                    <h3>Cynthia Grafton-Holt Couture</h3>
+                    <p>Full storefront optimization, customer database synchronization, and automated Klaviyo
+                        lifecycle marketing integration for a bespoke London couture house.</p>
+                    <a href="https://www.cynthiagraftonholt.com" class="project-link" target="_blank"
+                        rel="noopener noreferrer">
+                        <span>cynthiagraftonholt.com</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                    </a>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-card-header">
+                        <span class="project-location">Mayfair, London · Lead Systems</span>
+                    </div>
+                    <h3>Dragoni Partners LLP</h3>
+                    <p>Digital advisory funnel architecture, DNS and cPanel routing calibration, and secure custom
+                        lead-capture workflows built for boutique financial consultancy.</p>
+                    <a href="https://dragonipartnersllp.com" class="project-link" target="_blank"
+                        rel="noopener noreferrer">
+                        <span>dragonipartnersllp.com</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                    </a>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-card-header">
+                        <span class="project-location">Park Royal, London · Shopify</span>
+                    </div>
+                    <h3>Lusine Bonfield Fashion</h3>
+                    <p>Shopify online store architecture overhaul covering technical SEO structure, storefront
+                        speed tuning, and Klaviyo customer retention workflows.</p>
+                    <a href="https://theloussine.com" class="project-link" target="_blank" rel="noopener noreferrer">
+                        <span>theloussine.com</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                    </a>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-card-header">
+                        <span class="project-location">Warsaw, Poland · Shopify &amp; Liquid</span>
+                    </div>
+                    <h3>Numa Bio — Patryk Surmacki</h3>
+                    <p>Full-scale Shopify e-commerce setup with custom responsive Liquid modules for lab analysis
+                        presentation, payment gateway routing, and mobile WebView optimization.</p>
+                    <a href="https://numa.bio" class="project-link" target="_blank" rel="noopener noreferrer">
+                        <span>numa.bio</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                    </a>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-card-header">
+                        <span class="project-location">London, UK · WordPress Speed</span>
+                    </div>
+                    <h3>Oui Madam Bridal</h3>
+                    <p>Enterprise WordPress optimization — template core code reconstruction, Core Web Vitals
+                        remediation, and PageSpeed acceleration for a luxury bridal atelier.</p>
+                    <a href="https://www.ouimadam.com" class="project-link" target="_blank" rel="noopener noreferrer">
+                        <span>ouimadam.com</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <!-- ======== QUOTE ======== -->
+        <section class="quote-section">
+            <blockquote class="quote-block reveal">
+                Design is not just what it looks like and feels like. Design is how it works.
+            </blockquote>
+        </section>
+
+        <!-- ======== CONTACT ======== -->
+        <section id="contact">
+            <div class="section-header reveal">
+                <span class="section-label">Direct Contact</span>
+                <h2 class="section-title">Get in Touch</h2>
+                <p class="section-subtitle">Available for freelance architecture, WordPress/Shopify builds, and
+                    infrastructure consulting</p>
+            </div>
+
+            <div class="contact-terminal reveal">
+                <div class="terminal-bar">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                    <span class="terminal-title">contact@jeff-set — bash</span>
+                    <button type="button" id="copy-email-btn" class="terminal-copy-btn"
+                        aria-label="Copy email address info@jeff-set.com">Copy Email</button>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$&nbsp;</span>
+                        <span class="terminal-key">ENGINEER=</span>
+                        <span class="terminal-value">"Vitalii Kartashov"</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$&nbsp;</span>
+                        <span class="terminal-key">EMAIL=</span>
+                        <span class="terminal-value"><a href="mailto:info@jeff-set.com">info@jeff-set.com</a></span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$&nbsp;</span>
+                        <span class="terminal-key">PHONE=</span>
+                        <span class="terminal-value" id="secure-phone">Loading...</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$&nbsp;</span>
+                        <span class="terminal-key">LOCATION=</span>
+                        <span class="terminal-value">"Kyiv, Ukraine (Remote Worldwide)"</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$&nbsp;</span>
+                        <span class="terminal-key">WEBSITE=</span>
+                        <span class="terminal-value"><a href="https://jeff-set.com" target="_blank"
+                                rel="noopener noreferrer">jeff-set.com</a></span>
+                    </div>
+                    <div class="terminal-line terminal-cursor-line">
+                        <span class="terminal-prompt">$&nbsp;</span>
+                        <span class="terminal-cursor-blink" aria-hidden="true"></span>
+                    </div>
                 </div>
             </div>
 
-            <h1 class="hero-name reveal">Vitalii Kartashov</h1>
-
-            <div class="hero-title reveal">
-                <span id="typing-text"></span><span class="typing-cursor"></span>
-            </div>
-
-            <p class="hero-desc reveal">
-                High-performance web development, cross-platform architecture migration, cloud hosting engineering,
-                and low-level CDN speed optimization.
-            </p>
-
-            <div class="legal-notice reveal">
-                <p>Verified Service Merchant Status</p>
-                <p>All international contractor operations, technical sprints, and
-                    digital development services are officially managed, invoiced, and validated directly through
-                    registered corporate payment networks (Payoneer Business Node Integration).</p>
-            </div>
-
-            <a href="#contact" class="hero-cta reveal">
-                <span>Get in Touch</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-            </a>
-        </div>
-
-        <div class="hero-scroll-hint" aria-hidden="true">
-            <span>scroll</span>
-            <div class="scroll-arrow"></div>
-        </div>
-    </section>
-
-    <!-- ======== ABOUT (brief intro + stack intro) ======== -->
-    <section id="about">
-        <div class="section-header reveal">
-            <span class="section-label">// who am I</span>
-            <h2 class="section-title">About</h2>
-            <p class="section-subtitle">Sovereign Static Node Infrastructure Hub — Kyiv, Ukraine</p>
-        </div>
-        <blockquote class="quote-block reveal">
-            Welcome to the official static node infrastructure hub. I specialize in
-            high-performance web development, cross-platform architecture migration, cloud hosting engineering, and
-            low-level content delivery network (CDN) speed optimization.
-        </blockquote>
-    </section>
-
-    <!-- ======== STACK ======== -->
-    <section id="stack">
-        <div class="section-header reveal">
-            <span class="section-label">// core infrastructure</span>
-            <h2 class="section-title">Deployment Stack</h2>
-        </div>
-
-        <div class="stack-grid stagger">
-            <article class="stack-card">
-                <div class="stack-card-logo wordpress">
-                    <img src="/logo/wordpress.svg" alt="WordPress logo" width="40" height="40">
-                </div>
-                <h3>WordPress</h3>
-                <p>Advanced backend configuration, customized theme hardcoding, Core Web Vitals optimization,
-                    database cleaning, and headless CMS architecture alignment.</p>
-                <span class="dev-tag">.dev</span>
-            </article>
-
-            <article class="stack-card">
-                <div class="stack-card-logo shopify">
-                    <img src="/logo/shopify.svg" alt="Shopify logo" width="40" height="40">
-                </div>
-                <h3>Shopify</h3>
-                <p>Complete digital storefront setup, API synchronization, custom Liquid script modification,
-                    and automated sales-funnel routing integration.</p>
-                <span class="dev-tag">.dev</span>
-            </article>
-
-            <article class="stack-card">
-                <div class="stack-card-logo cloudflare">
-                    <img src="/logo/cloudflare.svg" alt="Cloudflare logo" width="40" height="40">
-                </div>
-                <h3>Cloudflare</h3>
-                <p>Low-level DNS shield integration, 92%+ data edge-caching optimization, Rocket Loader
-                    calibration, Page Rules configuration, and DDoS threat neutralization.</p>
-                <span class="dev-tag">.dev</span>
-            </article>
-
-            <article class="stack-card">
-                <div class="stack-card-logo digitalocean">
-                    <img src="/logo/digital-ocean.svg" alt="DigitalOcean logo" width="40" height="40">
-                </div>
-                <h3>DigitalOcean</h3>
-                <p>VPS / Cloud Droplet allocation, Linux server security hardening, reverse proxy implementation,
-                    and custom scalable application hosting setups.</p>
-                <span class="dev-tag">.dev</span>
-            </article>
-        </div>
-
-        <!-- Comparison table -->
-        <div class="table-wrapper reveal">
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Platform</th>
-                        <th>Hosting Type</th>
-                        <th>Use Case</th>
-                        <th>Customization</th>
-                        <th>Pricing</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>WordPress</td>
-                        <td>Self-hosted / Managed</td>
-                        <td>Blogging, Business Sites</td>
-                        <td>Very High</td>
-                        <td>Free + Hosting</td>
-                    </tr>
-                    <tr>
-                        <td>Shopify</td>
-                        <td>Fully Managed</td>
-                        <td>eCommerce</td>
-                        <td>Medium (via themes/apps)</td>
-                        <td>From $39/mo</td>
-                    </tr>
-                    <tr>
-                        <td>Cloudflare</td>
-                        <td>Serverless / CDN</td>
-                        <td>Performance, Security</td>
-                        <td>Low-Level (Dev-focused)</td>
-                        <td>Free to Enterprise</td>
-                    </tr>
-                    <tr>
-                        <td>DigitalOcean</td>
-                        <td>VPS / Cloud</td>
-                        <td>Custom Apps, Scalable Infra</td>
-                        <td>High (full root)</td>
-                        <td>From $4/mo</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- ======== PROJECTS ======== -->
-    <section id="projects">
-        <div class="section-header reveal">
-            <span class="section-label">// recent deployments</span>
-            <h2 class="section-title">Global Infrastructure</h2>
-            <p class="section-subtitle">Recent projects from around the world</p>
-        </div>
-
-        <div class="projects-grid stagger">
-            <article class="project-card">
-                <div class="project-card-header">
-                    <span class="project-location">London, UK</span>
-                </div>
-                <h3>Cynthia Grafton-Holt Couture</h3>
-                <p>Complete Wix Stores optimization, CRM database synchronization, and Klaviyo automated flow
-                    integration.</p>
-                <a href="https://www.cynthiagraftonholt.com" class="project-link" target="_blank"
-                    rel="noopener noreferrer">
-                    cynthiagraftonholt.com
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                </a>
-            </article>
-
-            <article class="project-card">
-                <div class="project-card-header">
-                    <span class="project-location">Mayfair, London, UK</span>
-                </div>
-                <h3>Dragoni Partners LLP</h3>
-                <p>Offline-to-online AI marketing funnel deployment, Bluehost cPanel routing calibration, and secure
-                    custom CTA lead-capture systems.</p>
-                <a href="https://dragonipartnersllp.com" class="project-link" target="_blank"
-                    rel="noopener noreferrer">
-                    dragonipartnersllp.com
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                </a>
-            </article>
-
-            <article class="project-card">
-                <div class="project-card-header">
-                    <span class="project-location">Park Royal, London, UK</span>
-                </div>
-                <h3>Fashion designer Lusine Bonfield</h3>
-                <p>Optimizing Shopify Online Store — SEO, Marketing, and Klaviyo Integration.</p>
-                <a href="https://theloussine.com" class="project-link" target="_blank" rel="noopener noreferrer">
-                    theloussine.com
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                </a>
-            </article>
-
-            <article class="project-card">
-                <div class="project-card-header">
-                    <span class="project-location">Warsaw, Poland</span>
-                </div>
-                <h3>Premium Food Brand — Patryk Surmacki</h3>
-                <p>Full-scale Shopify e-commerce infrastructure configuration under strict global performance
-                    standards. Deployment of custom responsive HTML/CSS liquid-modules for laboratory analysis data
-                    alignment, payment gateway routing, and advanced mobile WebView layout speed optimization.</p>
-                <a href="https://numa.bio" class="project-link" target="_blank" rel="noopener noreferrer">
-                    numa.bio
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                </a>
-            </article>
-
-            <article class="project-card">
-                <div class="project-card-header">
-                    <span class="project-location">Gorst Road, London, UK</span>
-                </div>
-                <h3>Luxury bridal designer — Oui Madam</h3>
-                <p>High-End WordPress Optimization — Advanced Core Web Vitals, Template Core Code Reconstruction,
-                    and Enterprise PageSpeed Acceleration.</p>
-                <a href="https://www.ouimadam.com" class="project-link" target="_blank" rel="noopener noreferrer">
-                    ouimadam.com
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                </a>
-            </article>
-        </div>
-    </section>
-
-    <!-- ======== QUOTE ======== -->
-    <section class="quote-section">
-        <blockquote class="quote-block reveal">
-            Design is not just what it looks like and feels like. Design is how it works.
-        </blockquote>
-    </section>
-
-    <!-- ======== CONTACT ======== -->
-    <section id="contact">
-        <div class="section-header reveal">
-            <span class="section-label">// secure contact terminal</span>
-            <h2 class="section-title">Get in Touch</h2>
-        </div>
-
-        <div class="contact-terminal reveal">
-            <div class="terminal-bar">
-                <span class="terminal-dot red"></span>
-                <span class="terminal-dot yellow"></span>
-                <span class="terminal-dot green"></span>
-                <span class="terminal-title">contact@jeff-set — bash</span>
-            </div>
-            <div class="terminal-body">
-                <div class="terminal-line">
-                    <span class="terminal-prompt">$&nbsp;</span>
-                    <span class="terminal-key">ENGINEER=</span>
-                    <span class="terminal-value">"Vitalii Kartashov"</span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt">$&nbsp;</span>
-                    <span class="terminal-key">EMAIL=</span>
-                    <span class="terminal-value"><a href="mailto:info@jeff-set.com">info@jeff-set.com</a></span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt">$&nbsp;</span>
-                    <span class="terminal-key">PHONE=</span>
-                    <span class="terminal-value" id="secure-phone">Loading...</span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt">$&nbsp;</span>
-                    <span class="terminal-key">RELAY=</span>
-                    <span class="terminal-value"><a href="https://jeff-set.com"
-                            target="_blank">jeff-set.com</a></span>
-                </div>
-                <div class="terminal-line terminal-cursor-line">
-                    <span class="terminal-prompt">$&nbsp;</span>
-                    <span class="terminal-cursor-blink"></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Phone decode (same as original) -->
-        <script>
-            (function () {
-                const p1 = "KzM4MDk5";
-                const p2 = "NzM4MTI4Mw==";
-                try {
-                    const fullNumber = atob(p1) + atob(p2);
-                    const target = document.getElementById('secure-phone');
-                    if (target) {
-                        target.textContent = fullNumber;
+            <!-- Phone decode -->
+            <script>
+                (function () {
+                    const p1 = "KzM4MDk5";
+                    const p2 = "NzM4MTI4Mw==";
+                    try {
+                        const fullNumber = atob(p1) + atob(p2);
+                        const target = document.getElementById('secure-phone');
+                        if (target) {
+                            const link = document.createElement('a');
+                            link.href = 'tel:' + fullNumber;
+                            link.textContent = fullNumber;
+                            target.textContent = '';
+                            target.appendChild(link);
+                        }
+                    } catch (e) {
+                        console.error("Initialization error");
                     }
-                } catch (e) {
-                    console.error("Initialization error");
-                }
-            })();
-        </script>
-    </section>
+                })();
+            </script>
+        </section>
+
+        <!-- ======== CURRENTLY IN DEVELOPMENT ======== -->
+        <section id="building">
+            <div class="section-header reveal">
+                <span class="section-label">Active Ventures</span>
+                <h2 class="section-title">Currently in Development</h2>
+                <p class="section-subtitle">Independent projects and publications being engineered right now</p>
+            </div>
+
+            <div class="ventures-grid stagger">
+                <article class="venture-card">
+                    <div class="venture-head">
+                        <div class="venture-icon venture-icon-house" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 10.5L12 3l9 7.5" />
+                                <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5" />
+                                <path d="M9 21v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>JEFF HOUSE</h3>
+                            <span class="venture-domain">house.jeff-set.com · In Development</span>
+                        </div>
+                    </div>
+                    <p>
+                        A dedicated digital home and smart-space platform under active construction — bringing
+                        together architectural experiments, connected home automation notes, and personal space
+                        engineering.
+                    </p>
+                    <a href="https://house.jeff-set.com" class="venture-link" target="_blank"
+                        rel="noopener noreferrer">
+                        <span>Visit JEFF HOUSE</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                    </a>
+                </article>
+
+                <article class="venture-card">
+                    <div class="venture-head">
+                        <div class="venture-icon venture-icon-blog" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                                <path d="M8 7h8M8 11h6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>JEFF BLOG</h3>
+                            <span class="venture-domain">blog.jeff-set.com · In Development</span>
+                        </div>
+                    </div>
+                    <p>
+                        An upcoming engineering journal featuring practical field notes on WordPress internals,
+                        Shopify Liquid patterns, Cloudflare edge rules, Linux hardening, and real-world speed case
+                        studies.
+                    </p>
+                    <a href="https://blog.jeff-set.com" class="venture-link" target="_blank"
+                        rel="noopener noreferrer">
+                        <span>Visit JEFF BLOG</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                    </a>
+                </article>
+            </div>
+        </section>
+    </main>
 
     <!-- ======== FOOTER ======== -->
     <div class="footer-meta">
@@ -394,8 +645,7 @@
     </div>
 
     <footer>
-        &copy; 2026 Jeff-Set &amp; JEFFERSON &amp; Vitalii Kartashov — All rights reserved.
-        Sovereign Static Node deployed directly via GitHub Pages Infrastructure Network.
+        &copy; 2026 Vitalii Kartashov &middot; Jeff-Set &mdash; All rights reserved.
     </footer>
 
     <script src="js/jeff-set.js"></script>

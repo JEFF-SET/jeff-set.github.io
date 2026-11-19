@@ -1,35 +1,40 @@
 /* ============================================
    JEFF-SET — Main JavaScript
-   Vanilla JS: Theme, Typing, Scroll Reveal,
-   Particles, Cursor Glow, Burger, ScrollSpy
+   Theme Toggle, Typing, Scroll Reveal,
+   Ambient Kinetic Canvas, Cursor Glow,
+   Burger Menu, ScrollSpy, Copy Email
    ============================================ */
 
 (function () {
   'use strict';
 
   // ============================================
-  // THEME TOGGLE
+  // THEME TOGGLE (SVG Button)
   // ============================================
-  const toggle = document.getElementById('toggle-dark');
+  const toggleBtn = document.getElementById('toggle-dark');
   const THEME_KEY = 'theme';
 
   function setTheme(isDark) {
     document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
     localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+    if (toggleBtn) {
+      toggleBtn.setAttribute('aria-pressed', String(isDark));
+      toggleBtn.setAttribute(
+        'aria-label',
+        isDark ? 'Switch to light mode' : 'Switch to dark mode'
+      );
+    }
   }
 
-  if (toggle) {
-    toggle.addEventListener('change', () => setTheme(toggle.checked));
-  }
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  const initialDark = savedTheme === null ? true : savedTheme === 'dark';
+  setTheme(initialDark);
 
-  // Apply saved theme (default: dark)
-  const saved = localStorage.getItem(THEME_KEY);
-  if (saved === 'dark' || saved === null) {
-    if (toggle) toggle.checked = true;
-    setTheme(true);
-  } else {
-    if (toggle) toggle.checked = false;
-    setTheme(false);
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const isCurrentlyDark = document.body.getAttribute('data-theme') === 'dark';
+      setTheme(!isCurrentlyDark);
+    });
   }
 
   // ============================================
@@ -38,20 +43,20 @@
   const typingEl = document.getElementById('typing-text');
   const phrases = [
     'Lead Systems Architect',
-    'DevOps Engineer',
-    'Cloud Infrastructure',
-    'CDN Speed Optimization',
-    'Web Performance Expert'
+    'WordPress & Shopify Engineer',
+    'Cloudflare Edge Specialist',
+    'Cloud Infrastructure & DevOps',
+    'Web Performance Architect'
   ];
 
   if (typingEl) {
     let phraseIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
-    const typeSpeed = 70;
-    const deleteSpeed = 40;
+    const typeSpeed = 65;
+    const deleteSpeed = 35;
     const pauseEnd = 2000;
-    const pauseStart = 500;
+    const pauseStart = 450;
 
     function typeLoop() {
       const current = phrases[phraseIndex];
@@ -77,13 +82,13 @@
       }
     }
 
-    setTimeout(typeLoop, 800);
+    setTimeout(typeLoop, 600);
   }
 
   // ============================================
   // SCROLL REVEAL (IntersectionObserver)
   // ============================================
-  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .stagger');
+  const revealElements = document.querySelectorAll('.reveal, .stagger');
 
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver(
@@ -95,12 +100,11 @@
           }
         });
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
     );
 
     revealElements.forEach((el) => revealObserver.observe(el));
   } else {
-    // Fallback: show all
     revealElements.forEach((el) => el.classList.add('visible'));
   }
 
@@ -125,166 +129,180 @@
           }
         });
       },
-      { threshold: 0.2, rootMargin: '-80px 0px -40% 0px' }
+      { threshold: 0.2, rootMargin: '-80px 0px -45% 0px' }
     );
 
     sections.forEach((s) => spyObserver.observe(s));
   }
 
   // ============================================
-  // BURGER MENU
+  // BURGER MENU (Mobile)
   // ============================================
   const burger = document.querySelector('.burger');
   const mobileNav = document.querySelector('.mobile-nav');
 
+  function closeMobileNav() {
+    if (!burger || !mobileNav) return;
+    mobileNav.classList.remove('open');
+    burger.classList.remove('active');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
   if (burger && mobileNav) {
     burger.addEventListener('click', () => {
       const isOpen = mobileNav.classList.contains('open');
-      burger.classList.toggle('active');
-      burger.setAttribute('aria-expanded', !isOpen);
-
       if (isOpen) {
-        mobileNav.classList.remove('open');
-        document.body.style.overflow = '';
+        closeMobileNav();
       } else {
         mobileNav.classList.add('open');
+        burger.classList.add('active');
+        burger.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
       }
     });
 
-    // Close on link click
     mobileNav.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        mobileNav.classList.remove('open');
-        burger.classList.remove('active');
-        burger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
+      link.addEventListener('click', closeMobileNav);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+        closeMobileNav();
+      }
     });
   }
 
   // ============================================
-  // PARTICLE GRID ON HERO CANVAS (desktop only)
+  // FULL-PAGE AMBIENT KINETIC CANVAS
   // ============================================
-  const canvas = document.querySelector('.hero-canvas');
+  const canvas = document.querySelector('.bg-canvas');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  if (canvas && window.innerWidth > 768) {
+  if (canvas && !prefersReducedMotion.matches) {
     const ctx = canvas.getContext('2d');
-    let particles = [];
-    let mouse = { x: -1000, y: -1000 };
-    let animFrame;
+    let nodes = [];
+    const mouse = { x: -9999, y: -9999 };
+    let animFrame = null;
 
-    function resizeCanvas() {
-      const hero = canvas.parentElement;
-      canvas.width = hero.offsetWidth;
-      canvas.height = hero.offsetHeight;
-      initParticles();
-    }
+    function initNodes() {
+      nodes = [];
+      const area = window.innerWidth * window.innerHeight;
+      const isMobile = window.innerWidth <= 768;
+      const count = isMobile
+        ? Math.min(30, Math.max(18, Math.floor(area / 22000)))
+        : Math.min(68, Math.max(36, Math.floor(area / 20000)));
 
-    function initParticles() {
-      particles = [];
-      const spacing = 60;
-      const cols = Math.ceil(canvas.width / spacing);
-      const rows = Math.ceil(canvas.height / spacing);
-
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          particles.push({
-            x: i * spacing + spacing / 2,
-            y: j * spacing + spacing / 2,
-            baseX: i * spacing + spacing / 2,
-            baseY: j * spacing + spacing / 2,
-            size: 1.5,
-          });
-        }
+      for (let i = 0; i < count; i++) {
+        nodes.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * (isMobile ? 0.42 : 0.58),
+          vy: (Math.random() - 0.5) * (isMobile ? 0.42 : 0.58),
+          radius: Math.random() * 1.9 + 1.3
+        });
       }
     }
 
-    function drawParticles() {
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initNodes();
+    }
+
+    function drawNetwork() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const isDark = document.body.getAttribute('data-theme') === 'dark';
-      const dotColor = isDark ? 'rgba(102, 51, 153, 0.25)' : 'rgba(102, 51, 153, 0.1)';
-      const glowColor = isDark ? 'rgba(102, 51, 153, 0.7)' : 'rgba(102, 51, 153, 0.35)';
-      const lineColor = isDark ? 'rgba(102, 51, 153, 0.12)' : 'rgba(102, 51, 153, 0.05)';
+      const dotColor = isDark ? 'rgba(166, 120, 245, 0.48)' : 'rgba(102, 51, 153, 0.34)';
+      const lineRgb = isDark ? '166, 120, 245' : '102, 51, 153';
+      const maxLinkDist = window.innerWidth <= 768 ? 130 : 170;
+      const mouseDist = 200;
 
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const maxDist = 150;
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
 
-        if (dist < maxDist) {
-          const force = (maxDist - dist) / maxDist;
-          p.x = p.baseX - dx * force * 0.3;
-          p.y = p.baseY - dy * force * 0.3;
-          ctx.fillStyle = glowColor;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size + force * 2, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          p.x += (p.baseX - p.x) * 0.08;
-          p.y += (p.baseY - p.y) * 0.08;
-          ctx.fillStyle = dotColor;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
+        if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
+        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
+
+        // Subtle pointer glow lines on desktop
+        if (window.innerWidth > 768) {
+          const dx = mouse.x - n.x;
+          const dy = mouse.y - n.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouseDist && dist > 1) {
+            const pull = (mouseDist - dist) / mouseDist;
+            ctx.strokeStyle = `rgba(${lineRgb}, ${(pull * (isDark ? 0.42 : 0.28)).toFixed(3)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+          }
         }
 
-        // Connect nearby particles
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const d = Math.sqrt(
-            (p.x - p2.x) * (p.x - p2.x) + (p.y - p2.y) * (p.y - p2.y)
-          );
-          if (d < 70) {
-            ctx.strokeStyle = lineColor;
-            ctx.lineWidth = 0.5;
+        ctx.fillStyle = dotColor;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let j = i + 1; j < nodes.length; j++) {
+          const n2 = nodes[j];
+          const dx = n.x - n2.x;
+          const dy = n.y - n2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < maxLinkDist) {
+            const alpha = (1 - dist / maxLinkDist) * (isDark ? 0.25 : 0.16);
+            ctx.strokeStyle = `rgba(${lineRgb}, ${alpha.toFixed(3)})`;
+            ctx.lineWidth = 0.85;
             ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(n2.x, n2.y);
             ctx.stroke();
           }
         }
       }
 
-      animFrame = requestAnimationFrame(drawParticles);
+      animFrame = requestAnimationFrame(drawNetwork);
     }
 
-    canvas.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     });
 
-    canvas.addEventListener('mouseleave', () => {
-      mouse.x = -1000;
-      mouse.y = -1000;
+    window.addEventListener('mouseleave', () => {
+      mouse.x = -9999;
+      mouse.y = -9999;
     });
 
-    // Check for reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!prefersReducedMotion.matches) {
-      resizeCanvas();
-      drawParticles();
-
-      window.addEventListener('resize', () => {
-        cancelAnimationFrame(animFrame);
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (animFrame) cancelAnimationFrame(animFrame);
         resizeCanvas();
-        drawParticles();
-      });
-    }
+        drawNetwork();
+      }, 150);
+    });
+
+    resizeCanvas();
+    drawNetwork();
   }
 
   // ============================================
-  // CURSOR GLOW (desktop only)
+  // CURSOR GLOW (desktop only, preserved)
   // ============================================
   const cursorGlow = document.querySelector('.cursor-glow');
 
-  if (cursorGlow && window.innerWidth > 768) {
-    let glowX = 0, glowY = 0;
-    let currentX = 0, currentY = 0;
+  if (cursorGlow && window.innerWidth > 768 && !prefersReducedMotion.matches) {
+    let glowX = -400;
+    let glowY = -400;
+    let currentX = -400;
+    let currentY = -400;
 
     document.addEventListener('mousemove', (e) => {
       glowX = e.clientX;
@@ -299,11 +317,30 @@
       requestAnimationFrame(animateGlow);
     }
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!prefersReducedMotion.matches) {
-      animateGlow();
-    }
+    animateGlow();
   } else if (cursorGlow) {
     cursorGlow.style.display = 'none';
+  }
+
+  // ============================================
+  // COPY EMAIL BUTTON IN CONTACT TERMINAL
+  // ============================================
+  const copyEmailBtn = document.getElementById('copy-email-btn');
+  if (copyEmailBtn) {
+    copyEmailBtn.addEventListener('click', () => {
+      const email = 'info@jeff-set.com';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(() => {
+          copyEmailBtn.textContent = 'Copied!';
+          setTimeout(() => {
+            copyEmailBtn.textContent = 'Copy Email';
+          }, 2000);
+        }).catch(() => {
+          copyEmailBtn.textContent = email;
+        });
+      } else {
+        copyEmailBtn.textContent = email;
+      }
+    });
   }
 })();
