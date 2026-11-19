@@ -1800,3 +1800,226 @@ footer {
     justify-content: center;
   }
 }
+
+/* ============================================
+   UTILITY PAGE — Android TV & Mobile Key Copy (777.html)
+   ============================================ */
+.tv-main {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-height) + 2rem) 1.25rem 3rem;
+}
+
+.tv-card {
+  width: 100%;
+  max-width: 660px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.tv-kicker {
+  display: block;
+  font-family: var(--mono-font);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  margin-bottom: 0.5rem;
+}
+
+body:not([data-theme="dark"]) .tv-kicker {
+  color: var(--accent);
+}
+
+.tv-title {
+  font-family: var(--header-font);
+  font-weight: 400;
+  font-synthesis: none;
+  -webkit-text-stroke: 0;
+  font-size: clamp(2.1rem, 5.5vw, 3.3rem);
+  color: var(--text);
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+
+.tv-subtitle {
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  margin: 0 auto 2rem;
+  max-width: 48ch;
+  line-height: 1.6;
+}
+
+.tv-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  width: 100%;
+  min-height: 76px;
+  padding: 1.2rem 1.75rem;
+  font-family: var(--mono-font);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--accent);
+  border: 2px solid var(--accent-bright);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.tv-copy-btn:hover {
+  background: var(--accent-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px var(--accent-glow);
+}
+
+.tv-copy-btn:focus,
+.tv-copy-btn:focus-visible {
+  outline: 4px solid var(--terminal-green);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 8px rgba(0, 255, 136, 0.18);
+}
+
+.tv-copy-btn:active {
+  transform: scale(0.98);
+}
+
+.tv-copy-btn.is-copied {
+  background: #147a4b;
+  border-color: var(--terminal-green);
+}
+
+.tv-copy-btn svg {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.tv-status {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--mono-font);
+  font-size: 1rem;
+  font-weight: 700;
+  display: none;
+}
+
+.tv-status.is-visible {
+  display: block;
+}
+
+.tv-status.is-success {
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.45);
+  color: #16a34a;
+}
+
+body[data-theme="dark"] .tv-status.is-success {
+  color: var(--terminal-green);
+}
+
+.tv-status.is-warn {
+  background: rgba(244, 129, 32, 0.14);
+  border: 1px solid rgba(244, 129, 32, 0.45);
+  color: var(--cf-heading);
+}
+
+.tv-secondary-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.tv-toggle-key-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.7rem 1.35rem;
+  font-family: var(--mono-font);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--accent-softer);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.tv-toggle-key-btn:hover,
+.tv-toggle-key-btn:focus-visible {
+  background: var(--accent-soft);
+  border-color: var(--accent-bright);
+  outline: 3px solid var(--accent-bright);
+  outline-offset: 3px;
+}
+
+.tv-key-panel {
+  display: none;
+  margin-top: 1.25rem;
+  text-align: left;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.tv-key-panel.is-open {
+  display: block;
+}
+
+.tv-key-textarea {
+  width: 100%;
+  min-height: 112px;
+  padding: 0.9rem 1rem;
+  font-family: var(--mono-font);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  resize: none;
+  word-break: break-all;
+}
+
+.tv-select-btn {
+  margin-top: 0.75rem;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.7rem 1.2rem;
+  font-family: var(--mono-font);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--accent-soft);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.tv-select-btn:focus-visible {
+  outline: 3px solid var(--terminal-green);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .tv-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .tv-copy-btn {
+    min-height: 68px;
+    padding: 1rem 1.1rem;
+  }
+}
+

@@ -18,6 +18,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Prevent indexing of /777 and /777.html at HTTP header level as well
+app.use((req, res, next) => {
+  if (req.path === '/777' || req.path === '/777.html') {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet');
+  }
+  next();
+});
+
 app.use(express.static(__dirname, {
   extensions: ['html'],
   dotfiles: 'ignore'

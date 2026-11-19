@@ -1,62 +1,96 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
-    <!-- ЗАБОРОНА ДЛЯ ПОШУКОВИХ СИСТЕМ -->
-    <meta name="robots" content="noindex, nofollow">
-    <title>Копирование VLESS</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: #1a1a1a; color: #fff; padding-top: 100px; padding-bottom: 200px; }
-        .btn { padding: 20px 40px; font-size: 24px; font-weight: bold; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        .btn:active { background: #1d4ed8; }
-        .status { margin-top: 20px; font-size: 18px; color: #10b981; display: none; }
-    </style>
-        <link rel="stylesheet" href="css/jeff-set.css">
-        <link rel="stylesheet" href="css/logo-anim.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="js/logo-anim.js"></script>
+    <!-- ЗАПРЕТ ИНДЕКСАЦИИ ДЛЯ ПОИСКОВЫХ СИСТЕМ -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow">
+    <title>Криївка 17/65 — Быстрое копирование ключа</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/jeff-set.css">
+    <link rel="stylesheet" href="css/logo-anim.css">
 </head>
-<body>
-    <div class="topbar">
-        <a href="/" class="logo-mini">
-            <svg class="logo-svg-mini" width="40" height="40" viewBox="0 0 140 140">
-                <path class="logo-border" d="
-                M5,5
-                H135
-                V105
-                A30,30 0 0 1 105,135
-                H5
-                Z
-              " />
-                <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="700"
-                    class="logo-j">J</text>
-            </svg>
-        </a>
-        <form class="theme-toggle" autocomplete="off">
-            <input type="checkbox" id="toggle-dark" aria-label="Toggle dark mode">
-            <label for="toggle-dark" class="theme-toggle-label"></label>
-        </form>
+
+<body data-theme="dark">
+    <!-- Ambient Kinetic Background -->
+    <div class="bg-ambient" aria-hidden="true">
+        <div class="bg-grid-pattern"></div>
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+        <canvas class="bg-canvas"></canvas>
     </div>
 
-    <h1>Криївка 17/65</h1>
-    <br>
-    <button class="btn" onclick="copyVless()">СКОПИРОВАТЬ VLESS-КЛЮЧ</button>
-    <div id="status" class="status">✓ Скопировано в буфер обмена ТВ!</div>
+    <!-- Cursor glow (desktop only) -->
+    <div class="cursor-glow" aria-hidden="true"></div>
 
-    <script>
-        function copyVless() {
-            const vlessLink = "vless://b670c7ca-2472-4040-8314-019a0c2a754b@app.voxclear.cc:443?security=reality&encryption=none&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&pbk=hiXLrNf0yVQNkheLR7WR_VohRMwxxfuyYzdWxf8xH0I&sni=www.microsoft.com&sid=6f31e2f3b86a#VPN_131_1777981226_8";
-            
-            navigator.clipboard.writeText(vlessLink).then(() => {
-                const status = document.getElementById('status');
-                status.style.display = 'block';
-                setTimeout(() => { status.style.display = 'none'; }, 3000);
-            }).catch(err => {
-                alert("Ошибка копирования. Убедитесь, что у браузера есть разрешение на буфер обмена.");
-            });
-        }
-    </script>
+    <!-- ======== NAVIGATION ======== -->
+    <header class="topbar" role="banner">
+        <div class="nav-left">
+            <a href="/" class="logo-mini" aria-label="Jeff-Set Home">
+                <svg class="logo-svg-mini" width="38" height="38" viewBox="0 0 140 140" aria-hidden="true">
+                    <path class="logo-border" d="M5,5 H135 V105 A30,30 0 0 1 105,135 H5 Z" />
+                    <text x="70" y="105" text-anchor="middle" font-size="90" font-family="'Rubik'" font-weight="700"
+                        class="logo-j">J</text>
+                </svg>
+            </a>
+        </div>
+
+        <div class="nav-right">
+            <button type="button" id="toggle-dark" class="theme-toggle-btn" aria-label="Switch to light mode"
+                aria-pressed="true" title="Toggle color theme">
+                <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4" fill="currentColor" fill-opacity="0.2" />
+                    <path
+                        d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                </svg>
+                <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"
+                        fill-opacity="0.2" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="tv-main">
+        <section class="tv-card" aria-labelledby="tv-page-title">
+            <span class="tv-kicker">Android TV · Приставка · Телефон</span>
+            <h1 id="tv-page-title" class="tv-title">Криївка 17/65</h1>
+            <p class="tv-subtitle">
+                Нажмите «OK» на пульте или кнопку ниже — ключ сразу скопируется в буфер обмена для вставки в
+                VPN-клиент.
+            </p>
+
+            <button type="button" id="copy-vless-btn" class="tv-copy-btn" autofocus>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <span id="copy-btn-label">СКОПИРОВАТЬ VLESS-КЛЮЧ</span>
+            </button>
+
+            <div id="copy-status" class="tv-status" role="status" aria-live="polite"></div>
+
+            <div class="tv-secondary-actions">
+                <button type="button" id="toggle-key-btn" class="tv-toggle-key-btn" aria-expanded="false"
+                    aria-controls="key-panel">
+                    Показать / выделить ключ вручную
+                </button>
+            </div>
+
+            <div id="key-panel" class="tv-key-panel">
+                <textarea id="vless-textarea" class="tv-key-textarea" readonly
+                    aria-label="VLESS-ключ">vless://b670c7ca-2472-4040-8314-019a0c2a754b@app.voxclear.cc:443?security=reality&encryption=none&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&pbk=hiXLrNf0yVQNkheLR7WR_VohRMwxxfuyYzdWxf8xH0I&sni=www.microsoft.com&sid=6f31e2f3b86a#VPN_131_1777981226_8</textarea>
+                <button type="button" id="select-key-btn" class="tv-select-btn">Выделить весь ключ</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======== FOOTER ======== -->
     <div class="footer-meta">
         <span class="location-flag">
             <span class="flag-label">Kyiv</span>
@@ -69,10 +103,131 @@
     </div>
 
     <footer>
-        &copy; 2026 Jeff-Set &amp; Vitalii K. All rights reserved.
+        &copy; 2026 Vitalii Kartashov &middot; Jeff-Set &mdash; All rights reserved.
     </footer>
 
     <script src="js/jeff-set.js"></script>
+    <script>
+        (function () {
+            'use strict';
 
+            var vlessLink = "vless://b670c7ca-2472-4040-8314-019a0c2a754b@app.voxclear.cc:443?security=reality&encryption=none&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&pbk=hiXLrNf0yVQNkheLR7WR_VohRMwxxfuyYzdWxf8xH0I&sni=www.microsoft.com&sid=6f31e2f3b86a#VPN_131_1777981226_8";
+            var copyBtn = document.getElementById('copy-vless-btn');
+            var copyBtnLabel = document.getElementById('copy-btn-label');
+            var statusEl = document.getElementById('copy-status');
+            var toggleKeyBtn = document.getElementById('toggle-key-btn');
+            var keyPanel = document.getElementById('key-panel');
+            var keyTextarea = document.getElementById('vless-textarea');
+            var selectKeyBtn = document.getElementById('select-key-btn');
+            var statusTimer = null;
+
+            function showStatus(message, isSuccess) {
+                if (!statusEl) return;
+                statusEl.textContent = message;
+                statusEl.className = 'tv-status is-visible ' + (isSuccess ? 'is-success' : 'is-warn');
+                if (isSuccess && copyBtn && copyBtnLabel) {
+                    copyBtn.classList.add('is-copied');
+                    copyBtnLabel.textContent = 'СКОПИРОВАНО ✓';
+                }
+                clearTimeout(statusTimer);
+                statusTimer = setTimeout(function () {
+                    statusEl.classList.remove('is-visible');
+                    if (copyBtn && copyBtnLabel) {
+                        copyBtn.classList.remove('is-copied');
+                        copyBtnLabel.textContent = 'СКОПИРОВАТЬ VLESS-КЛЮЧ';
+                    }
+                }, 3500);
+            }
+
+            function fallbackExecCopy(text) {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                ta.style.top = '0';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                ta.setSelectionRange(0, text.length);
+
+                var ok = false;
+                try {
+                    ok = document.execCommand('copy');
+                } catch (err) {
+                    ok = false;
+                }
+                document.body.removeChild(ta);
+                return ok;
+            }
+
+            function openAndSelectKey() {
+                if (!keyPanel || !keyTextarea) return;
+                keyPanel.classList.add('is-open');
+                if (toggleKeyBtn) toggleKeyBtn.setAttribute('aria-expanded', 'true');
+                keyTextarea.focus();
+                keyTextarea.select();
+                try {
+                    keyTextarea.setSelectionRange(0, keyTextarea.value.length);
+                } catch (e) {}
+            }
+
+            function copyVless() {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(vlessLink).then(function () {
+                        showStatus('✓ Ключ скопирован в буфер обмена!', true);
+                    }).catch(function () {
+                        if (fallbackExecCopy(vlessLink)) {
+                            showStatus('✓ Ключ скопирован в буфер обмена!', true);
+                        } else {
+                            openAndSelectKey();
+                            showStatus('Автокопирование заблокировано браузером — ключ выделен ниже, нажмите «Копировать».', false);
+                        }
+                    });
+                } else {
+                    if (fallbackExecCopy(vlessLink)) {
+                        showStatus('✓ Ключ скопирован в буфер обмена!', true);
+                    } else {
+                        openAndSelectKey();
+                        showStatus('Автокопирование недоступно — ключ выделен ниже, скопируйте его вручную.', false);
+                    }
+                }
+            }
+
+            if (copyBtn) {
+                copyBtn.addEventListener('click', copyVless);
+                // Focus button right away for Android TV D-pad remote
+                setTimeout(function () {
+                    try { copyBtn.focus(); } catch (e) {}
+                }, 100);
+            }
+
+            if (toggleKeyBtn && keyPanel) {
+                toggleKeyBtn.addEventListener('click', function () {
+                    var isOpen = keyPanel.classList.toggle('is-open');
+                    toggleKeyBtn.setAttribute('aria-expanded', String(isOpen));
+                    if (isOpen && keyTextarea) {
+                        keyTextarea.focus();
+                        keyTextarea.select();
+                    }
+                });
+            }
+
+            if (selectKeyBtn && keyTextarea) {
+                selectKeyBtn.addEventListener('click', function () {
+                    keyTextarea.focus();
+                    keyTextarea.select();
+                    try {
+                        keyTextarea.setSelectionRange(0, keyTextarea.value.length);
+                        document.execCommand('copy');
+                        showStatus('✓ Ключ выделен и скопирован!', true);
+                    } catch (e) {
+                        showStatus('Ключ выделен в поле выше.', false);
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
+
 </html>
