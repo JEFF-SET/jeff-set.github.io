@@ -1585,6 +1585,9 @@ footer {
 .stagger.visible > *:nth-child(4) { transition-delay: 0.3s; }
 .stagger.visible > *:nth-child(5) { transition-delay: 0.38s; }
 .stagger.visible > *:nth-child(6) { transition-delay: 0.46s; }
+.stagger.visible > *:nth-child(7) { transition-delay: 0.54s; }
+.stagger.visible > *:nth-child(8) { transition-delay: 0.62s; }
+.stagger.visible > *:nth-child(9) { transition-delay: 0.7s; }
 
 .stagger.visible > * {
   opacity: 1;
