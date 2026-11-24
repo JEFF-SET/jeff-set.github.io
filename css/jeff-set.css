@@ -1851,6 +1851,8 @@ footer {
   z-index: 2;
   flex: 1;
   display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
   align-items: center;
   justify-content: center;
   padding: calc(var(--nav-height) + 2rem) 1.25rem 3rem;
@@ -1889,6 +1891,10 @@ body:not([data-theme="dark"]) .tv-kicker {
   color: var(--text);
   line-height: 1.15;
   margin-bottom: 0.75rem;
+}
+
+.tv-title--sub {
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
 }
 
 .tv-subtitle {
