@@ -2221,30 +2221,6 @@ body:not([data-theme="dark"]) .tv-step-num {
   }
 }
 
-/* Google Maps Platform Quota Notice (Demo Key Tier) */
-.gmp-quota-banner {
-  position: sticky;
-  top: 0;
-  z-index: 1200;
-  background: rgba(244, 129, 32, 0.16);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(244, 129, 32, 0.45);
-  color: var(--text);
-  padding: 0.65rem 1rem;
-  font-size: 0.84rem;
-  text-align: center;
-}
-
-.gmp-quota-banner[hidden] {
-  display: none;
-}
-
-.gmp-quota-banner a {
-  color: var(--accent-bright);
-  font-weight: 700;
-  text-decoration: underline;
-}
-
 /* Compact 7-Day Weather Forecast Widget (777.html) */
 .tv-weather-card {
   padding: 1.3rem 1.5rem;
@@ -2287,10 +2263,10 @@ body:not([data-theme="dark"]) .tv-step-num {
 }
 
 .tv-weather-now-icon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
-  object-fit: contain;
+  color: var(--accent-bright);
 }
 
 .tv-weather-now-temp {
@@ -2346,10 +2322,15 @@ body:not([data-theme="dark"]) .tv-step-num {
 }
 
 .tv-w-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  margin: 0.1rem 0;
+  width: 22px;
+  height: 22px;
+  color: var(--accent-bright);
+  margin: 0.15rem 0;
+}
+
+body:not([data-theme="dark"]) .tv-weather-now-icon,
+body:not([data-theme="dark"]) .tv-w-icon {
+  color: var(--accent);
 }
 
 .tv-w-temps {
@@ -2490,90 +2471,73 @@ body:not([data-theme="dark"]) .tv-w-pop {
   transition: width 240ms ease;
 }
 
-.tv-speed-footer {
-  margin-top: 1.15rem;
-  padding-top: 1rem;
+/* Last 5 Speed Test Checks */
+.tv-speed-history {
+  margin-top: 1.35rem;
+  padding-top: 1.1rem;
   border-top: 1px solid var(--border-subtle);
+  text-align: left;
+}
+
+.tv-history-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
+  margin-bottom: 0.65rem;
 }
 
-.tv-log-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.55rem 0.9rem;
+.tv-history-title {
   font-family: var(--mono-font);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--accent-bright);
-  background: var(--accent-softer);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  transition: background var(--transition-fast), border-color var(--transition-fast);
-}
-
-body:not([data-theme="dark"]) .tv-log-link {
-  color: var(--accent);
-}
-
-.tv-log-link:hover,
-.tv-log-link:focus-visible {
-  background: var(--accent-soft);
-  border-color: var(--accent-bright);
-  outline: 3px solid var(--terminal-green);
-  outline-offset: 2px;
-}
-
-.tv-log-link svg {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
 }
 
 .tv-speed-ip {
   font-family: var(--mono-font);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: var(--text-secondary);
 }
 
-/* Google Map Widget (777.html) */
-.tv-map-card {
-  padding: 1.65rem 1.75rem;
-}
-
-.tv-map-box {
-  width: 100%;
-  height: 320px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-  background: var(--surface);
+.tv-history-list {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--mono-font);
-  font-size: 0.84rem;
-  color: var(--text-secondary);
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
-.tv-map-footer {
-  margin-top: 0.95rem;
+.tv-history-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   flex-wrap: wrap;
+  padding: 0.6rem 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--mono-font);
+  font-size: 0.76rem;
 }
 
-.tv-map-coords {
+.tv-history-meta {
+  color: var(--text-secondary);
+}
+
+.tv-history-stats {
+  color: var(--text);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tv-history-empty {
   font-family: var(--mono-font);
   font-size: 0.78rem;
   color: var(--text-secondary);
+  padding: 0.35rem 0;
 }
 
 @media (max-width: 640px) {
@@ -2598,13 +2562,10 @@ body:not([data-theme="dark"]) .tv-log-link {
     padding: 0.7rem 0.95rem;
   }
 
-  .tv-speed-footer,
-  .tv-map-footer {
-    justify-content: center;
-  }
-
-  .tv-map-box {
-    height: 260px;
+  .tv-history-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
 }
 

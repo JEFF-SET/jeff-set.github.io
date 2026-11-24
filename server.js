@@ -1,6 +1,5 @@
 import express from 'express';
 import path from 'path';
-import fs from 'fs';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 
@@ -13,38 +12,16 @@ const HOST = '0.0.0.0';
 
 app.set('trust proxy', true);
 
-const DATA_DIR = path.resolve(__dirname, 'data');
-const LOG_FILE_PATH = path.resolve(DATA_DIR, 'speedtest-log.txt');
-if (!LOG_FILE_PATH.startsWith(DATA_DIR + path.sep)) {
-  throw new Error('Invalid log file path');
-}
-
-const LOG_HEADER = [
-  '====================================================================',
-  'JEFF-SET | Журнал перевірок швидкості інтернету (777.html)',
-  '====================================================================',
-  ''
-].join('\n');
-
-async function ensureLogFile() {
-  await fs.promises.mkdir(DATA_DIR, { recursive: true });
-  try {
-    await fs.promises.access(LOG_FILE_PATH, fs.constants.F_OK);
-  } catch {
-    await fs.promises.writeFile(LOG_FILE_PATH, LOG_HEADER, 'utf8');
-  }
-}
-
 // Incompressible 512 KB random buffer for accurate download speed measurement
 const RANDOM_CHUNK = crypto.randomBytes(512 * 1024);
 
-// Short in-memory cache for Weather API to protect API quota
+// Short in-memory cache for Open-Meteo Weather API (15 min)
 const weatherCache = new Map();
-const WEATHER_CACHE_TTL_MS = 20 * 60 * 1000;
+const WEATHER_CACHE_TTL_MS = 15 * 60 * 1000;
 
-function getMapsApiKey() {
-  return (process.env.GOOGLE_MAPS_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY || '').trim();
-}
+// Keep last 5 speed test results in memory (no filesystem writes needed)
+const MAX_RECENT_TESTS = 5;
+const recentSpeedTests = [];
 
 function sanitizeText(val, maxLen = 64) {
   if (typeof val !== 'string') return '-';
@@ -53,6 +30,7 @@ function sanitizeText(val, maxLen = 64) {
 }
 
 function sanitizeNumber(val, decimals = 2) {
+  if (val === null || val === undefined || val === '') return null;
   const num = Number(val);
   if (!Number.isFinite(num) || num < 0 || num > 100000) return null;
   return Number(num.toFixed(decimals));
@@ -68,24 +46,19 @@ function getClientIp(req) {
   return sanitizeText(req.ip || req.socket?.remoteAddress || 'unknown', 64);
 }
 
-function summarizeUserAgent(ua) {
+function detectDeviceShort(ua) {
   const safe = sanitizeText(ua, 240);
-  if (safe === '-') return 'Unknown';
-  let os = 'Other OS';
-  if (/Android/i.test(safe)) os = 'Android';
-  else if (/iPhone|iPad|iPod/i.test(safe)) os = 'iOS';
-  else if (/Windows/i.test(safe)) os = 'Windows';
-  else if (/Mac OS X|Macintosh/i.test(safe)) os = 'macOS';
-  else if (/Linux/i.test(safe)) os = 'Linux';
-
-  let device = 'Desktop/Web';
-  if (/AFT|BRAVIA|MIBOX|Android TV|SmartTV|SMART-TV|TV/i.test(safe)) device = 'TV Box / Smart TV';
-  else if (/Mobile|iPhone|Android/i.test(safe)) device = 'Mobile';
-
-  return `${device} (${os}) | ${safe}`;
+  if (safe === '-') return 'Пристрій';
+  if (/AFT|BRAVIA|MIBOX|Android TV|SmartTV|SMART-TV|TV/i.test(safe)) return 'TV Box';
+  if (/iPhone|iPad|iPod/i.test(safe)) return 'iOS';
+  if (/Android/i.test(safe)) return 'Android';
+  if (/Windows/i.test(safe)) return 'Windows';
+  if (/Mac OS X|Macintosh/i.test(safe)) return 'macOS';
+  if (/Linux/i.test(safe)) return 'Linux';
+  return 'Браузер';
 }
 
-// Prevent exposing server/config/data/cache files as static assets
+// Prevent exposing server/config/internal files as static assets
 app.use((req, res, next) => {
   const blockedExact = ['/server.js', '/package.json', '/package-lock.json', '/bun.lock', '/.env', '/.env.example'];
   if (
@@ -99,36 +72,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Prevent indexing of /777, /777.html, /speedtest-log.txt, and /api/*
+// Prevent indexing of /777, /777.html, and /api/*
 app.use((req, res, next) => {
-  if (
-    req.path === '/777' ||
-    req.path === '/777.html' ||
-    req.path === '/speedtest-log.txt' ||
-    req.path.startsWith('/api/')
-  ) {
+  if (req.path === '/777' || req.path === '/777.html' || req.path.startsWith('/api/')) {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet');
   }
   next();
 });
 
-// Client Maps JS API configuration (reads key from environment)
-app.get('/api/maps-config', (req, res) => {
-  res.setHeader('Cache-Control', 'no-store');
-  const apiKey = getMapsApiKey();
-  res.json({
-    apiKey,
-    configured: Boolean(apiKey)
-  });
-});
-
-// Google Maps Platform Weather API proxy (current conditions + 7-day forecast)
+// Open-Meteo Weather API proxy (current conditions + 7-day forecast)
 app.get('/api/weather', async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  const apiKey = getMapsApiKey();
-  if (!apiKey) {
-    return res.status(503).json({ error: 'WEATHER_KEY_MISSING' });
-  }
 
   const lat = req.query.lat !== undefined ? Number(req.query.lat) : 48.05833;
   const lon = req.query.lon !== undefined ? Number(req.query.lon) : 39.65833;
@@ -143,69 +97,31 @@ app.get('/api/weather', async (req, res) => {
   }
 
   try {
-    const headers = {
-      'X-Goog-Maps-Solution-ID': 'gmp_mcp_codeassist_v1_aistudio'
-    };
+    const url = new URL('https://api.open-meteo.com/v1/forecast');
+    url.searchParams.set('latitude', String(lat));
+    url.searchParams.set('longitude', String(lon));
+    url.searchParams.set('current', 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m');
+    url.searchParams.set('daily', 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max');
+    url.searchParams.set('timezone', 'Europe/Kyiv');
+    url.searchParams.set('forecast_days', '7');
 
-    const currentUrl = new URL('https://weather.googleapis.com/v1/currentConditions:lookup');
-    currentUrl.searchParams.set('key', apiKey);
-    currentUrl.searchParams.set('location.latitude', String(lat));
-    currentUrl.searchParams.set('location.longitude', String(lon));
-    currentUrl.searchParams.set('unitsSystem', 'METRIC');
-
-    const forecastUrl = new URL('https://weather.googleapis.com/v1/forecast/days:lookup');
-    forecastUrl.searchParams.set('key', apiKey);
-    forecastUrl.searchParams.set('location.latitude', String(lat));
-    forecastUrl.searchParams.set('location.longitude', String(lon));
-    forecastUrl.searchParams.set('days', '7');
-    forecastUrl.searchParams.set('pageSize', '7');
-    forecastUrl.searchParams.set('unitsSystem', 'METRIC');
-
-    const [currentResp, forecastResp] = await Promise.all([
-      fetch(currentUrl.toString(), { method: 'GET', headers }),
-      fetch(forecastUrl.toString(), { method: 'GET', headers })
-    ]);
-
-    const currentText = await currentResp.text();
-    const forecastText = await forecastResp.text();
-
-    let currentJson = null;
-    let forecastJson = null;
-    try { currentJson = JSON.parse(currentText); } catch {}
-    try { forecastJson = JSON.parse(forecastText); } catch {}
-
-    const isQuotaExceeded =
-      currentResp.status === 429 ||
-      forecastResp.status === 429 ||
-      currentJson?.error?.status === 'RESOURCE_EXHAUSTED' ||
-      forecastJson?.error?.status === 'RESOURCE_EXHAUSTED';
-
-    if (isQuotaExceeded) {
-      return res.status(429).json({
-        error: 'QUOTA_EXCEEDED',
-        quotaExceeded: true
-      });
+    const resp = await fetch(url.toString(), { method: 'GET' });
+    if (!resp.ok) {
+      return res.status(502).json({ error: 'WEATHER_UPSTREAM_ERROR', status: resp.status });
     }
 
-    if (!forecastResp.ok) {
-      return res.status(forecastResp.status >= 400 ? forecastResp.status : 502).json({
-        error: 'WEATHER_UPSTREAM_ERROR',
-        status: forecastResp.status,
-        message: forecastJson?.error?.message || 'Weather service unavailable'
-      });
-    }
-
+    const data = await resp.json();
     const payload = {
       coordinates: { lat, lon },
-      current: currentResp.ok ? currentJson : null,
-      forecast: forecastJson,
+      current: data.current || null,
+      daily: data.daily || null,
       fetchedAt: new Date().toISOString()
     };
 
     weatherCache.set(cacheKey, { ts: Date.now(), data: payload });
     return res.json({ ...payload, cached: false });
   } catch (err) {
-    console.error('Weather API proxy error:', err?.message || err);
+    console.error('Open-Meteo fetch error:', err?.message || err);
     return res.status(502).json({ error: 'WEATHER_FETCH_FAILED' });
   }
 });
@@ -213,7 +129,7 @@ app.get('/api/weather', async (req, res) => {
 // Speed Test: Ping
 app.get('/api/speedtest/ping', (req, res) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-  res.json({ ok: true, serverTime: Date.now() });
+  res.json({ ok: true, serverTime: Date.now(), ip: getClientIp(req) });
 });
 
 // Speed Test: Download payload (incompressible random bytes)
@@ -264,8 +180,18 @@ app.post('/api/speedtest/upload', (req, res) => {
   });
 });
 
-// Speed Test: Persist result to text log file
-app.post('/api/speedtest/log', express.json({ limit: '8kb' }), async (req, res) => {
+// Speed Test: Get last 5 results
+app.get('/api/speedtest/recent', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.json({
+    ok: true,
+    clientIp: getClientIp(req),
+    recent: recentSpeedTests
+  });
+});
+
+// Speed Test: Save result into last-5 memory buffer
+app.post('/api/speedtest/recent', express.json({ limit: '8kb' }), (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   const body = req.body && typeof req.body === 'object' ? req.body : {};
 
@@ -274,63 +200,42 @@ app.post('/api/speedtest/log', express.json({ limit: '8kb' }), async (req, res) 
   const downloadMbps = sanitizeNumber(body.downloadMbps, 2);
   const uploadMbps = sanitizeNumber(body.uploadMbps, 2);
 
-  if (pingMs === null || downloadMbps === null || uploadMbps === null) {
+  if (pingMs === null || downloadMbps === null) {
     return res.status(400).json({ error: 'INVALID_SPEEDTEST_METRICS' });
   }
 
   const now = new Date();
   const kyivTime = new Intl.DateTimeFormat('uk-UA', {
     timeZone: 'Europe/Kyiv',
-    year: 'numeric',
-    month: '2-digit',
     day: '2-digit',
+    month: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
     hour12: false
   }).format(now);
 
-  const clientIp = getClientIp(req);
-  const deviceInfo = summarizeUserAgent(req.headers['user-agent']);
-  const netType = sanitizeText(body.connectionType, 32);
-  const screenSize = sanitizeText(body.screen, 24);
-  const clientTz = sanitizeText(body.timezone, 48);
-  const clientLang = sanitizeText(body.language, 24);
-  const proto = sanitizeText(req.headers['x-forwarded-proto'] || req.protocol, 12);
+  const entry = {
+    time: kyivTime,
+    isoTime: now.toISOString(),
+    ip: getClientIp(req),
+    device: detectDeviceShort(req.headers['user-agent']),
+    pingMs,
+    jitterMs,
+    downloadMbps,
+    uploadMbps
+  };
 
-  const entry = [
-    `[${kyivTime} Kyiv | ${now.toISOString()}]`,
-    `IP: ${clientIp}`,
-    `Пінг: ${pingMs} мс | Джитер: ${jitterMs !== null ? jitterMs + ' мс' : '-'}`,
-    `Завантаження (Download): ${downloadMbps} Мбіт/с | Віддача (Upload): ${uploadMbps} Мбіт/с`,
-    `Пристрій / Браузер: ${deviceInfo}`,
-    `Мережа (браузер): ${netType} | Екран: ${screenSize} | Часовий пояс: ${clientTz} | Мова: ${clientLang} | Протокол: ${proto}`,
-    '--------------------------------------------------------------------',
-    ''
-  ].join('\n');
-
-  try {
-    await ensureLogFile();
-    await fs.promises.appendFile(LOG_FILE_PATH, entry, 'utf8');
-    return res.json({ ok: true, logUrl: '/speedtest-log.txt', savedAt: now.toISOString(), ip: clientIp });
-  } catch (err) {
-    console.error('Failed to write speedtest log:', err?.message || err);
-    return res.status(500).json({ error: 'LOG_WRITE_FAILED' });
+  recentSpeedTests.unshift(entry);
+  if (recentSpeedTests.length > MAX_RECENT_TESTS) {
+    recentSpeedTests.length = MAX_RECENT_TESTS;
   }
-});
 
-// Serve the plain-text speed test log file
-app.get('/speedtest-log.txt', async (req, res) => {
-  try {
-    await ensureLogFile();
-    const content = await fs.promises.readFile(LOG_FILE_PATH, 'utf8');
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.setHeader('Cache-Control', 'no-store');
-    res.send(content);
-  } catch (err) {
-    console.error('Failed to read speedtest log:', err?.message || err);
-    res.status(500).type('text/plain').send('Помилка читання журналу.');
-  }
+  return res.json({
+    ok: true,
+    entry,
+    recent: recentSpeedTests
+  });
 });
 
 app.use(express.static(__dirname, {
@@ -342,10 +247,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-ensureLogFile()
-  .catch((err) => console.error('Log init warning:', err?.message || err))
-  .finally(() => {
-    app.listen(PORT, HOST, () => {
-      console.log(`Static server listening on http://${HOST}:${PORT}`);
-    });
-  });
+app.listen(PORT, HOST, () => {
+  console.log(`Static server listening on http://${HOST}:${PORT}`);
+});

@@ -12,36 +12,9 @@
     <link rel="shortcut icon" href="favicon.svg">
     <link rel="stylesheet" href="css/jeff-set.css">
     <link rel="stylesheet" href="css/logo-anim.css">
-    <script>
-        // Demo Key Quota Defense (Tier 1): capture Maps JS auth & tile quota errors
-        window.gm_authFailure = function () {
-            window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
-        };
-        (function () {
-            var origError = console.error;
-            console.error = function () {
-                origError.apply(console, arguments);
-                var msg = Array.prototype.map.call(arguments, function (a) {
-                    return String(a);
-                }).join(' ');
-                if (msg.indexOf('OverQuotaMapError') !== -1 || msg.indexOf('QuotaExceededError') !== -1) {
-                    window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
-                }
-            };
-        })();
-    </script>
 </head>
 
 <body data-theme="dark">
-    <div id="gmp-quota-banner" class="gmp-quota-banner" role="alert" hidden>
-        <span>
-            Google Maps Platform quota reached. If you are the app owner, visit
-            <a href="https://developers.google.com/maps/ai/ai-studio?utm_campaign=gmp_mcp_codeassist_v1_aistudio#quota_exceeded_errors"
-                target="_blank" rel="noopener noreferrer">maps developer site</a>
-            for instructions to update your account.
-        </span>
-    </div>
-
     <!-- Ambient Kinetic Background -->
     <div class="bg-ambient" aria-hidden="true">
         <div class="bg-grid-pattern"></div>
@@ -85,7 +58,7 @@
     </header>
 
     <main class="tv-main">
-        <!-- 1. Компактний прогноз погоди на тиждень (Довжанськ) -->
+        <!-- 1. Компактний прогноз погоди на тиждень (Open-Meteo, Довжанськ) -->
         <section class="tv-card tv-weather-card" aria-labelledby="weather-place-title">
             <div class="tv-weather-head">
                 <div class="tv-weather-loc">
@@ -93,7 +66,7 @@
                     <span class="tv-weather-coords">48.05833° пн. ш., 39.65833° сх. д. · 7 днів</span>
                 </div>
                 <div id="weather-now-box" class="tv-weather-now">
-                    <span class="tv-weather-now-meta">Оновлення...</span>
+                    <span class="tv-weather-now-meta">Оновлення…</span>
                 </div>
             </div>
             <div id="weather-week-grid" class="tv-weather-week" aria-live="polite">
@@ -197,13 +170,12 @@
             </ol>
         </section>
 
-        <!-- 4. Простий тест швидкості мережі (після інструкції) -->
+        <!-- 4. Простий тест швидкості мережі (після інструкції) + 5 останніх перевірок -->
         <section class="tv-card tv-speed-card" aria-labelledby="speed-title">
             <span class="tv-kicker">Перевірка інтернет-з'єднання</span>
             <h2 id="speed-title" class="tv-title tv-title--sub">Швидкість мережі</h2>
             <p class="tv-subtitle">
-                Натисніть одну кнопку, щоб виміряти затримку та реальну швидкість інтернету. Результат автоматично
-                записується у журнал.
+                Натисніть кнопку нижче, щоб виміряти затримку та швидкість інтернету.
             </p>
 
             <div class="tv-speed-metrics">
@@ -239,32 +211,14 @@
 
             <div id="speedtest-status" class="tv-status" role="status" aria-live="polite"></div>
 
-            <div class="tv-speed-footer">
-                <a href="/speedtest-log.txt" target="_blank" rel="noopener noreferrer" class="tv-log-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                        <line x1="16" y1="13" x2="8" y2="13" />
-                        <line x1="16" y1="17" x2="8" y2="17" />
-                    </svg>
-                    <span>Текстовий журнал результатів (.txt)</span>
-                </a>
-                <span id="speedtest-ip" class="tv-speed-ip">IP та час зберігаються автоматично</span>
-            </div>
-        </section>
-
-        <!-- 5. Простий віджет Google Карти в самому низу -->
-        <section class="tv-card tv-map-card" aria-labelledby="map-title">
-            <span class="tv-kicker">GPS · 48°03′30″ пн. ш., 39°39′30″ сх. д.</span>
-            <h2 id="map-title" class="tv-title tv-title--sub">Довжанськ на карті</h2>
-            <div id="gmap-container" class="tv-map-box">Завантаження Google Карти…</div>
-            <div class="tv-map-footer">
-                <span class="tv-map-coords">48.05833° N, 39.65833° E · Луганська область</span>
-                <a href="https://www.google.com/maps/search/?api=1&query=48.05833,39.65833" target="_blank"
-                    rel="noopener noreferrer" class="tv-log-link">
-                    <span>Відкрити в Google Картах</span>
-                </a>
+            <div class="tv-speed-history">
+                <div class="tv-history-head">
+                    <span class="tv-history-title">Останні 5 перевірок</span>
+                    <span id="speedtest-ip" class="tv-speed-ip"></span>
+                </div>
+                <div id="speed-history-list" class="tv-history-list">
+                    <div class="tv-history-empty">Поки що немає збережених перевірок.</div>
+                </div>
             </div>
         </section>
     </main>
@@ -292,12 +246,7 @@
 
             var TARGET_LAT = 48.05833;
             var TARGET_LON = 39.65833;
-
-            // Quota banner listener
-            var quotaBanner = document.getElementById('gmp-quota-banner');
-            window.addEventListener('gmp-quota-exceeded', function () {
-                if (quotaBanner) quotaBanner.hidden = false;
-            });
+            var LOCAL_HISTORY_KEY = 'jeff777_speed_history';
 
             // =====================================================
             // 1. GATE 19 KEY DECODER & COPY LOGIC (OBFUSCATED)
@@ -470,67 +419,62 @@
             }
 
             // =====================================================
-            // 2. COMPACT 7-DAY WEATHER FORECAST (DOVZHANSK)
+            // 2. COMPACT 7-DAY WEATHER FORECAST (OPEN-METEO)
             // =====================================================
-            var WEATHER_LABELS_UK = {
-                CLEAR: 'Ясно',
-                MOSTLY_CLEAR: 'Перев. ясно',
-                PARTLY_CLOUDY: 'Мінл. хмарність',
-                MOSTLY_CLOUDY: 'Хмарно з проясн.',
-                CLOUDY: 'Хмарно',
-                WINDY: 'Вітряно',
-                WIND_AND_RAIN: 'Вітер і дощ',
-                LIGHT_RAIN_SHOWERS: 'Невел. зливи',
-                CHANCE_OF_SHOWERS: 'Можл. дощ',
-                SCATTERED_SHOWERS: 'Місцями дощ',
-                RAIN_SHOWERS: 'Зливи',
-                HEAVY_RAIN_SHOWERS: 'Сильні зливи',
-                LIGHT_TO_MODERATE_RAIN: 'Помірний дощ',
-                MODERATE_TO_HEAVY_RAIN: 'Сильний дощ',
-                RAIN: 'Дощ',
-                LIGHT_RAIN: 'Невел. дощ',
-                HEAVY_RAIN: 'Злива',
-                RAIN_PERIODICALLY_HEAVY: 'Період. злива',
-                LIGHT_SNOW_SHOWERS: 'Невел. сніг',
-                CHANCE_OF_SNOW_SHOWERS: 'Можл. сніг',
-                SCATTERED_SNOW_SHOWERS: 'Місцями сніг',
-                SNOW_SHOWERS: 'Снігопад',
-                HEAVY_SNOW_SHOWERS: 'Сильний сніг',
-                LIGHT_TO_MODERATE_SNOW: 'Помірний сніг',
-                MODERATE_TO_HEAVY_SNOW: 'Сильний сніг',
-                SNOW: 'Сніг',
-                LIGHT_SNOW: 'Невел. сніг',
-                HEAVY_SNOW: 'Сильний сніг',
-                SNOWSTORM: 'Хуртовина',
-                SNOW_PERIODICALLY_HEAVY: 'Період. сніг',
-                HEAVY_SNOW_STORM: 'Снігова буря',
-                BLOWING_SNOW: 'Заметіль',
-                RAIN_AND_SNOW: 'Дощ зі снігом',
-                HAIL: 'Град',
-                HAIL_SHOWERS: 'Злива з градом',
-                THUNDERSTORM: 'Гроза',
-                THUNDERSHOWER: 'Грозова злива',
-                LIGHT_THUNDERSTORM_RAIN: 'Гроза, дощ',
-                SCATTERED_THUNDERSTORMS: 'Місцями грози',
-                HEAVY_THUNDERSTORM: 'Сильна гроза',
-                FOG: 'Туман'
-            };
-
             var WEEKDAYS_UK = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 
-            function translateCondition(cond) {
-                if (!cond) return '';
-                if (cond.type && WEATHER_LABELS_UK[cond.type]) {
-                    return WEATHER_LABELS_UK[cond.type];
-                }
-                return (cond.description && cond.description.text) ? cond.description.text : '';
+            function wmoToInfo(code) {
+                if (code === 0) return { label: 'Ясно', kind: 'sun' };
+                if (code === 1 || code === 2) return { label: 'Мінл. хмарність', kind: 'partly' };
+                if (code === 3) return { label: 'Хмарно', kind: 'cloud' };
+                if (code === 45 || code === 48) return { label: 'Туман', kind: 'fog' };
+                if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return { label: 'Дощ', kind: 'rain' };
+                if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) return { label: 'Сніг', kind: 'snow' };
+                if (code >= 95 && code <= 99) return { label: 'Гроза', kind: 'storm' };
+                return { label: 'Хмарно', kind: 'cloud' };
             }
 
-            function safeIconUrl(iconBaseUri) {
-                if (typeof iconBaseUri === 'string' && iconBaseUri.indexOf('https://maps.gstatic.com/weather/') === 0) {
-                    return iconBaseUri + '.svg';
+            function createWeatherSvg(kind, className) {
+                var ns = 'http://www.w3.org/2000/svg';
+                var svg = document.createElementNS(ns, 'svg');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                svg.setAttribute('stroke-width', '2');
+                svg.setAttribute('stroke-linecap', 'round');
+                svg.setAttribute('stroke-linejoin', 'round');
+                svg.setAttribute('aria-hidden', 'true');
+                svg.setAttribute('class', className);
+
+                function add(tag, attrs) {
+                    var el = document.createElementNS(ns, tag);
+                    for (var k in attrs) el.setAttribute(k, attrs[k]);
+                    svg.appendChild(el);
                 }
-                return '';
+
+                if (kind === 'sun') {
+                    add('circle', { cx: '12', cy: '12', r: '4' });
+                    add('path', { d: 'M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41' });
+                } else if (kind === 'partly') {
+                    add('path', { d: 'M12 2v2M4.93 4.93l1.41 1.41M20 12h2M19.07 4.93l-1.41 1.41M15.95 11.65a4 4 0 0 0-5.9-3.9' });
+                    add('path', { d: 'M17.5 19H9a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 17.5 19z' });
+                } else if (kind === 'fog') {
+                    add('path', { d: 'M4 10h16M4 14h16M6 18h12' });
+                } else if (kind === 'rain') {
+                    add('path', { d: 'M16 14H8a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 16 14z' });
+                    add('path', { d: 'M8 19l1-2M12 20l1-2M16 19l1-2' });
+                } else if (kind === 'snow') {
+                    add('path', { d: 'M16 14H8a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 16 14z' });
+                    add('circle', { cx: '8.5', cy: '18.5', r: '1', fill: 'currentColor' });
+                    add('circle', { cx: '12', cy: '19.5', r: '1', fill: 'currentColor' });
+                    add('circle', { cx: '15.5', cy: '18.5', r: '1', fill: 'currentColor' });
+                } else if (kind === 'storm') {
+                    add('path', { d: 'M16 14H8a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 16 14z' });
+                    add('path', { d: 'M13 14l-2 4h3l-2 4' });
+                } else {
+                    add('path', { d: 'M17.5 19H9a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 17.5 19z' });
+                }
+                return svg;
             }
 
             function formatDeg(val) {
@@ -546,41 +490,35 @@
 
                 nowBox.textContent = '';
                 var cur = data && data.current ? data.current : null;
-                if (cur && cur.temperature) {
-                    var curIconSrc = safeIconUrl(cur.weatherCondition && cur.weatherCondition.iconBaseUri);
-                    if (curIconSrc) {
-                        var img = document.createElement('img');
-                        img.src = curIconSrc;
-                        img.alt = translateCondition(cur.weatherCondition);
-                        img.className = 'tv-weather-now-icon';
-                        nowBox.appendChild(img);
-                    }
+                if (cur && typeof cur.temperature_2m === 'number') {
+                    var info = wmoToInfo(cur.weather_code);
+                    nowBox.appendChild(createWeatherSvg(info.kind, 'tv-weather-now-icon'));
+
                     var tempSpan = document.createElement('span');
                     tempSpan.className = 'tv-weather-now-temp';
-                    tempSpan.textContent = formatDeg(cur.temperature.degrees) + 'C';
+                    tempSpan.textContent = formatDeg(cur.temperature_2m) + 'C';
                     nowBox.appendChild(tempSpan);
 
                     var metaDiv = document.createElement('div');
                     metaDiv.className = 'tv-weather-now-meta';
-                    var condLabel = translateCondition(cur.weatherCondition);
-                    var windVal = cur.wind && cur.wind.speed ? Math.round(cur.wind.speed.value) + ' км/год' : '';
-                    var humVal = typeof cur.relativeHumidity === 'number' ? cur.relativeHumidity + '%' : '';
-                    var parts = [];
-                    if (condLabel) parts.push(condLabel);
-                    if (cur.feelsLikeTemperature && typeof cur.feelsLikeTemperature.degrees === 'number') {
-                        parts.push('відч. ' + formatDeg(cur.feelsLikeTemperature.degrees));
+                    var line1 = [info.label];
+                    if (typeof cur.apparent_temperature === 'number') {
+                        line1.push('відч. ' + formatDeg(cur.apparent_temperature));
                     }
                     var line2 = [];
-                    if (windVal) line2.push('вітер ' + windVal);
-                    if (humVal) line2.push('волог. ' + humVal);
-
-                    var line1El = document.createElement('div');
-                    line1El.textContent = parts.join(' · ');
-                    metaDiv.appendChild(line1El);
+                    if (typeof cur.wind_speed_10m === 'number') {
+                        line2.push('вітер ' + Math.round(cur.wind_speed_10m) + ' км/год');
+                    }
+                    if (typeof cur.relative_humidity_2m === 'number') {
+                        line2.push('волог. ' + Math.round(cur.relative_humidity_2m) + '%');
+                    }
+                    var l1 = document.createElement('div');
+                    l1.textContent = line1.join(' · ');
+                    metaDiv.appendChild(l1);
                     if (line2.length) {
-                        var line2El = document.createElement('div');
-                        line2El.textContent = line2.join(' · ');
-                        metaDiv.appendChild(line2El);
+                        var l2 = document.createElement('div');
+                        l2.textContent = line2.join(' · ');
+                        metaDiv.appendChild(l2);
                     }
                     nowBox.appendChild(metaDiv);
                 } else {
@@ -591,11 +529,10 @@
                 }
 
                 weekGrid.textContent = '';
-                var days = data && data.forecast && Array.isArray(data.forecast.forecastDays)
-                    ? data.forecast.forecastDays
-                    : [];
+                var daily = data && data.daily ? data.daily : null;
+                var times = daily && Array.isArray(daily.time) ? daily.time : [];
 
-                if (!days.length) {
+                if (!times.length) {
                     var emptyEl = document.createElement('div');
                     emptyEl.className = 'tv-weather-placeholder';
                     emptyEl.style.gridColumn = '1 / -1';
@@ -604,17 +541,18 @@
                     return;
                 }
 
-                days.slice(0, 7).forEach(function (dayObj, idx) {
+                times.slice(0, 7).forEach(function (dateStr, idx) {
                     var tile = document.createElement('div');
                     tile.className = 'tv-weather-day' + (idx === 0 ? ' is-today' : '');
 
-                    var dd = dayObj.displayDate || {};
-                    var dateLabel = '';
+                    var parts = String(dateStr).split('-');
                     var dayName = idx === 0 ? 'Сьог.' : '';
-                    if (dd.year && dd.month && dd.day) {
-                        var dt = new Date(Date.UTC(dd.year, dd.month - 1, dd.day));
+                    var dateLabel = '';
+                    if (parts.length === 3) {
+                        var y = Number(parts[0]), m = Number(parts[1]), d = Number(parts[2]);
+                        var dt = new Date(Date.UTC(y, m - 1, d));
                         if (!dayName) dayName = WEEKDAYS_UK[dt.getUTCDay()] || '';
-                        dateLabel = String(dd.day).padStart(2, '0') + '.' + String(dd.month).padStart(2, '0');
+                        dateLabel = String(d).padStart(2, '0') + '.' + String(m).padStart(2, '0');
                     }
 
                     var dayEl = document.createElement('span');
@@ -627,32 +565,25 @@
                     dateEl.textContent = dateLabel;
                     tile.appendChild(dateEl);
 
-                    var dayCond = dayObj.daytimeForecast && dayObj.daytimeForecast.weatherCondition;
-                    var wIconSrc = safeIconUrl(dayCond && dayCond.iconBaseUri);
-                    if (wIconSrc) {
-                        var wImg = document.createElement('img');
-                        wImg.src = wIconSrc;
-                        wImg.alt = translateCondition(dayCond);
-                        wImg.title = translateCondition(dayCond);
-                        wImg.className = 'tv-w-icon';
-                        tile.appendChild(wImg);
-                    }
+                    var wCode = daily.weather_code ? daily.weather_code[idx] : 3;
+                    var wInfo = wmoToInfo(wCode);
+                    var svgIcon = createWeatherSvg(wInfo.kind, 'tv-w-icon');
+                    svgIcon.setAttribute('title', wInfo.label);
+                    tile.appendChild(svgIcon);
 
                     var tempsEl = document.createElement('span');
                     tempsEl.className = 'tv-w-temps';
-                    var maxText = document.createTextNode(formatDeg(dayObj.maxTemperature && dayObj.maxTemperature.degrees) + ' ');
+                    var maxVal = daily.temperature_2m_max ? daily.temperature_2m_max[idx] : null;
+                    var minVal = daily.temperature_2m_min ? daily.temperature_2m_min[idx] : null;
+                    var maxText = document.createTextNode(formatDeg(maxVal) + ' ');
                     var minSpan = document.createElement('span');
                     minSpan.className = 'tv-w-min';
-                    minSpan.textContent = formatDeg(dayObj.minTemperature && dayObj.minTemperature.degrees);
+                    minSpan.textContent = formatDeg(minVal);
                     tempsEl.appendChild(maxText);
                     tempsEl.appendChild(minSpan);
                     tile.appendChild(tempsEl);
 
-                    var popPct = dayObj.daytimeForecast &&
-                        dayObj.daytimeForecast.precipitation &&
-                        dayObj.daytimeForecast.precipitation.probability &&
-                        dayObj.daytimeForecast.precipitation.probability.percent;
-
+                    var popPct = daily.precipitation_probability_max ? daily.precipitation_probability_max[idx] : null;
                     var popEl = document.createElement('span');
                     popEl.className = 'tv-w-pop';
                     popEl.textContent = (typeof popPct === 'number' && popPct > 0) ? ('💧 ' + popPct + '%') : '';
@@ -665,21 +596,24 @@
             function loadWeather() {
                 var weekGrid = document.getElementById('weather-week-grid');
                 var nowBox = document.getElementById('weather-now-box');
+                var directOpenMeteo = 'https://api.open-meteo.com/v1/forecast?latitude=' + TARGET_LAT +
+                    '&longitude=' + TARGET_LON +
+                    '&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m' +
+                    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+                    '&timezone=Europe%2FKyiv&forecast_days=7';
+
                 fetch('/api/weather?lat=' + TARGET_LAT + '&lon=' + TARGET_LON)
                     .then(function (res) {
-                        return res.json().then(function (json) {
-                            return { ok: res.ok, status: res.status, json: json };
+                        if (!res.ok) throw new Error('Proxy error');
+                        return res.json();
+                    })
+                    .catch(function () {
+                        return fetch(directOpenMeteo).then(function (r) {
+                            if (!r.ok) throw new Error('Open-Meteo error');
+                            return r.json();
                         });
                     })
-                    .then(function (resp) {
-                        if (resp.status === 429 || (resp.json && (resp.json.quotaExceeded || resp.json.error === 'QUOTA_EXCEEDED'))) {
-                            window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
-                        }
-                        if (!resp.ok) {
-                            throw new Error((resp.json && resp.json.message) || 'Weather unavailable');
-                        }
-                        renderWeather(resp.json);
-                    })
+                    .then(renderWeather)
                     .catch(function () {
                         if (nowBox) {
                             nowBox.textContent = '';
@@ -702,7 +636,7 @@
             loadWeather();
 
             // =====================================================
-            // 3. SIMPLE SPEED TEST + LOGGING TO /speedtest-log.txt
+            // 3. SIMPLE SPEED TEST + LAST 5 CHECKS IN PAGE FOOTER
             // =====================================================
             var speedBtn = document.getElementById('speedtest-btn');
             var speedBtnLabel = document.getElementById('speedtest-btn-label');
@@ -713,7 +647,9 @@
             var stBar = document.getElementById('speedtest-bar');
             var stStatus = document.getElementById('speedtest-status');
             var stIpEl = document.getElementById('speedtest-ip');
+            var historyListEl = document.getElementById('speed-history-list');
             var speedRunning = false;
+            var knownClientIp = '';
 
             function setSpeedStatus(text, isSuccess) {
                 if (!stStatus) return;
@@ -727,7 +663,95 @@
                 stBar.style.width = Math.max(0, Math.min(100, pct)) + '%';
             }
 
-            function createRandomPayload(byteLength) {
+            function readLocalHistory() {
+                try {
+                    var raw = localStorage.getItem(LOCAL_HISTORY_KEY);
+                    var arr = raw ? JSON.parse(raw) : [];
+                    return Array.isArray(arr) ? arr.slice(0, 5) : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function writeLocalHistory(list) {
+                try {
+                    localStorage.setItem(LOCAL_HISTORY_KEY, JSON.stringify((list || []).slice(0, 5)));
+                } catch (e) {}
+            }
+
+            function renderHistory(items) {
+                if (!historyListEl) return;
+                historyListEl.textContent = '';
+                var list = Array.isArray(items) ? items.slice(0, 5) : [];
+                if (!list.length) {
+                    var empty = document.createElement('div');
+                    empty.className = 'tv-history-empty';
+                    empty.textContent = 'Поки що немає збережених перевірок.';
+                    historyListEl.appendChild(empty);
+                    return;
+                }
+
+                list.forEach(function (item) {
+                    var row = document.createElement('div');
+                    row.className = 'tv-history-row';
+
+                    var meta = document.createElement('span');
+                    meta.className = 'tv-history-meta';
+                    var parts = [];
+                    if (item.time) parts.push(item.time);
+                    if (item.ip) parts.push(item.ip);
+                    if (item.device) parts.push(item.device);
+                    meta.textContent = parts.join(' · ');
+
+                    var stats = document.createElement('span');
+                    stats.className = 'tv-history-stats';
+                    var upTxt = (typeof item.uploadMbps === 'number') ? (item.uploadMbps + ' Мбіт/с') : '—';
+                    stats.textContent = 'Ping ' + item.pingMs + ' мс · ↓ ' + item.downloadMbps + ' · ↑ ' + upTxt;
+
+                    row.appendChild(meta);
+                    row.appendChild(stats);
+                    historyListEl.appendChild(row);
+                });
+            }
+
+            function loadRecentHistory() {
+                var localItems = readLocalHistory();
+                if (localItems.length) {
+                    renderHistory(localItems);
+                }
+
+                fetch('/api/speedtest/recent', { cache: 'no-store' })
+                    .then(function (r) {
+                        if (!r.ok) throw new Error('recent error');
+                        return r.json();
+                    })
+                    .then(function (json) {
+                        if (json && json.clientIp) {
+                            knownClientIp = json.clientIp;
+                            if (stIpEl) stIpEl.textContent = 'Ваш IP: ' + json.clientIp;
+                        }
+                        if (json && Array.isArray(json.recent) && json.recent.length) {
+                            renderHistory(json.recent);
+                            writeLocalHistory(json.recent);
+                        }
+                    })
+                    .catch(function () {});
+            }
+
+            function fetchWithTimeout(url, options, timeoutMs) {
+                var opts = Object.assign({ cache: 'no-store' }, options || {});
+                if (typeof AbortController === 'undefined') {
+                    return fetch(url, opts);
+                }
+                var ctrl = new AbortController();
+                var timer = setTimeout(function () { ctrl.abort(); }, timeoutMs || 10000);
+                opts.signal = ctrl.signal;
+                return fetch(url, opts).finally(function () {
+                    clearTimeout(timer);
+                });
+            }
+
+            function createRandomBlob(byteLength) {
                 var buf = new Uint8Array(byteLength);
                 if (window.crypto && window.crypto.getRandomValues) {
                     var step = 65536;
@@ -740,18 +764,24 @@
                         buf[i] = (Math.random() * 256) | 0;
                     }
                 }
-                return buf;
+                return new Blob([buf], { type: 'application/octet-stream' });
             }
 
             async function measurePing() {
-                // Warm-up request
-                await fetch('/api/speedtest/ping?t=' + Date.now(), { cache: 'no-store' });
+                var warm = await fetchWithTimeout('/api/speedtest/ping?t=' + Date.now(), {}, 8000);
+                if (!warm.ok) throw new Error('PING_' + warm.status);
+                try {
+                    var warmJson = await warm.json();
+                    if (warmJson && warmJson.ip) knownClientIp = warmJson.ip;
+                } catch (e) {}
+
                 var samples = [];
                 for (var i = 0; i < 5; i++) {
                     var t0 = performance.now();
-                    await fetch('/api/speedtest/ping?i=' + i + '&t=' + Date.now(), { cache: 'no-store' });
-                    var dt = performance.now() - t0;
-                    samples.push(dt);
+                    var r = await fetchWithTimeout('/api/speedtest/ping?i=' + i + '&t=' + Date.now(), {}, 8000);
+                    if (!r.ok) throw new Error('PING_' + r.status);
+                    await r.text();
+                    samples.push(performance.now() - t0);
                 }
                 var sum = samples.reduce(function (a, b) { return a + b; }, 0);
                 var avg = sum / samples.length;
@@ -765,24 +795,22 @@
 
             async function measureDownload() {
                 var probeStart = performance.now();
-                var probeResp = await fetch('/api/speedtest/download?kb=512&t=' + Date.now(), { cache: 'no-store' });
+                var probeResp = await fetchWithTimeout('/api/speedtest/download?kb=512&t=' + Date.now(), {}, 12000);
+                if (!probeResp.ok) throw new Error('DL_' + probeResp.status);
                 var probeBuf = await probeResp.arrayBuffer();
                 var probeMs = performance.now() - probeStart;
 
                 var totalBytes = probeBuf.byteLength;
-                var totalMs = probeMs;
-
                 var chunkKb = probeMs > 700 ? 512 : 1024;
                 var streams = probeMs > 900 ? 1 : 2;
                 var testStart = performance.now();
 
                 async function worker() {
-                    while (performance.now() - testStart < 3000) {
-                        var s0 = performance.now();
-                        var r = await fetch('/api/speedtest/download?kb=' + chunkKb + '&r=' + Math.random(), { cache: 'no-store' });
+                    while (performance.now() - testStart < 2800) {
+                        var r = await fetchWithTimeout('/api/speedtest/download?kb=' + chunkKb + '&r=' + Math.random(), {}, 12000);
+                        if (!r.ok) break;
                         var b = await r.arrayBuffer();
                         totalBytes += b.byteLength;
-                        totalMs += (performance.now() - s0);
                         if (totalBytes >= 12 * 1024 * 1024) break;
                     }
                 }
@@ -799,29 +827,31 @@
             }
 
             async function measureUpload() {
-                var probePayload = createRandomPayload(256 * 1024);
+                var probeBlob = createRandomBlob(256 * 1024);
                 var p0 = performance.now();
-                await fetch('/api/speedtest/upload?t=' + Date.now(), {
+                var pr = await fetchWithTimeout('/api/speedtest/upload?t=' + Date.now(), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/octet-stream' },
-                    body: probePayload,
-                    cache: 'no-store'
-                });
+                    body: probeBlob
+                }, 12000);
+                if (!pr.ok) throw new Error('UL_' + pr.status);
+                await pr.text();
                 var probeMs = performance.now() - p0;
 
                 var chunkSize = probeMs > 700 ? 256 * 1024 : 512 * 1024;
-                var payload = createRandomPayload(chunkSize);
-                var totalBytes = probePayload.byteLength;
+                var blob = createRandomBlob(chunkSize);
+                var totalBytes = probeBlob.size;
                 var wallStart = performance.now();
 
-                while (performance.now() - wallStart < 3000) {
-                    await fetch('/api/speedtest/upload?r=' + Math.random(), {
+                while (performance.now() - wallStart < 2800) {
+                    var ur = await fetchWithTimeout('/api/speedtest/upload?r=' + Math.random(), {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/octet-stream' },
-                        body: payload,
-                        cache: 'no-store'
-                    });
-                    totalBytes += payload.byteLength;
+                        body: blob
+                    }, 12000);
+                    if (!ur.ok) break;
+                    await ur.text();
+                    totalBytes += blob.size;
                     if (totalBytes >= 6 * 1024 * 1024) break;
                 }
 
@@ -854,41 +884,66 @@
                     setProgress(70);
 
                     setSpeedStatus('Крок 3/3: перевірка швидкості віддачі…', true);
-                    var upMbps = await measureUpload();
-                    stUpEl.textContent = String(upMbps);
-                    setProgress(92);
-
-                    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                    var connLabel = conn ? ([conn.effectiveType, conn.type].filter(Boolean).join('/') || '-') : '-';
-                    var tz = '-';
-                    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '-'; } catch (e) {}
-
-                    var logResp = await fetch('/api/speedtest/log', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            pingMs: pingRes.pingMs,
-                            jitterMs: pingRes.jitterMs,
-                            downloadMbps: downMbps,
-                            uploadMbps: upMbps,
-                            connectionType: connLabel,
-                            screen: window.screen ? (window.screen.width + 'x' + window.screen.height) : '-',
-                            timezone: tz,
-                            language: navigator.language || '-'
-                        })
-                    });
-
-                    var logJson = await logResp.json();
-                    setProgress(100);
-
-                    if (logResp.ok && logJson.ok) {
-                        if (stIpEl && logJson.ip) {
-                            stIpEl.textContent = 'IP: ' + logJson.ip + ' · збережено в .txt';
-                        }
-                        setSpeedStatus('✓ Перевірку завершено! Результат і ваш IP збережено у текстовий журнал.', true);
-                    } else {
-                        setSpeedStatus('✓ Тест завершено, але не вдалося записати в журнал.', false);
+                    var upMbps = null;
+                    try {
+                        upMbps = await measureUpload();
+                        stUpEl.textContent = String(upMbps);
+                    } catch (ulErr) {
+                        stUpEl.textContent = '—';
                     }
+                    setProgress(95);
+
+                    // Save into server last-5 list & fallback to localStorage
+                    var nowStr = new Date().toLocaleString('uk-UA', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    var fallbackEntry = {
+                        time: nowStr,
+                        ip: knownClientIp || 'Локально',
+                        device: '',
+                        pingMs: pingRes.pingMs,
+                        jitterMs: pingRes.jitterMs,
+                        downloadMbps: downMbps,
+                        uploadMbps: upMbps
+                    };
+
+                    var savedRecent = null;
+                    try {
+                        var saveResp = await fetchWithTimeout('/api/speedtest/recent', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                pingMs: pingRes.pingMs,
+                                jitterMs: pingRes.jitterMs,
+                                downloadMbps: downMbps,
+                                uploadMbps: upMbps
+                            })
+                        }, 6000);
+                        if (saveResp.ok) {
+                            var saveJson = await saveResp.json();
+                            if (saveJson && saveJson.entry && saveJson.entry.ip) {
+                                knownClientIp = saveJson.entry.ip;
+                                if (stIpEl) stIpEl.textContent = 'Ваш IP: ' + saveJson.entry.ip;
+                            }
+                            if (saveJson && Array.isArray(saveJson.recent)) {
+                                savedRecent = saveJson.recent;
+                            }
+                        }
+                    } catch (saveErr) {}
+
+                    if (!savedRecent) {
+                        var curHist = readLocalHistory();
+                        curHist.unshift(fallbackEntry);
+                        savedRecent = curHist.slice(0, 5);
+                    }
+                    writeLocalHistory(savedRecent);
+                    renderHistory(savedRecent);
+                    setProgress(100);
+                    setSpeedStatus('✓ Перевірку завершено!', true);
                 } catch (err) {
                     setSpeedStatus('Помилка перевірки швидкості. Перевірте інтернет і спробуйте ще раз.', false);
                 } finally {
@@ -904,86 +959,7 @@
             if (speedBtn) {
                 speedBtn.addEventListener('click', runSpeedTest);
             }
-
-            // =====================================================
-            // 4. GOOGLE MAPS WIDGET (DOVZHANSK 48.05833, 39.65833)
-            // =====================================================
-            function loadGoogleMapsBootstrap(apiKey) {
-                (function (g) {
-                    var h, a, k, p = 'The Google Maps JavaScript API', c = 'google', l = 'importLibrary', q = '__ib__', m = document, b = window;
-                    b = b[c] || (b[c] = {});
-                    var d = b.maps || (b.maps = {}), r = new Set(), e = new URLSearchParams();
-                    var u = function () {
-                        return h || (h = new Promise(async function (f, n) {
-                            a = m.createElement('script');
-                            e.set('libraries', Array.from(r).join(','));
-                            for (k in g) e.set(k.replace(/[A-Z]/g, function (t) { return '_' + t[0].toLowerCase(); }), g[k]);
-                            e.set('callback', c + '.maps.' + q);
-                            a.src = 'https://maps.' + c + 'apis.com/maps/api/js?' + e;
-                            d[q] = f;
-                            a.onerror = function () { h = n(new Error(p + ' could not load.')); };
-                            var nonceEl = m.querySelector('script[nonce]');
-                            a.nonce = (nonceEl && nonceEl.nonce) || '';
-                            m.head.append(a);
-                        }));
-                    };
-                    if (!d[l]) {
-                        d[l] = function (f) {
-                            r.add(f);
-                            var args = arguments;
-                            return u().then(function () { return d[l].apply(null, args); });
-                        };
-                    }
-                })({
-                    key: apiKey,
-                    v: 'weekly',
-                    language: 'uk',
-                    region: 'UA'
-                });
-            }
-
-            async function initGoogleMap() {
-                var mapEl = document.getElementById('gmap-container');
-                if (!mapEl) return;
-
-                try {
-                    var cfgResp = await fetch('/api/maps-config');
-                    var cfg = await cfgResp.json();
-                    if (!cfg || !cfg.apiKey) {
-                        mapEl.textContent = 'Google Карта тимчасово не налаштована.';
-                        return;
-                    }
-
-                    loadGoogleMapsBootstrap(cfg.apiKey);
-
-                    var mapsLib = await google.maps.importLibrary('maps');
-                    var markerLib = await google.maps.importLibrary('marker');
-                    var coreLib = await google.maps.importLibrary('core');
-
-                    var isDark = document.body.getAttribute('data-theme') !== 'light';
-                    var position = { lat: TARGET_LAT, lng: TARGET_LON };
-
-                    mapEl.textContent = '';
-                    var map = new mapsLib.Map(mapEl, {
-                        center: position,
-                        zoom: 13,
-                        mapId: 'DEMO_MAP_ID',
-                        gestureHandling: 'cooperative',
-                        colorScheme: isDark ? coreLib.ColorScheme.DARK : coreLib.ColorScheme.LIGHT,
-                        internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio']
-                    });
-
-                    new markerLib.AdvancedMarkerElement({
-                        map: map,
-                        position: position,
-                        title: 'Довжанськ (48.05833° N, 39.65833° E)'
-                    });
-                } catch (err) {
-                    mapEl.textContent = 'Не вдалося завантажити Google Карту.';
-                }
-            }
-
-            initGoogleMap();
+            loadRecentHistory();
         })();
     </script>
 </body>
