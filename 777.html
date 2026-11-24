@@ -6,7 +6,7 @@
     <!-- ЗАБОРОНА ІНДЕКСАЦІЇ ДЛЯ ПОШУКОВИХ СИСТЕМ -->
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, nofollow">
-    <title>Криївка 17/65 — Швидке копіювання ключа</title>
+    <title>Криївка 17/65 — Швидке копіювання ключів</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="shortcut icon" href="favicon.svg">
@@ -62,32 +62,51 @@
             <span class="tv-kicker">Android TV · Приставка · Смартфон</span>
             <h1 id="tv-page-title" class="tv-title">Криївка 17/65</h1>
             <p class="tv-subtitle">
-                Натисніть «OK» на пульті або кнопку нижче — ключ одразу скопіюється в буфер обміну для вставки у
-                VPN-клієнт.
+                Натисніть «OK» на пульті або оберіть потрібну кнопку нижче — ключ одразу скопіюється в буфер обміну для
+                вставки у VPN-клієнт.
             </p>
 
-            <button type="button" id="copy-vless-btn" class="tv-copy-btn" autofocus>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                </svg>
-                <span id="copy-btn-label">СКОПІЮВАТИ VLESS-КЛЮЧ</span>
-            </button>
+            <div class="tv-actions-stack">
+                <button type="button" id="copy-vless-btn" class="tv-copy-btn" autofocus>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    <span id="copy-btn-label">СКОПІЮВАТИ VLESS-КЛЮЧ</span>
+                </button>
+
+                <button type="button" id="copy-extra-btn" class="tv-copy-btn tv-copy-btn--secondary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    <span id="copy-extra-label">ДОДАТКОВИЙ КЛЮЧ</span>
+                </button>
+            </div>
 
             <div id="copy-status" class="tv-status" role="status" aria-live="polite"></div>
 
             <div class="tv-secondary-actions">
                 <button type="button" id="toggle-key-btn" class="tv-toggle-key-btn" aria-expanded="false"
                     aria-controls="key-panel">
-                    Показати / виділити ключ вручну
+                    Показати / виділити ключі вручну
                 </button>
             </div>
 
             <div id="key-panel" class="tv-key-panel">
-                <textarea id="vless-textarea" class="tv-key-textarea" readonly
-                    aria-label="VLESS-ключ">vless://b670c7ca-2472-4040-8314-019a0c2a754b@app.voxclear.cc:443?security=reality&encryption=none&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&pbk=hiXLrNf0yVQNkheLR7WR_VohRMwxxfuyYzdWxf8xH0I&sni=www.microsoft.com&sid=6f31e2f3b86a#VPN_131_1777981226_8</textarea>
-                <button type="button" id="select-key-btn" class="tv-select-btn">Виділити весь ключ</button>
+                <div class="tv-key-group">
+                    <label for="vless-textarea" class="tv-key-label">Основний ключ (VLESS)</label>
+                    <textarea id="vless-textarea" class="tv-key-textarea" readonly>vless://b670c7ca-2472-4040-8314-019a0c2a754b@app.voxclear.cc:443?security=reality&amp;encryption=none&amp;headerType=none&amp;fp=chrome&amp;type=tcp&amp;flow=xtls-rprx-vision&amp;pbk=hiXLrNf0yVQNkheLR7WR_VohRMwxxfuyYzdWxf8xH0I&amp;sni=www.microsoft.com&amp;sid=6f31e2f3b86a#VPN_131_1777981226_8</textarea>
+                    <button type="button" id="select-key-btn" class="tv-select-btn">Виділити основний ключ</button>
+                </div>
+
+                <div class="tv-key-group">
+                    <label for="extra-textarea" class="tv-key-label">Додатковий ключ</label>
+                    <textarea id="extra-textarea" class="tv-key-textarea" readonly>ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTp3S082WnBKSmNweWhoQjl5UHdaQzFwVDhJS01oTmpCQ21nOXFZWlIyUUYxOGxHTjVzazN1V1ZjeGZjb1NtNlFLdlFiWDJ0c053ZE4wNmYwWENkWXpLcTRDZFY5NDJXQW0=@images.zentarq.org:20923/?outline=1&amp;prefix=%2516%2503%2501%2500%25C2%25A8%2501%2501#VPN_131_1777981226</textarea>
+                    <button type="button" id="select-extra-btn" class="tv-select-btn">Виділити додатковий ключ</button>
+                </div>
             </div>
         </section>
     </main>
@@ -114,30 +133,47 @@
             'use strict';
 
             var vlessLink = "vless://b670c7ca-2472-4040-8314-019a0c2a754b@app.voxclear.cc:443?security=reality&encryption=none&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&pbk=hiXLrNf0yVQNkheLR7WR_VohRMwxxfuyYzdWxf8xH0I&sni=www.microsoft.com&sid=6f31e2f3b86a#VPN_131_1777981226_8";
+            var extraLink = "ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTp3S082WnBKSmNweWhoQjl5UHdaQzFwVDhJS01oTmpCQ21nOXFZWlIyUUYxOGxHTjVzazN1V1ZjeGZjb1NtNlFLdlFiWDJ0c053ZE4wNmYwWENkWXpLcTRDZFY5NDJXQW0=@images.zentarq.org:20923/?outline=1&prefix=%2516%2503%2501%2500%25C2%25A8%2501%2501#VPN_131_1777981226";
+
             var copyBtn = document.getElementById('copy-vless-btn');
             var copyBtnLabel = document.getElementById('copy-btn-label');
+            var copyExtraBtn = document.getElementById('copy-extra-btn');
+            var copyExtraLabel = document.getElementById('copy-extra-label');
             var statusEl = document.getElementById('copy-status');
             var toggleKeyBtn = document.getElementById('toggle-key-btn');
             var keyPanel = document.getElementById('key-panel');
             var keyTextarea = document.getElementById('vless-textarea');
+            var extraTextarea = document.getElementById('extra-textarea');
             var selectKeyBtn = document.getElementById('select-key-btn');
+            var selectExtraBtn = document.getElementById('select-extra-btn');
             var statusTimer = null;
 
-            function showStatus(message, isSuccess) {
+            function resetButtonStates() {
+                if (copyBtn && copyBtnLabel) {
+                    copyBtn.classList.remove('is-copied');
+                    copyBtnLabel.textContent = 'СКОПІЮВАТИ VLESS-КЛЮЧ';
+                }
+                if (copyExtraBtn && copyExtraLabel) {
+                    copyExtraBtn.classList.remove('is-copied');
+                    copyExtraLabel.textContent = 'ДОДАТКОВИЙ КЛЮЧ';
+                }
+            }
+
+            function showStatus(message, isSuccess, activeBtn, activeLabelEl, copiedText) {
                 if (!statusEl) return;
+                resetButtonStates();
                 statusEl.textContent = message;
                 statusEl.className = 'tv-status is-visible ' + (isSuccess ? 'is-success' : 'is-warn');
-                if (isSuccess && copyBtn && copyBtnLabel) {
-                    copyBtn.classList.add('is-copied');
-                    copyBtnLabel.textContent = 'СКОПІЙОВАНО ✓';
+
+                if (isSuccess && activeBtn && activeLabelEl) {
+                    activeBtn.classList.add('is-copied');
+                    activeLabelEl.textContent = copiedText || 'СКОПІЙОВАНО ✓';
                 }
+
                 clearTimeout(statusTimer);
                 statusTimer = setTimeout(function () {
                     statusEl.classList.remove('is-visible');
-                    if (copyBtn && copyBtnLabel) {
-                        copyBtn.classList.remove('is-copied');
-                        copyBtnLabel.textContent = 'СКОПІЮВАТИ VLESS-КЛЮЧ';
-                    }
+                    resetButtonStates();
                 }, 3500);
             }
 
@@ -163,44 +199,66 @@
                 return ok;
             }
 
-            function openAndSelectKey() {
-                if (!keyPanel || !keyTextarea) return;
+            function openAndSelectKey(targetTextarea) {
+                if (!keyPanel || !targetTextarea) return;
                 keyPanel.classList.add('is-open');
                 if (toggleKeyBtn) toggleKeyBtn.setAttribute('aria-expanded', 'true');
-                keyTextarea.focus();
-                keyTextarea.select();
+                targetTextarea.focus();
+                targetTextarea.select();
                 try {
-                    keyTextarea.setSelectionRange(0, keyTextarea.value.length);
+                    targetTextarea.setSelectionRange(0, targetTextarea.value.length);
                 } catch (e) {}
             }
 
-            function copyVless() {
+            function copyKey(link, successMessage, activeBtn, activeLabelEl, copiedText, targetTextarea) {
                 if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(vlessLink).then(function () {
-                        showStatus('✓ Ключ скопійовано в буфер обміну!', true);
+                    navigator.clipboard.writeText(link).then(function () {
+                        showStatus(successMessage, true, activeBtn, activeLabelEl, copiedText);
                     }).catch(function () {
-                        if (fallbackExecCopy(vlessLink)) {
-                            showStatus('✓ Ключ скопійовано в буфер обміну!', true);
+                        if (fallbackExecCopy(link)) {
+                            showStatus(successMessage, true, activeBtn, activeLabelEl, copiedText);
                         } else {
-                            openAndSelectKey();
+                            openAndSelectKey(targetTextarea);
                             showStatus('Автокопіювання заблоковане браузером — ключ виділено нижче, натисніть «Копіювати».', false);
                         }
                     });
                 } else {
-                    if (fallbackExecCopy(vlessLink)) {
-                        showStatus('✓ Ключ скопійовано в буфер обміну!', true);
+                    if (fallbackExecCopy(link)) {
+                        showStatus(successMessage, true, activeBtn, activeLabelEl, copiedText);
                     } else {
-                        openAndSelectKey();
+                        openAndSelectKey(targetTextarea);
                         showStatus('Автокопіювання недоступне — ключ виділено нижче, скопіюйте його вручну.', false);
                     }
                 }
             }
 
             if (copyBtn) {
-                copyBtn.addEventListener('click', copyVless);
+                copyBtn.addEventListener('click', function () {
+                    copyKey(
+                        vlessLink,
+                        '✓ Основний VLESS-ключ скопійовано в буфер обміну!',
+                        copyBtn,
+                        copyBtnLabel,
+                        'VLESS СКОПІЙОВАНО ✓',
+                        keyTextarea
+                    );
+                });
                 setTimeout(function () {
                     try { copyBtn.focus(); } catch (e) {}
                 }, 100);
+            }
+
+            if (copyExtraBtn) {
+                copyExtraBtn.addEventListener('click', function () {
+                    copyKey(
+                        extraLink,
+                        '✓ Додатковий ключ скопійовано в буфер обміну!',
+                        copyExtraBtn,
+                        copyExtraLabel,
+                        'ДОДАТКОВИЙ СКОПІЙОВАНО ✓',
+                        extraTextarea
+                    );
+                });
             }
 
             if (toggleKeyBtn && keyPanel) {
@@ -214,19 +272,23 @@
                 });
             }
 
-            if (selectKeyBtn && keyTextarea) {
-                selectKeyBtn.addEventListener('click', function () {
-                    keyTextarea.focus();
-                    keyTextarea.select();
+            function bindSelectHelper(btn, textarea, successMsg) {
+                if (!btn || !textarea) return;
+                btn.addEventListener('click', function () {
+                    textarea.focus();
+                    textarea.select();
                     try {
-                        keyTextarea.setSelectionRange(0, keyTextarea.value.length);
+                        textarea.setSelectionRange(0, textarea.value.length);
                         document.execCommand('copy');
-                        showStatus('✓ Ключ виділено та скопійовано!', true);
+                        showStatus(successMsg, true);
                     } catch (e) {
                         showStatus('Ключ виділено у полі вище.', false);
                     }
                 });
             }
+
+            bindSelectHelper(selectKeyBtn, keyTextarea, '✓ Основний ключ виділено та скопійовано!');
+            bindSelectHelper(selectExtraBtn, extraTextarea, '✓ Додатковий ключ виділено та скопійовано!');
         })();
     </script>
 </body>
