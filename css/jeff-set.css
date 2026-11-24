@@ -2221,3 +2221,391 @@ body:not([data-theme="dark"]) .tv-step-num {
   }
 }
 
+/* Google Maps Platform Quota Notice (Demo Key Tier) */
+.gmp-quota-banner {
+  position: sticky;
+  top: 0;
+  z-index: 1200;
+  background: rgba(244, 129, 32, 0.16);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(244, 129, 32, 0.45);
+  color: var(--text);
+  padding: 0.65rem 1rem;
+  font-size: 0.84rem;
+  text-align: center;
+}
+
+.gmp-quota-banner[hidden] {
+  display: none;
+}
+
+.gmp-quota-banner a {
+  color: var(--accent-bright);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Compact 7-Day Weather Forecast Widget (777.html) */
+.tv-weather-card {
+  padding: 1.3rem 1.5rem;
+}
+
+.tv-weather-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem 1.25rem;
+  flex-wrap: wrap;
+  text-align: left;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tv-weather-loc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.tv-weather-place {
+  font-family: var(--main-font);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.tv-weather-coords {
+  font-family: var(--mono-font);
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.tv-weather-now {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.tv-weather-now-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.tv-weather-now-temp {
+  font-family: var(--mono-font);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.tv-weather-now-meta {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
+.tv-weather-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.tv-weather-day {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.tv-weather-day.is-today {
+  border-color: var(--accent-bright);
+  background: var(--accent-softer);
+}
+
+.tv-w-day {
+  font-family: var(--mono-font);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.tv-w-date {
+  font-family: var(--mono-font);
+  font-size: 0.66rem;
+  color: var(--text-secondary);
+}
+
+.tv-w-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  margin: 0.1rem 0;
+}
+
+.tv-w-temps {
+  font-family: var(--mono-font);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.tv-w-min {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.tv-w-pop {
+  font-family: var(--mono-font);
+  font-size: 0.66rem;
+  color: var(--accent-bright);
+  min-height: 0.9rem;
+}
+
+body:not([data-theme="dark"]) .tv-w-pop {
+  color: var(--accent);
+}
+
+.tv-weather-placeholder {
+  font-family: var(--mono-font);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding: 0.75rem 0 0.25rem;
+}
+
+/* Simple Speed Test Widget (777.html) */
+.tv-speed-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.tv-speed-metric {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.tv-speed-label {
+  font-family: var(--mono-font);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.tv-speed-val {
+  font-family: var(--mono-font);
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.15;
+}
+
+.tv-speed-unit {
+  font-family: var(--mono-font);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.tv-speed-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 62px;
+  padding: 1rem 1.5rem;
+  font-family: var(--mono-font);
+  font-size: clamp(0.98rem, 2.3vw, 1.15rem);
+  font-weight: 700;
+  color: var(--text);
+  background: var(--accent-soft);
+  border: 2px solid var(--accent-bright);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.tv-speed-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px var(--accent-glow);
+}
+
+.tv-speed-btn:focus,
+.tv-speed-btn:focus-visible {
+  outline: 4px solid var(--terminal-green);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 8px rgba(0, 255, 136, 0.18);
+}
+
+.tv-speed-btn:disabled {
+  opacity: 0.72;
+  cursor: wait;
+}
+
+.tv-speed-btn svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.tv-speed-progress {
+  width: 100%;
+  height: 6px;
+  margin-top: 1rem;
+  background: var(--border-subtle);
+  border-radius: 999px;
+  overflow: hidden;
+  display: none;
+}
+
+.tv-speed-progress.is-active {
+  display: block;
+}
+
+.tv-speed-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--terminal-green));
+  transition: width 240ms ease;
+}
+
+.tv-speed-footer {
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tv-log-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.9rem;
+  font-family: var(--mono-font);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  background: var(--accent-softer);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+body:not([data-theme="dark"]) .tv-log-link {
+  color: var(--accent);
+}
+
+.tv-log-link:hover,
+.tv-log-link:focus-visible {
+  background: var(--accent-soft);
+  border-color: var(--accent-bright);
+  outline: 3px solid var(--terminal-green);
+  outline-offset: 2px;
+}
+
+.tv-log-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.tv-speed-ip {
+  font-family: var(--mono-font);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+/* Google Map Widget (777.html) */
+.tv-map-card {
+  padding: 1.65rem 1.75rem;
+}
+
+.tv-map-box {
+  width: 100%;
+  height: 320px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono-font);
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+.tv-map-footer {
+  margin-top: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tv-map-coords {
+  font-family: var(--mono-font);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .tv-weather-card {
+    padding: 1.15rem 1rem;
+  }
+
+  .tv-weather-week {
+    grid-template-columns: repeat(7, minmax(72px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .tv-speed-metrics {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .tv-speed-metric {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.7rem 0.95rem;
+  }
+
+  .tv-speed-footer,
+  .tv-map-footer {
+    justify-content: center;
+  }
+
+  .tv-map-box {
+    height: 260px;
+  }
+}
+
+

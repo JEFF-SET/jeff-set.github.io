@@ -12,9 +12,36 @@
     <link rel="shortcut icon" href="favicon.svg">
     <link rel="stylesheet" href="css/jeff-set.css">
     <link rel="stylesheet" href="css/logo-anim.css">
+    <script>
+        // Demo Key Quota Defense (Tier 1): capture Maps JS auth & tile quota errors
+        window.gm_authFailure = function () {
+            window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
+        };
+        (function () {
+            var origError = console.error;
+            console.error = function () {
+                origError.apply(console, arguments);
+                var msg = Array.prototype.map.call(arguments, function (a) {
+                    return String(a);
+                }).join(' ');
+                if (msg.indexOf('OverQuotaMapError') !== -1 || msg.indexOf('QuotaExceededError') !== -1) {
+                    window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
+                }
+            };
+        })();
+    </script>
 </head>
 
 <body data-theme="dark">
+    <div id="gmp-quota-banner" class="gmp-quota-banner" role="alert" hidden>
+        <span>
+            Google Maps Platform quota reached. If you are the app owner, visit
+            <a href="https://developers.google.com/maps/ai/ai-studio?utm_campaign=gmp_mcp_codeassist_v1_aistudio#quota_exceeded_errors"
+                target="_blank" rel="noopener noreferrer">maps developer site</a>
+            for instructions to update your account.
+        </span>
+    </div>
+
     <!-- Ambient Kinetic Background -->
     <div class="bg-ambient" aria-hidden="true">
         <div class="bg-grid-pattern"></div>
@@ -58,7 +85,23 @@
     </header>
 
     <main class="tv-main">
-        <!-- Блок копіювання ключа Gate 19 -->
+        <!-- 1. Компактний прогноз погоди на тиждень (Довжанськ) -->
+        <section class="tv-card tv-weather-card" aria-labelledby="weather-place-title">
+            <div class="tv-weather-head">
+                <div class="tv-weather-loc">
+                    <span id="weather-place-title" class="tv-weather-place">Погода · Довжанськ (Луганська обл.)</span>
+                    <span class="tv-weather-coords">48.05833° пн. ш., 39.65833° сх. д. · 7 днів</span>
+                </div>
+                <div id="weather-now-box" class="tv-weather-now">
+                    <span class="tv-weather-now-meta">Оновлення...</span>
+                </div>
+            </div>
+            <div id="weather-week-grid" class="tv-weather-week" aria-live="polite">
+                <div class="tv-weather-placeholder" style="grid-column: 1 / -1;">Завантаження прогнозу на тиждень…</div>
+            </div>
+        </section>
+
+        <!-- 2. Блок копіювання ключа Gate 19 -->
         <section class="tv-card" aria-labelledby="tv-page-title">
             <span class="tv-kicker">Android TV · TV Box · Смартфон · iOS</span>
             <h1 id="tv-page-title" class="tv-title">Криївка 17/65</h1>
@@ -92,7 +135,7 @@
             </div>
         </section>
 
-        <!-- Застосунок Gate 19 для Android / TV Box та iOS -->
+        <!-- 3. Застосунок Gate 19 для Android / TV Box та iOS + Інструкція -->
         <section class="tv-card" aria-labelledby="apps-title">
             <span class="tv-kicker">Офіційні застосунки</span>
             <h2 id="apps-title" class="tv-title tv-title--sub">Завантажити Gate 19</h2>
@@ -153,6 +196,77 @@
                 </li>
             </ol>
         </section>
+
+        <!-- 4. Простий тест швидкості мережі (після інструкції) -->
+        <section class="tv-card tv-speed-card" aria-labelledby="speed-title">
+            <span class="tv-kicker">Перевірка інтернет-з'єднання</span>
+            <h2 id="speed-title" class="tv-title tv-title--sub">Швидкість мережі</h2>
+            <p class="tv-subtitle">
+                Натисніть одну кнопку, щоб виміряти затримку та реальну швидкість інтернету. Результат автоматично
+                записується у журнал.
+            </p>
+
+            <div class="tv-speed-metrics">
+                <div class="tv-speed-metric">
+                    <span class="tv-speed-label">Пінг</span>
+                    <span id="st-ping" class="tv-speed-val">—</span>
+                    <span class="tv-speed-unit">мс</span>
+                </div>
+                <div class="tv-speed-metric">
+                    <span class="tv-speed-label">Завантаження</span>
+                    <span id="st-down" class="tv-speed-val">—</span>
+                    <span class="tv-speed-unit">Мбіт/с</span>
+                </div>
+                <div class="tv-speed-metric">
+                    <span class="tv-speed-label">Віддача</span>
+                    <span id="st-up" class="tv-speed-val">—</span>
+                    <span class="tv-speed-unit">Мбіт/с</span>
+                </div>
+            </div>
+
+            <button type="button" id="speedtest-btn" class="tv-speed-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 14l4-4" />
+                    <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+                </svg>
+                <span id="speedtest-btn-label">ПЕРЕВІРИТИ ШВИДКІСТЬ</span>
+            </button>
+
+            <div id="speedtest-progress" class="tv-speed-progress" aria-hidden="true">
+                <div id="speedtest-bar" class="tv-speed-progress-bar"></div>
+            </div>
+
+            <div id="speedtest-status" class="tv-status" role="status" aria-live="polite"></div>
+
+            <div class="tv-speed-footer">
+                <a href="/speedtest-log.txt" target="_blank" rel="noopener noreferrer" class="tv-log-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                    <span>Текстовий журнал результатів (.txt)</span>
+                </a>
+                <span id="speedtest-ip" class="tv-speed-ip">IP та час зберігаються автоматично</span>
+            </div>
+        </section>
+
+        <!-- 5. Простий віджет Google Карти в самому низу -->
+        <section class="tv-card tv-map-card" aria-labelledby="map-title">
+            <span class="tv-kicker">GPS · 48°03′30″ пн. ш., 39°39′30″ сх. д.</span>
+            <h2 id="map-title" class="tv-title tv-title--sub">Довжанськ на карті</h2>
+            <div id="gmap-container" class="tv-map-box">Завантаження Google Карти…</div>
+            <div class="tv-map-footer">
+                <span class="tv-map-coords">48.05833° N, 39.65833° E · Луганська область</span>
+                <a href="https://www.google.com/maps/search/?api=1&query=48.05833,39.65833" target="_blank"
+                    rel="noopener noreferrer" class="tv-log-link">
+                    <span>Відкрити в Google Картах</span>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- ======== FOOTER ======== -->
@@ -176,7 +290,18 @@
         (function () {
             'use strict';
 
-            // Обфусковані фрагменти ключа (без відкритого тексту у HTML/JS для захисту від парсерів)
+            var TARGET_LAT = 48.05833;
+            var TARGET_LON = 39.65833;
+
+            // Quota banner listener
+            var quotaBanner = document.getElementById('gmp-quota-banner');
+            window.addEventListener('gmp-quota-exceeded', function () {
+                if (quotaBanner) quotaBanner.hidden = false;
+            });
+
+            // =====================================================
+            // 1. GATE 19 KEY DECODER & COPY LOGIC (OBFUSCATED)
+            // =====================================================
             var _c = [
                 "=Q0NukhXVYwLfIjcyt1UTtQHngSHa1VCb0lQDZQSmkmZV8zch0VCIpSfC8SA5ISR",
                 "NsRA+BBdvkkOtxxKrglNVtSf4AmGshiXHUVHTlzdT8XJtVyUTYkDClmZHoyEkpQC",
@@ -231,7 +356,6 @@
                 }, 4000);
             }
 
-            // Надійне копіювання для iOS, Android, TV Box і десктопу
             function fallbackExecCopy(text) {
                 var ta = document.createElement('textarea');
                 ta.value = text;
@@ -344,6 +468,522 @@
                     }
                 });
             }
+
+            // =====================================================
+            // 2. COMPACT 7-DAY WEATHER FORECAST (DOVZHANSK)
+            // =====================================================
+            var WEATHER_LABELS_UK = {
+                CLEAR: 'Ясно',
+                MOSTLY_CLEAR: 'Перев. ясно',
+                PARTLY_CLOUDY: 'Мінл. хмарність',
+                MOSTLY_CLOUDY: 'Хмарно з проясн.',
+                CLOUDY: 'Хмарно',
+                WINDY: 'Вітряно',
+                WIND_AND_RAIN: 'Вітер і дощ',
+                LIGHT_RAIN_SHOWERS: 'Невел. зливи',
+                CHANCE_OF_SHOWERS: 'Можл. дощ',
+                SCATTERED_SHOWERS: 'Місцями дощ',
+                RAIN_SHOWERS: 'Зливи',
+                HEAVY_RAIN_SHOWERS: 'Сильні зливи',
+                LIGHT_TO_MODERATE_RAIN: 'Помірний дощ',
+                MODERATE_TO_HEAVY_RAIN: 'Сильний дощ',
+                RAIN: 'Дощ',
+                LIGHT_RAIN: 'Невел. дощ',
+                HEAVY_RAIN: 'Злива',
+                RAIN_PERIODICALLY_HEAVY: 'Період. злива',
+                LIGHT_SNOW_SHOWERS: 'Невел. сніг',
+                CHANCE_OF_SNOW_SHOWERS: 'Можл. сніг',
+                SCATTERED_SNOW_SHOWERS: 'Місцями сніг',
+                SNOW_SHOWERS: 'Снігопад',
+                HEAVY_SNOW_SHOWERS: 'Сильний сніг',
+                LIGHT_TO_MODERATE_SNOW: 'Помірний сніг',
+                MODERATE_TO_HEAVY_SNOW: 'Сильний сніг',
+                SNOW: 'Сніг',
+                LIGHT_SNOW: 'Невел. сніг',
+                HEAVY_SNOW: 'Сильний сніг',
+                SNOWSTORM: 'Хуртовина',
+                SNOW_PERIODICALLY_HEAVY: 'Період. сніг',
+                HEAVY_SNOW_STORM: 'Снігова буря',
+                BLOWING_SNOW: 'Заметіль',
+                RAIN_AND_SNOW: 'Дощ зі снігом',
+                HAIL: 'Град',
+                HAIL_SHOWERS: 'Злива з градом',
+                THUNDERSTORM: 'Гроза',
+                THUNDERSHOWER: 'Грозова злива',
+                LIGHT_THUNDERSTORM_RAIN: 'Гроза, дощ',
+                SCATTERED_THUNDERSTORMS: 'Місцями грози',
+                HEAVY_THUNDERSTORM: 'Сильна гроза',
+                FOG: 'Туман'
+            };
+
+            var WEEKDAYS_UK = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+            function translateCondition(cond) {
+                if (!cond) return '';
+                if (cond.type && WEATHER_LABELS_UK[cond.type]) {
+                    return WEATHER_LABELS_UK[cond.type];
+                }
+                return (cond.description && cond.description.text) ? cond.description.text : '';
+            }
+
+            function safeIconUrl(iconBaseUri) {
+                if (typeof iconBaseUri === 'string' && iconBaseUri.indexOf('https://maps.gstatic.com/weather/') === 0) {
+                    return iconBaseUri + '.svg';
+                }
+                return '';
+            }
+
+            function formatDeg(val) {
+                if (typeof val !== 'number' || !isFinite(val)) return '—';
+                var rounded = Math.round(val);
+                return (rounded > 0 ? '+' : '') + rounded + '°';
+            }
+
+            function renderWeather(data) {
+                var nowBox = document.getElementById('weather-now-box');
+                var weekGrid = document.getElementById('weather-week-grid');
+                if (!nowBox || !weekGrid) return;
+
+                nowBox.textContent = '';
+                var cur = data && data.current ? data.current : null;
+                if (cur && cur.temperature) {
+                    var curIconSrc = safeIconUrl(cur.weatherCondition && cur.weatherCondition.iconBaseUri);
+                    if (curIconSrc) {
+                        var img = document.createElement('img');
+                        img.src = curIconSrc;
+                        img.alt = translateCondition(cur.weatherCondition);
+                        img.className = 'tv-weather-now-icon';
+                        nowBox.appendChild(img);
+                    }
+                    var tempSpan = document.createElement('span');
+                    tempSpan.className = 'tv-weather-now-temp';
+                    tempSpan.textContent = formatDeg(cur.temperature.degrees) + 'C';
+                    nowBox.appendChild(tempSpan);
+
+                    var metaDiv = document.createElement('div');
+                    metaDiv.className = 'tv-weather-now-meta';
+                    var condLabel = translateCondition(cur.weatherCondition);
+                    var windVal = cur.wind && cur.wind.speed ? Math.round(cur.wind.speed.value) + ' км/год' : '';
+                    var humVal = typeof cur.relativeHumidity === 'number' ? cur.relativeHumidity + '%' : '';
+                    var parts = [];
+                    if (condLabel) parts.push(condLabel);
+                    if (cur.feelsLikeTemperature && typeof cur.feelsLikeTemperature.degrees === 'number') {
+                        parts.push('відч. ' + formatDeg(cur.feelsLikeTemperature.degrees));
+                    }
+                    var line2 = [];
+                    if (windVal) line2.push('вітер ' + windVal);
+                    if (humVal) line2.push('волог. ' + humVal);
+
+                    var line1El = document.createElement('div');
+                    line1El.textContent = parts.join(' · ');
+                    metaDiv.appendChild(line1El);
+                    if (line2.length) {
+                        var line2El = document.createElement('div');
+                        line2El.textContent = line2.join(' · ');
+                        metaDiv.appendChild(line2El);
+                    }
+                    nowBox.appendChild(metaDiv);
+                } else {
+                    var fallbackSpan = document.createElement('span');
+                    fallbackSpan.className = 'tv-weather-now-meta';
+                    fallbackSpan.textContent = 'Прогноз на 7 днів';
+                    nowBox.appendChild(fallbackSpan);
+                }
+
+                weekGrid.textContent = '';
+                var days = data && data.forecast && Array.isArray(data.forecast.forecastDays)
+                    ? data.forecast.forecastDays
+                    : [];
+
+                if (!days.length) {
+                    var emptyEl = document.createElement('div');
+                    emptyEl.className = 'tv-weather-placeholder';
+                    emptyEl.style.gridColumn = '1 / -1';
+                    emptyEl.textContent = 'Немає даних прогнозу.';
+                    weekGrid.appendChild(emptyEl);
+                    return;
+                }
+
+                days.slice(0, 7).forEach(function (dayObj, idx) {
+                    var tile = document.createElement('div');
+                    tile.className = 'tv-weather-day' + (idx === 0 ? ' is-today' : '');
+
+                    var dd = dayObj.displayDate || {};
+                    var dateLabel = '';
+                    var dayName = idx === 0 ? 'Сьог.' : '';
+                    if (dd.year && dd.month && dd.day) {
+                        var dt = new Date(Date.UTC(dd.year, dd.month - 1, dd.day));
+                        if (!dayName) dayName = WEEKDAYS_UK[dt.getUTCDay()] || '';
+                        dateLabel = String(dd.day).padStart(2, '0') + '.' + String(dd.month).padStart(2, '0');
+                    }
+
+                    var dayEl = document.createElement('span');
+                    dayEl.className = 'tv-w-day';
+                    dayEl.textContent = dayName;
+                    tile.appendChild(dayEl);
+
+                    var dateEl = document.createElement('span');
+                    dateEl.className = 'tv-w-date';
+                    dateEl.textContent = dateLabel;
+                    tile.appendChild(dateEl);
+
+                    var dayCond = dayObj.daytimeForecast && dayObj.daytimeForecast.weatherCondition;
+                    var wIconSrc = safeIconUrl(dayCond && dayCond.iconBaseUri);
+                    if (wIconSrc) {
+                        var wImg = document.createElement('img');
+                        wImg.src = wIconSrc;
+                        wImg.alt = translateCondition(dayCond);
+                        wImg.title = translateCondition(dayCond);
+                        wImg.className = 'tv-w-icon';
+                        tile.appendChild(wImg);
+                    }
+
+                    var tempsEl = document.createElement('span');
+                    tempsEl.className = 'tv-w-temps';
+                    var maxText = document.createTextNode(formatDeg(dayObj.maxTemperature && dayObj.maxTemperature.degrees) + ' ');
+                    var minSpan = document.createElement('span');
+                    minSpan.className = 'tv-w-min';
+                    minSpan.textContent = formatDeg(dayObj.minTemperature && dayObj.minTemperature.degrees);
+                    tempsEl.appendChild(maxText);
+                    tempsEl.appendChild(minSpan);
+                    tile.appendChild(tempsEl);
+
+                    var popPct = dayObj.daytimeForecast &&
+                        dayObj.daytimeForecast.precipitation &&
+                        dayObj.daytimeForecast.precipitation.probability &&
+                        dayObj.daytimeForecast.precipitation.probability.percent;
+
+                    var popEl = document.createElement('span');
+                    popEl.className = 'tv-w-pop';
+                    popEl.textContent = (typeof popPct === 'number' && popPct > 0) ? ('💧 ' + popPct + '%') : '';
+                    tile.appendChild(popEl);
+
+                    weekGrid.appendChild(tile);
+                });
+            }
+
+            function loadWeather() {
+                var weekGrid = document.getElementById('weather-week-grid');
+                var nowBox = document.getElementById('weather-now-box');
+                fetch('/api/weather?lat=' + TARGET_LAT + '&lon=' + TARGET_LON)
+                    .then(function (res) {
+                        return res.json().then(function (json) {
+                            return { ok: res.ok, status: res.status, json: json };
+                        });
+                    })
+                    .then(function (resp) {
+                        if (resp.status === 429 || (resp.json && (resp.json.quotaExceeded || resp.json.error === 'QUOTA_EXCEEDED'))) {
+                            window.dispatchEvent(new CustomEvent('gmp-quota-exceeded'));
+                        }
+                        if (!resp.ok) {
+                            throw new Error((resp.json && resp.json.message) || 'Weather unavailable');
+                        }
+                        renderWeather(resp.json);
+                    })
+                    .catch(function () {
+                        if (nowBox) {
+                            nowBox.textContent = '';
+                            var errMeta = document.createElement('span');
+                            errMeta.className = 'tv-weather-now-meta';
+                            errMeta.textContent = 'Тимчасово недоступно';
+                            nowBox.appendChild(errMeta);
+                        }
+                        if (weekGrid) {
+                            weekGrid.textContent = '';
+                            var msg = document.createElement('div');
+                            msg.className = 'tv-weather-placeholder';
+                            msg.style.gridColumn = '1 / -1';
+                            msg.textContent = 'Не вдалося завантажити прогноз погоди.';
+                            weekGrid.appendChild(msg);
+                        }
+                    });
+            }
+
+            loadWeather();
+
+            // =====================================================
+            // 3. SIMPLE SPEED TEST + LOGGING TO /speedtest-log.txt
+            // =====================================================
+            var speedBtn = document.getElementById('speedtest-btn');
+            var speedBtnLabel = document.getElementById('speedtest-btn-label');
+            var stPingEl = document.getElementById('st-ping');
+            var stDownEl = document.getElementById('st-down');
+            var stUpEl = document.getElementById('st-up');
+            var stProgress = document.getElementById('speedtest-progress');
+            var stBar = document.getElementById('speedtest-bar');
+            var stStatus = document.getElementById('speedtest-status');
+            var stIpEl = document.getElementById('speedtest-ip');
+            var speedRunning = false;
+
+            function setSpeedStatus(text, isSuccess) {
+                if (!stStatus) return;
+                stStatus.textContent = text;
+                stStatus.className = 'tv-status is-visible ' + (isSuccess ? 'is-success' : 'is-warn');
+            }
+
+            function setProgress(pct) {
+                if (!stProgress || !stBar) return;
+                stProgress.classList.add('is-active');
+                stBar.style.width = Math.max(0, Math.min(100, pct)) + '%';
+            }
+
+            function createRandomPayload(byteLength) {
+                var buf = new Uint8Array(byteLength);
+                if (window.crypto && window.crypto.getRandomValues) {
+                    var step = 65536;
+                    for (var offset = 0; offset < byteLength; offset += step) {
+                        var slice = buf.subarray(offset, Math.min(offset + step, byteLength));
+                        window.crypto.getRandomValues(slice);
+                    }
+                } else {
+                    for (var i = 0; i < byteLength; i++) {
+                        buf[i] = (Math.random() * 256) | 0;
+                    }
+                }
+                return buf;
+            }
+
+            async function measurePing() {
+                // Warm-up request
+                await fetch('/api/speedtest/ping?t=' + Date.now(), { cache: 'no-store' });
+                var samples = [];
+                for (var i = 0; i < 5; i++) {
+                    var t0 = performance.now();
+                    await fetch('/api/speedtest/ping?i=' + i + '&t=' + Date.now(), { cache: 'no-store' });
+                    var dt = performance.now() - t0;
+                    samples.push(dt);
+                }
+                var sum = samples.reduce(function (a, b) { return a + b; }, 0);
+                var avg = sum / samples.length;
+                var jitterSum = 0;
+                for (var j = 1; j < samples.length; j++) {
+                    jitterSum += Math.abs(samples[j] - samples[j - 1]);
+                }
+                var jitter = samples.length > 1 ? jitterSum / (samples.length - 1) : 0;
+                return { pingMs: Number(avg.toFixed(1)), jitterMs: Number(jitter.toFixed(1)) };
+            }
+
+            async function measureDownload() {
+                var probeStart = performance.now();
+                var probeResp = await fetch('/api/speedtest/download?kb=512&t=' + Date.now(), { cache: 'no-store' });
+                var probeBuf = await probeResp.arrayBuffer();
+                var probeMs = performance.now() - probeStart;
+
+                var totalBytes = probeBuf.byteLength;
+                var totalMs = probeMs;
+
+                var chunkKb = probeMs > 700 ? 512 : 1024;
+                var streams = probeMs > 900 ? 1 : 2;
+                var testStart = performance.now();
+
+                async function worker() {
+                    while (performance.now() - testStart < 3000) {
+                        var s0 = performance.now();
+                        var r = await fetch('/api/speedtest/download?kb=' + chunkKb + '&r=' + Math.random(), { cache: 'no-store' });
+                        var b = await r.arrayBuffer();
+                        totalBytes += b.byteLength;
+                        totalMs += (performance.now() - s0);
+                        if (totalBytes >= 12 * 1024 * 1024) break;
+                    }
+                }
+
+                var wallStart = performance.now();
+                var tasks = [];
+                for (var w = 0; w < streams; w++) {
+                    tasks.push(worker());
+                }
+                await Promise.all(tasks);
+                var wallSec = Math.max((performance.now() - wallStart + probeMs) / 1000, 0.05);
+                var mbps = (totalBytes * 8) / wallSec / 1000000;
+                return Number(mbps.toFixed(2));
+            }
+
+            async function measureUpload() {
+                var probePayload = createRandomPayload(256 * 1024);
+                var p0 = performance.now();
+                await fetch('/api/speedtest/upload?t=' + Date.now(), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/octet-stream' },
+                    body: probePayload,
+                    cache: 'no-store'
+                });
+                var probeMs = performance.now() - p0;
+
+                var chunkSize = probeMs > 700 ? 256 * 1024 : 512 * 1024;
+                var payload = createRandomPayload(chunkSize);
+                var totalBytes = probePayload.byteLength;
+                var wallStart = performance.now();
+
+                while (performance.now() - wallStart < 3000) {
+                    await fetch('/api/speedtest/upload?r=' + Math.random(), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/octet-stream' },
+                        body: payload,
+                        cache: 'no-store'
+                    });
+                    totalBytes += payload.byteLength;
+                    if (totalBytes >= 6 * 1024 * 1024) break;
+                }
+
+                var wallSec = Math.max((performance.now() - wallStart + probeMs) / 1000, 0.05);
+                var mbps = (totalBytes * 8) / wallSec / 1000000;
+                return Number(mbps.toFixed(2));
+            }
+
+            async function runSpeedTest() {
+                if (speedRunning) return;
+                speedRunning = true;
+                if (speedBtn) speedBtn.disabled = true;
+                if (speedBtnLabel) speedBtnLabel.textContent = 'ТЕСТУВАННЯ…';
+                if (stStatus) stStatus.classList.remove('is-visible');
+
+                stPingEl.textContent = '…';
+                stDownEl.textContent = '…';
+                stUpEl.textContent = '…';
+                setProgress(10);
+
+                try {
+                    setSpeedStatus('Крок 1/3: вимірювання затримки (пінгу)…', true);
+                    var pingRes = await measurePing();
+                    stPingEl.textContent = String(pingRes.pingMs);
+                    setProgress(35);
+
+                    setSpeedStatus('Крок 2/3: перевірка швидкості завантаження…', true);
+                    var downMbps = await measureDownload();
+                    stDownEl.textContent = String(downMbps);
+                    setProgress(70);
+
+                    setSpeedStatus('Крок 3/3: перевірка швидкості віддачі…', true);
+                    var upMbps = await measureUpload();
+                    stUpEl.textContent = String(upMbps);
+                    setProgress(92);
+
+                    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                    var connLabel = conn ? ([conn.effectiveType, conn.type].filter(Boolean).join('/') || '-') : '-';
+                    var tz = '-';
+                    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '-'; } catch (e) {}
+
+                    var logResp = await fetch('/api/speedtest/log', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            pingMs: pingRes.pingMs,
+                            jitterMs: pingRes.jitterMs,
+                            downloadMbps: downMbps,
+                            uploadMbps: upMbps,
+                            connectionType: connLabel,
+                            screen: window.screen ? (window.screen.width + 'x' + window.screen.height) : '-',
+                            timezone: tz,
+                            language: navigator.language || '-'
+                        })
+                    });
+
+                    var logJson = await logResp.json();
+                    setProgress(100);
+
+                    if (logResp.ok && logJson.ok) {
+                        if (stIpEl && logJson.ip) {
+                            stIpEl.textContent = 'IP: ' + logJson.ip + ' · збережено в .txt';
+                        }
+                        setSpeedStatus('✓ Перевірку завершено! Результат і ваш IP збережено у текстовий журнал.', true);
+                    } else {
+                        setSpeedStatus('✓ Тест завершено, але не вдалося записати в журнал.', false);
+                    }
+                } catch (err) {
+                    setSpeedStatus('Помилка перевірки швидкості. Перевірте інтернет і спробуйте ще раз.', false);
+                } finally {
+                    speedRunning = false;
+                    if (speedBtn) speedBtn.disabled = false;
+                    if (speedBtnLabel) speedBtnLabel.textContent = 'ПЕРЕВІРИТИ ЩЕ РАЗ';
+                    setTimeout(function () {
+                        if (stProgress) stProgress.classList.remove('is-active');
+                    }, 1200);
+                }
+            }
+
+            if (speedBtn) {
+                speedBtn.addEventListener('click', runSpeedTest);
+            }
+
+            // =====================================================
+            // 4. GOOGLE MAPS WIDGET (DOVZHANSK 48.05833, 39.65833)
+            // =====================================================
+            function loadGoogleMapsBootstrap(apiKey) {
+                (function (g) {
+                    var h, a, k, p = 'The Google Maps JavaScript API', c = 'google', l = 'importLibrary', q = '__ib__', m = document, b = window;
+                    b = b[c] || (b[c] = {});
+                    var d = b.maps || (b.maps = {}), r = new Set(), e = new URLSearchParams();
+                    var u = function () {
+                        return h || (h = new Promise(async function (f, n) {
+                            a = m.createElement('script');
+                            e.set('libraries', Array.from(r).join(','));
+                            for (k in g) e.set(k.replace(/[A-Z]/g, function (t) { return '_' + t[0].toLowerCase(); }), g[k]);
+                            e.set('callback', c + '.maps.' + q);
+                            a.src = 'https://maps.' + c + 'apis.com/maps/api/js?' + e;
+                            d[q] = f;
+                            a.onerror = function () { h = n(new Error(p + ' could not load.')); };
+                            var nonceEl = m.querySelector('script[nonce]');
+                            a.nonce = (nonceEl && nonceEl.nonce) || '';
+                            m.head.append(a);
+                        }));
+                    };
+                    if (!d[l]) {
+                        d[l] = function (f) {
+                            r.add(f);
+                            var args = arguments;
+                            return u().then(function () { return d[l].apply(null, args); });
+                        };
+                    }
+                })({
+                    key: apiKey,
+                    v: 'weekly',
+                    language: 'uk',
+                    region: 'UA'
+                });
+            }
+
+            async function initGoogleMap() {
+                var mapEl = document.getElementById('gmap-container');
+                if (!mapEl) return;
+
+                try {
+                    var cfgResp = await fetch('/api/maps-config');
+                    var cfg = await cfgResp.json();
+                    if (!cfg || !cfg.apiKey) {
+                        mapEl.textContent = 'Google Карта тимчасово не налаштована.';
+                        return;
+                    }
+
+                    loadGoogleMapsBootstrap(cfg.apiKey);
+
+                    var mapsLib = await google.maps.importLibrary('maps');
+                    var markerLib = await google.maps.importLibrary('marker');
+                    var coreLib = await google.maps.importLibrary('core');
+
+                    var isDark = document.body.getAttribute('data-theme') !== 'light';
+                    var position = { lat: TARGET_LAT, lng: TARGET_LON };
+
+                    mapEl.textContent = '';
+                    var map = new mapsLib.Map(mapEl, {
+                        center: position,
+                        zoom: 13,
+                        mapId: 'DEMO_MAP_ID',
+                        gestureHandling: 'cooperative',
+                        colorScheme: isDark ? coreLib.ColorScheme.DARK : coreLib.ColorScheme.LIGHT,
+                        internalUsageAttributionIds: ['gmp_mcp_codeassist_v1_aistudio']
+                    });
+
+                    new markerLib.AdvancedMarkerElement({
+                        map: map,
+                        position: position,
+                        title: 'Довжанськ (48.05833° N, 39.65833° E)'
+                    });
+                } catch (err) {
+                    mapEl.textContent = 'Не вдалося завантажити Google Карту.';
+                }
+            }
+
+            initGoogleMap();
         })();
     </script>
 </body>
