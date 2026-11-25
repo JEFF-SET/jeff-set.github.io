@@ -714,15 +714,61 @@
                 });
             }
 
+            function detectLocalDevice() {
+                var ua = navigator.userAgent || '';
+                if (/AFT|BRAVIA|MIBOX|Android TV|SmartTV|SMART-TV|TV/i.test(ua)) return 'TV Box';
+                if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS';
+                if (/Android/i.test(ua)) return 'Android';
+                if (/Windows/i.test(ua)) return 'Windows';
+                if (/Mac OS X|Macintosh/i.test(ua)) return 'macOS';
+                if (/Linux/i.test(ua)) return 'Linux';
+                return 'Браузер';
+            }
+
+            function fetchWithTimeout(url, options, timeoutMs) {
+                var opts = Object.assign({ cache: 'no-store' }, options || {});
+                if (typeof AbortController === 'undefined') {
+                    return fetch(url, opts);
+                }
+                var ctrl = new AbortController();
+                var timer = setTimeout(function () {
+                    try { ctrl.abort(); } catch (e) {}
+                }, timeoutMs || 10000);
+                opts.signal = ctrl.signal;
+                function cleanup() {
+                    clearTimeout(timer);
+                }
+                return fetch(url, opts).then(
+                    function (res) { cleanup(); return res; },
+                    function (err) { cleanup(); throw err; }
+                );
+            }
+
+            function fetchCfIp() {
+                return fetchWithTimeout('https://speed.cloudflare.com/__down?bytes=0&t=' + Date.now(), {}, 5000)
+                    .then(function (r) {
+                        var ip = r.headers ? r.headers.get('cf-meta-ip') : '';
+                        if (ip) {
+                            knownClientIp = ip;
+                            if (stIpEl) stIpEl.textContent = 'Ваш IP: ' + ip;
+                        }
+                        return ip || '';
+                    })
+                    .catch(function () { return ''; });
+            }
+
             function loadRecentHistory() {
                 var localItems = readLocalHistory();
                 if (localItems.length) {
                     renderHistory(localItems);
                 }
 
-                fetch('/api/speedtest/recent', { cache: 'no-store' })
+                fetchWithTimeout('/api/speedtest/recent', {}, 4000)
                     .then(function (r) {
-                        if (!r.ok) throw new Error('recent error');
+                        var ct = r.headers ? (r.headers.get('content-type') || '') : '';
+                        if (!r.ok || ct.indexOf('application/json') === -1) {
+                            throw new Error('recent not json');
+                        }
                         return r.json();
                     })
                     .then(function (json) {
@@ -735,20 +781,9 @@
                             writeLocalHistory(json.recent);
                         }
                     })
-                    .catch(function () {});
-            }
-
-            function fetchWithTimeout(url, options, timeoutMs) {
-                var opts = Object.assign({ cache: 'no-store' }, options || {});
-                if (typeof AbortController === 'undefined') {
-                    return fetch(url, opts);
-                }
-                var ctrl = new AbortController();
-                var timer = setTimeout(function () { ctrl.abort(); }, timeoutMs || 10000);
-                opts.signal = ctrl.signal;
-                return fetch(url, opts).finally(function () {
-                    clearTimeout(timer);
-                });
+                    .catch(function () {
+                        if (!knownClientIp) fetchCfIp();
+                    });
             }
 
             function createRandomBlob(byteLength) {
@@ -767,18 +802,44 @@
                 return new Blob([buf], { type: 'application/octet-stream' });
             }
 
-            async function measurePing() {
-                var warm = await fetchWithTimeout('/api/speedtest/ping?t=' + Date.now(), {}, 8000);
-                if (!warm.ok) throw new Error('PING_' + warm.status);
+            async function detectSpeedBackend() {
                 try {
-                    var warmJson = await warm.json();
-                    if (warmJson && warmJson.ip) knownClientIp = warmJson.ip;
+                    var res = await fetchWithTimeout('/api/speedtest/ping?t=' + Date.now(), {}, 4000);
+                    var ct = res.headers ? (res.headers.get('content-type') || '') : '';
+                    if (res.ok && ct.indexOf('application/json') !== -1) {
+                        var json = await res.json();
+                        if (json && json.ok) {
+                            if (json.ip) {
+                                knownClientIp = json.ip;
+                                if (stIpEl) stIpEl.textContent = 'Ваш IP: ' + json.ip;
+                            }
+                            return 'server';
+                        }
+                    }
                 } catch (e) {}
+                return 'cloudflare';
+            }
+
+            async function measurePingWithBackend(backend) {
+                var makeUrl = backend === 'server'
+                    ? function (i) { return '/api/speedtest/ping?i=' + i + '&t=' + Date.now(); }
+                    : function (i) { return 'https://speed.cloudflare.com/__down?bytes=0&i=' + i + '&t=' + Date.now(); };
+
+                var warm = await fetchWithTimeout(makeUrl('w'), {}, 8000);
+                if (!warm.ok) throw new Error('PING_' + warm.status);
+                if (backend === 'cloudflare' && warm.headers) {
+                    var cfIp = warm.headers.get('cf-meta-ip');
+                    if (cfIp) {
+                        knownClientIp = cfIp;
+                        if (stIpEl) stIpEl.textContent = 'Ваш IP: ' + cfIp;
+                    }
+                }
+                await warm.text();
 
                 var samples = [];
                 for (var i = 0; i < 5; i++) {
                     var t0 = performance.now();
-                    var r = await fetchWithTimeout('/api/speedtest/ping?i=' + i + '&t=' + Date.now(), {}, 8000);
+                    var r = await fetchWithTimeout(makeUrl(i), {}, 8000);
                     if (!r.ok) throw new Error('PING_' + r.status);
                     await r.text();
                     samples.push(performance.now() - t0);
@@ -793,25 +854,44 @@
                 return { pingMs: Number(avg.toFixed(1)), jitterMs: Number(jitter.toFixed(1)) };
             }
 
-            async function measureDownload() {
+            async function measurePing(backend) {
+                try {
+                    return await measurePingWithBackend(backend);
+                } catch (e) {
+                    if (backend === 'server') {
+                        return await measurePingWithBackend('cloudflare');
+                    }
+                    throw e;
+                }
+            }
+
+            async function measureDownloadWithBackend(backend) {
+                var probeUrl = backend === 'server'
+                    ? '/api/speedtest/download?kb=512&t=' + Date.now()
+                    : 'https://speed.cloudflare.com/__down?bytes=524288&t=' + Date.now();
+
                 var probeStart = performance.now();
-                var probeResp = await fetchWithTimeout('/api/speedtest/download?kb=512&t=' + Date.now(), {}, 12000);
+                var probeResp = await fetchWithTimeout(probeUrl, {}, 12000);
                 if (!probeResp.ok) throw new Error('DL_' + probeResp.status);
                 var probeBuf = await probeResp.arrayBuffer();
                 var probeMs = performance.now() - probeStart;
 
                 var totalBytes = probeBuf.byteLength;
-                var chunkKb = probeMs > 700 ? 512 : 1024;
+                var chunkBytes = probeMs > 700 ? 524288 : 1048576;
+                var chunkKb = Math.round(chunkBytes / 1024);
                 var streams = probeMs > 900 ? 1 : 2;
                 var testStart = performance.now();
 
                 async function worker() {
                     while (performance.now() - testStart < 2800) {
-                        var r = await fetchWithTimeout('/api/speedtest/download?kb=' + chunkKb + '&r=' + Math.random(), {}, 12000);
+                        var url = backend === 'server'
+                            ? '/api/speedtest/download?kb=' + chunkKb + '&r=' + Math.random()
+                            : 'https://speed.cloudflare.com/__down?bytes=' + chunkBytes + '&r=' + Math.random();
+                        var r = await fetchWithTimeout(url, {}, 12000);
                         if (!r.ok) break;
                         var b = await r.arrayBuffer();
                         totalBytes += b.byteLength;
-                        if (totalBytes >= 12 * 1024 * 1024) break;
+                        if (totalBytes >= 16 * 1024 * 1024) break;
                     }
                 }
 
@@ -826,12 +906,28 @@
                 return Number(mbps.toFixed(2));
             }
 
-            async function measureUpload() {
+            async function measureDownload(backend) {
+                try {
+                    return await measureDownloadWithBackend(backend);
+                } catch (e) {
+                    if (backend === 'server') {
+                        return await measureDownloadWithBackend('cloudflare');
+                    }
+                    throw e;
+                }
+            }
+
+            async function measureUploadWithBackend(backend) {
+                var targetBase = backend === 'server'
+                    ? '/api/speedtest/upload'
+                    : 'https://speed.cloudflare.com/__up';
+                var contentType = backend === 'server' ? 'application/octet-stream' : 'text/plain';
+
                 var probeBlob = createRandomBlob(256 * 1024);
                 var p0 = performance.now();
-                var pr = await fetchWithTimeout('/api/speedtest/upload?t=' + Date.now(), {
+                var pr = await fetchWithTimeout(targetBase + '?t=' + Date.now(), {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/octet-stream' },
+                    headers: { 'Content-Type': contentType },
                     body: probeBlob
                 }, 12000);
                 if (!pr.ok) throw new Error('UL_' + pr.status);
@@ -844,9 +940,9 @@
                 var wallStart = performance.now();
 
                 while (performance.now() - wallStart < 2800) {
-                    var ur = await fetchWithTimeout('/api/speedtest/upload?r=' + Math.random(), {
+                    var ur = await fetchWithTimeout(targetBase + '?r=' + Math.random(), {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/octet-stream' },
+                        headers: { 'Content-Type': contentType },
                         body: blob
                     }, 12000);
                     if (!ur.ok) break;
@@ -860,6 +956,17 @@
                 return Number(mbps.toFixed(2));
             }
 
+            async function measureUpload(backend) {
+                try {
+                    return await measureUploadWithBackend(backend);
+                } catch (e) {
+                    if (backend === 'server') {
+                        return await measureUploadWithBackend('cloudflare');
+                    }
+                    throw e;
+                }
+            }
+
             async function runSpeedTest() {
                 if (speedRunning) return;
                 speedRunning = true;
@@ -870,30 +977,34 @@
                 stPingEl.textContent = '…';
                 stDownEl.textContent = '…';
                 stUpEl.textContent = '…';
-                setProgress(10);
+                setProgress(8);
 
                 try {
                     setSpeedStatus('Крок 1/3: вимірювання затримки (пінгу)…', true);
-                    var pingRes = await measurePing();
+                    var backend = await detectSpeedBackend();
+                    var pingRes = await measurePing(backend);
                     stPingEl.textContent = String(pingRes.pingMs);
                     setProgress(35);
 
                     setSpeedStatus('Крок 2/3: перевірка швидкості завантаження…', true);
-                    var downMbps = await measureDownload();
+                    var downMbps = await measureDownload(backend);
                     stDownEl.textContent = String(downMbps);
                     setProgress(70);
 
                     setSpeedStatus('Крок 3/3: перевірка швидкості віддачі…', true);
                     var upMbps = null;
                     try {
-                        upMbps = await measureUpload();
+                        upMbps = await measureUpload(backend);
                         stUpEl.textContent = String(upMbps);
                     } catch (ulErr) {
                         stUpEl.textContent = '—';
                     }
                     setProgress(95);
 
-                    // Save into server last-5 list & fallback to localStorage
+                    if (!knownClientIp) {
+                        await fetchCfIp();
+                    }
+
                     var nowStr = new Date().toLocaleString('uk-UA', {
                         day: '2-digit',
                         month: '2-digit',
@@ -903,8 +1014,8 @@
                     });
                     var fallbackEntry = {
                         time: nowStr,
-                        ip: knownClientIp || 'Локально',
-                        device: '',
+                        ip: knownClientIp || 'Ваш пристрій',
+                        device: detectLocalDevice(),
                         pingMs: pingRes.pingMs,
                         jitterMs: pingRes.jitterMs,
                         downloadMbps: downMbps,
@@ -912,28 +1023,31 @@
                     };
 
                     var savedRecent = null;
-                    try {
-                        var saveResp = await fetchWithTimeout('/api/speedtest/recent', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                pingMs: pingRes.pingMs,
-                                jitterMs: pingRes.jitterMs,
-                                downloadMbps: downMbps,
-                                uploadMbps: upMbps
-                            })
-                        }, 6000);
-                        if (saveResp.ok) {
-                            var saveJson = await saveResp.json();
-                            if (saveJson && saveJson.entry && saveJson.entry.ip) {
-                                knownClientIp = saveJson.entry.ip;
-                                if (stIpEl) stIpEl.textContent = 'Ваш IP: ' + saveJson.entry.ip;
+                    if (backend === 'server') {
+                        try {
+                            var saveResp = await fetchWithTimeout('/api/speedtest/recent', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    pingMs: pingRes.pingMs,
+                                    jitterMs: pingRes.jitterMs,
+                                    downloadMbps: downMbps,
+                                    uploadMbps: upMbps
+                                })
+                            }, 5000);
+                            var ct = saveResp.headers ? (saveResp.headers.get('content-type') || '') : '';
+                            if (saveResp.ok && ct.indexOf('application/json') !== -1) {
+                                var saveJson = await saveResp.json();
+                                if (saveJson && saveJson.entry && saveJson.entry.ip) {
+                                    knownClientIp = saveJson.entry.ip;
+                                    if (stIpEl) stIpEl.textContent = 'Ваш IP: ' + saveJson.entry.ip;
+                                }
+                                if (saveJson && Array.isArray(saveJson.recent)) {
+                                    savedRecent = saveJson.recent;
+                                }
                             }
-                            if (saveJson && Array.isArray(saveJson.recent)) {
-                                savedRecent = saveJson.recent;
-                            }
-                        }
-                    } catch (saveErr) {}
+                        } catch (saveErr) {}
+                    }
 
                     if (!savedRecent) {
                         var curHist = readLocalHistory();
@@ -945,7 +1059,8 @@
                     setProgress(100);
                     setSpeedStatus('✓ Перевірку завершено!', true);
                 } catch (err) {
-                    setSpeedStatus('Помилка перевірки швидкості. Перевірте інтернет і спробуйте ще раз.', false);
+                    var code = err && err.message ? ' (' + err.message + ')' : '';
+                    setSpeedStatus('Помилка перевірки швидкості' + code + '. Перевірте інтернет і спробуйте ще раз.', false);
                 } finally {
                     speedRunning = false;
                     if (speedBtn) speedBtn.disabled = false;
