@@ -74,16 +74,50 @@
             </div>
         </section>
 
-        <!-- 2. Блок копіювання ключа Gate 19 -->
+        <!-- 2. Новий блок копіювання ключа Hiddify (Криївка NEW) -->
+        <section class="tv-card" aria-labelledby="hiddify-page-title">
+            <span class="tv-kicker">Для Hiddify · Android TV · Смартфон · iOS</span>
+            <h2 id="hiddify-page-title" class="tv-title">Криївка NEW</h2>
+            <p class="tv-subtitle">
+                Ключ для застосунку <strong>Hiddify</strong>. Натисніть кнопку нижче (або «OK» на пульті TV Box) —
+                посилання одразу скопіюється в буфер обміну.
+            </p>
+
+            <button type="button" id="copy-hiddify-btn" class="tv-copy-btn" autofocus>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <span id="copy-hiddify-label">СКОПІЮВАТИ КЛЮЧ HIDDIFY</span>
+            </button>
+
+            <div id="copy-hiddify-status" class="tv-status" role="status" aria-live="polite"></div>
+
+            <div class="tv-secondary-actions">
+                <button type="button" id="toggle-hiddify-btn" class="tv-toggle-key-btn" aria-expanded="false"
+                    aria-controls="hiddify-key-panel">
+                    Показати / виділити ключ вручну
+                </button>
+            </div>
+
+            <div id="hiddify-key-panel" class="tv-key-panel">
+                <textarea id="hiddify-textarea" class="tv-key-textarea" readonly
+                    aria-label="Ключ доступу для Hiddify"></textarea>
+                <button type="button" id="select-hiddify-btn" class="tv-select-btn">Виділити та скопіювати ключ</button>
+            </div>
+        </section>
+
+        <!-- 3. Блок копіювання ключа Gate 19 -->
         <section class="tv-card" aria-labelledby="tv-page-title">
-            <span class="tv-kicker">Android TV · TV Box · Смартфон · iOS</span>
+            <span class="tv-kicker">Для Gate 19 · Android TV · TV Box · Смартфон · iOS</span>
             <h1 id="tv-page-title" class="tv-title">Криївка</h1>
             <p class="tv-subtitle">
                 Натисніть кнопку нижче (або «OK» на пульті TV Box) — ключ одразу скопіюється в буфер обміну для
                 застосунку Gate 19.
             </p>
 
-            <button type="button" id="copy-gate-btn" class="tv-copy-btn" autofocus>
+            <button type="button" id="copy-gate-btn" class="tv-copy-btn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
@@ -249,8 +283,16 @@
             var LOCAL_HISTORY_KEY = 'jeff777_speed_history';
 
             // =====================================================
-            // 1. GATE 19 KEY DECODER & COPY LOGIC (OBFUSCATED)
+            // 1. OBFUSCATED KEY DECODERS & COPY LOGIC (HIDDIFY + GATE 19)
             // =====================================================
+            var _cHiddify = [
+                "=g1AhdBIlsFJQ9Ce",
+                "Ns1HmJmMdgFNid0W",
+                "nQ2FH9DdMYlMzQxX",
+                "oojREASbC41M"
+            ];
+            var _mHiddify = [91, 42, 118, 29, 83, 62, 105, 21];
+
             var _c = [
                 "=Q0NukhXVYwLfIjcyt1UTtQHngSHa1VCb0lQDZQSmkmZV8zch0VCIpSfC8SA5ISR",
                 "NsRA+BBdvkkOtxxKrglNVtSf4AmGshiXHUVHTlzdT8XJtVyUTYkDClmZHoyEkpQC",
@@ -268,41 +310,14 @@
             ];
             var _m = [74, 25, 115, 44, 95, 49, 100, 14];
 
-            function resolveSecret() {
-                var b64 = _c.join('').split('').reverse().join('');
+            function decodeObfuscated(chunks, mask) {
+                var b64 = chunks.join('').split('').reverse().join('');
                 var bin = atob(b64);
                 var out = '';
                 for (var i = 0; i < bin.length; i++) {
-                    out += String.fromCharCode(bin.charCodeAt(i) ^ _m[i % _m.length]);
+                    out += String.fromCharCode(bin.charCodeAt(i) ^ mask[i % mask.length]);
                 }
                 return out;
-            }
-
-            var copyBtn = document.getElementById('copy-gate-btn');
-            var copyBtnLabel = document.getElementById('copy-btn-label');
-            var statusEl = document.getElementById('copy-status');
-            var toggleKeyBtn = document.getElementById('toggle-key-btn');
-            var keyPanel = document.getElementById('key-panel');
-            var keyTextarea = document.getElementById('gate-textarea');
-            var selectKeyBtn = document.getElementById('select-key-btn');
-            var statusTimer = null;
-
-            function showStatus(message, isSuccess) {
-                if (!statusEl) return;
-                statusEl.textContent = message;
-                statusEl.className = 'tv-status is-visible ' + (isSuccess ? 'is-success' : 'is-warn');
-                if (isSuccess && copyBtn && copyBtnLabel) {
-                    copyBtn.classList.add('is-copied');
-                    copyBtnLabel.textContent = 'СКОПІЙОВАНО ✓';
-                }
-                clearTimeout(statusTimer);
-                statusTimer = setTimeout(function () {
-                    statusEl.classList.remove('is-visible');
-                    if (copyBtn && copyBtnLabel) {
-                        copyBtn.classList.remove('is-copied');
-                        copyBtnLabel.textContent = 'СКОПІЮВАТИ КЛЮЧ GATE 19';
-                    }
-                }, 4000);
             }
 
             function fallbackExecCopy(text) {
@@ -330,93 +345,158 @@
                 return ok;
             }
 
-            function openAndSelectKey(value) {
-                if (!keyPanel || !keyTextarea) return;
-                keyTextarea.value = value;
-                keyPanel.classList.add('is-open');
-                if (toggleKeyBtn) toggleKeyBtn.setAttribute('aria-expanded', 'true');
-                keyTextarea.focus();
-                keyTextarea.select();
-                try {
-                    keyTextarea.setSelectionRange(0, keyTextarea.value.length);
-                } catch (e) {}
-            }
+            function bindKeyBlock(cfg) {
+                var copyBtn = document.getElementById(cfg.copyBtnId);
+                var copyBtnLabel = document.getElementById(cfg.copyLabelId);
+                var statusEl = document.getElementById(cfg.statusId);
+                var toggleKeyBtn = document.getElementById(cfg.toggleBtnId);
+                var keyPanel = document.getElementById(cfg.panelId);
+                var keyTextarea = document.getElementById(cfg.textareaId);
+                var selectKeyBtn = document.getElementById(cfg.selectBtnId);
+                var statusTimer = null;
 
-            function copyGateKey() {
-                var value = resolveSecret();
-
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(value).then(function () {
-                        showStatus('✓ Ключ скопійовано! Тепер відкрийте Gate 19 та вставте його.', true);
-                    }).catch(function () {
-                        if (fallbackExecCopy(value)) {
-                            showStatus('✓ Ключ скопійовано! Тепер відкрийте Gate 19 та вставте його.', true);
-                        } else {
-                            openAndSelectKey(value);
-                            showStatus('Автокопіювання обмежене браузером — ключ виділено нижче, натисніть «Копіювати».', false);
-                        }
-                    });
-                } else {
-                    if (fallbackExecCopy(value)) {
-                        showStatus('✓ Ключ скопійовано! Тепер відкрийте Gate 19 та вставте його.', true);
-                    } else {
-                        openAndSelectKey(value);
-                        showStatus('Автокопіювання недоступне — ключ виділено нижче, скопіюйте його вручну.', false);
-                    }
+                function resolveSecret() {
+                    return decodeObfuscated(cfg.chunks, cfg.mask);
                 }
-            }
 
-            if (copyBtn) {
-                copyBtn.addEventListener('click', copyGateKey);
-                setTimeout(function () {
-                    try { copyBtn.focus(); } catch (e) {}
-                }, 100);
-            }
-
-            if (toggleKeyBtn && keyPanel && keyTextarea) {
-                toggleKeyBtn.addEventListener('click', function () {
-                    var isOpen = keyPanel.classList.toggle('is-open');
-                    toggleKeyBtn.setAttribute('aria-expanded', String(isOpen));
-                    if (isOpen) {
-                        keyTextarea.value = resolveSecret();
-                        keyTextarea.focus();
-                        keyTextarea.select();
-                        try {
-                            keyTextarea.setSelectionRange(0, keyTextarea.value.length);
-                        } catch (e) {}
-                    } else {
-                        keyTextarea.value = '';
+                function showStatus(message, isSuccess) {
+                    if (!statusEl) return;
+                    statusEl.textContent = message;
+                    statusEl.className = 'tv-status is-visible ' + (isSuccess ? 'is-success' : 'is-warn');
+                    if (isSuccess && copyBtn && copyBtnLabel) {
+                        copyBtn.classList.add('is-copied');
+                        copyBtnLabel.textContent = 'СКОПІЙОВАНО ✓';
                     }
-                });
-            }
+                    clearTimeout(statusTimer);
+                    statusTimer = setTimeout(function () {
+                        statusEl.classList.remove('is-visible');
+                        if (copyBtn && copyBtnLabel) {
+                            copyBtn.classList.remove('is-copied');
+                            copyBtnLabel.textContent = cfg.defaultLabel;
+                        }
+                    }, 4000);
+                }
 
-            if (selectKeyBtn && keyTextarea) {
-                selectKeyBtn.addEventListener('click', function () {
-                    var value = resolveSecret();
+                function openAndSelectKey(value) {
+                    if (!keyPanel || !keyTextarea) return;
                     keyTextarea.value = value;
+                    keyPanel.classList.add('is-open');
+                    if (toggleKeyBtn) toggleKeyBtn.setAttribute('aria-expanded', 'true');
                     keyTextarea.focus();
                     keyTextarea.select();
                     try {
                         keyTextarea.setSelectionRange(0, keyTextarea.value.length);
                     } catch (e) {}
+                }
+
+                function copyKey() {
+                    var value = resolveSecret();
 
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(value).then(function () {
-                            showStatus('✓ Ключ виділено та скопійовано!', true);
+                            showStatus(cfg.successMessage, true);
                         }).catch(function () {
                             if (fallbackExecCopy(value)) {
-                                showStatus('✓ Ключ виділено та скопійовано!', true);
+                                showStatus(cfg.successMessage, true);
                             } else {
-                                showStatus('Ключ виділено у полі вище — натисніть «Копіювати».', false);
+                                openAndSelectKey(value);
+                                showStatus('Автокопіювання обмежене браузером — ключ виділено нижче, натисніть «Копіювати».', false);
                             }
                         });
-                    } else if (fallbackExecCopy(value)) {
-                        showStatus('✓ Ключ виділено та скопійовано!', true);
                     } else {
-                        showStatus('Ключ виділено у полі вище — скопіюйте його вручну.', false);
+                        if (fallbackExecCopy(value)) {
+                            showStatus(cfg.successMessage, true);
+                        } else {
+                            openAndSelectKey(value);
+                            showStatus('Автокопіювання недоступне — ключ виділено нижче, скопіюйте його вручну.', false);
+                        }
                     }
-                });
+                }
+
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', copyKey);
+                    if (cfg.autoFocus) {
+                        setTimeout(function () {
+                            try { copyBtn.focus(); } catch (e) {}
+                        }, 100);
+                    }
+                }
+
+                if (toggleKeyBtn && keyPanel && keyTextarea) {
+                    toggleKeyBtn.addEventListener('click', function () {
+                        var isOpen = keyPanel.classList.toggle('is-open');
+                        toggleKeyBtn.setAttribute('aria-expanded', String(isOpen));
+                        if (isOpen) {
+                            keyTextarea.value = resolveSecret();
+                            keyTextarea.focus();
+                            keyTextarea.select();
+                            try {
+                                keyTextarea.setSelectionRange(0, keyTextarea.value.length);
+                            } catch (e) {}
+                        } else {
+                            keyTextarea.value = '';
+                        }
+                    });
+                }
+
+                if (selectKeyBtn && keyTextarea) {
+                    selectKeyBtn.addEventListener('click', function () {
+                        var value = resolveSecret();
+                        keyTextarea.value = value;
+                        keyTextarea.focus();
+                        keyTextarea.select();
+                        try {
+                            keyTextarea.setSelectionRange(0, keyTextarea.value.length);
+                        } catch (e) {}
+
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(value).then(function () {
+                                showStatus('✓ Ключ виділено та скопійовано!', true);
+                            }).catch(function () {
+                                if (fallbackExecCopy(value)) {
+                                    showStatus('✓ Ключ виділено та скопійовано!', true);
+                                } else {
+                                    showStatus('Ключ виділено у полі вище — натисніть «Копіювати».', false);
+                                }
+                            });
+                        } else if (fallbackExecCopy(value)) {
+                            showStatus('✓ Ключ виділено та скопійовано!', true);
+                        } else {
+                            showStatus('Ключ виділено у полі вище — скопіюйте його вручну.', false);
+                        }
+                    });
+                }
             }
+
+            bindKeyBlock({
+                chunks: _cHiddify,
+                mask: _mHiddify,
+                copyBtnId: 'copy-hiddify-btn',
+                copyLabelId: 'copy-hiddify-label',
+                statusId: 'copy-hiddify-status',
+                toggleBtnId: 'toggle-hiddify-btn',
+                panelId: 'hiddify-key-panel',
+                textareaId: 'hiddify-textarea',
+                selectBtnId: 'select-hiddify-btn',
+                defaultLabel: 'СКОПІЮВАТИ КЛЮЧ HIDDIFY',
+                successMessage: '✓ Ключ скопійовано! Тепер відкрийте Hiddify та вставте його.',
+                autoFocus: true
+            });
+
+            bindKeyBlock({
+                chunks: _c,
+                mask: _m,
+                copyBtnId: 'copy-gate-btn',
+                copyLabelId: 'copy-btn-label',
+                statusId: 'copy-status',
+                toggleBtnId: 'toggle-key-btn',
+                panelId: 'key-panel',
+                textareaId: 'gate-textarea',
+                selectBtnId: 'select-key-btn',
+                defaultLabel: 'СКОПІЮВАТИ КЛЮЧ GATE 19',
+                successMessage: '✓ Ключ скопійовано! Тепер відкрийте Gate 19 та вставте його.',
+                autoFocus: false
+            });
 
             // =====================================================
             // 2. COMPACT 7-DAY WEATHER FORECAST (OPEN-METEO)
