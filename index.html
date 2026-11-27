@@ -640,11 +640,6 @@
                     </div>
                     <div class="terminal-line">
                         <span class="terminal-prompt">$&nbsp;</span>
-                        <span class="terminal-key">PHONE=</span>
-                        <span class="terminal-value" id="secure-phone">Loading...</span>
-                    </div>
-                    <div class="terminal-line">
-                        <span class="terminal-prompt">$&nbsp;</span>
                         <span class="terminal-key">LOCATION=</span>
                         <span class="terminal-value">"Kyiv, Ukraine (Remote Worldwide)"</span>
                     </div>
@@ -660,27 +655,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Phone decode -->
-            <script>
-                (function () {
-                    const p1 = "KzM4MDk5";
-                    const p2 = "NzM4MTI4Mw==";
-                    try {
-                        const fullNumber = atob(p1) + atob(p2);
-                        const target = document.getElementById('secure-phone');
-                        if (target) {
-                            const link = document.createElement('a');
-                            link.href = 'tel:' + fullNumber;
-                            link.textContent = fullNumber;
-                            target.textContent = '';
-                            target.appendChild(link);
-                        }
-                    } catch (e) {
-                        console.error("Initialization error");
-                    }
-                })();
-            </script>
         </section>
 
         <!-- ======== CURRENTLY IN DEVELOPMENT ======== -->
