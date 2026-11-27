@@ -520,11 +520,11 @@
                 svg.setAttribute('viewBox', '0 0 24 24');
                 svg.setAttribute('fill', 'none');
                 svg.setAttribute('stroke', 'currentColor');
-                svg.setAttribute('stroke-width', '2');
+                svg.setAttribute('stroke-width', '1.9');
                 svg.setAttribute('stroke-linecap', 'round');
                 svg.setAttribute('stroke-linejoin', 'round');
                 svg.setAttribute('aria-hidden', 'true');
-                svg.setAttribute('class', className);
+                svg.setAttribute('class', className + ' tv-w-icon--' + kind);
 
                 function add(tag, attrs) {
                     var el = document.createElementNS(ns, tag);
@@ -533,27 +533,43 @@
                 }
 
                 if (kind === 'sun') {
-                    add('circle', { cx: '12', cy: '12', r: '4' });
-                    add('path', { d: 'M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41' });
+                    add('circle', { cx: '12', cy: '12', r: '4.2', fill: 'currentColor', 'fill-opacity': '0.2' });
+                    add('path', { d: 'M12 2v2.2M12 19.8V22M4.93 4.93l1.55 1.55M17.52 17.52l1.55 1.55M2 12h2.2M19.8 12H22M6.48 17.52l-1.55 1.55M19.07 4.93l-1.55 1.55' });
                 } else if (kind === 'partly') {
-                    add('path', { d: 'M12 2v2M4.93 4.93l1.41 1.41M20 12h2M19.07 4.93l-1.41 1.41M15.95 11.65a4 4 0 0 0-5.9-3.9' });
-                    add('path', { d: 'M17.5 19H9a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 17.5 19z' });
+                    add('path', { d: 'M12 2v2M4.93 4.93l1.41 1.41M20 12h2M19.07 4.93l-1.41 1.41' });
+                    add('circle', { cx: '12.2', cy: '10.2', r: '3.2', fill: 'currentColor', 'fill-opacity': '0.18' });
+                    add('path', { d: 'M17.5 19H8.8a3.8 3.8 0 0 1-.4-7.58 4.8 4.8 0 0 1 9.15 1.88A2.9 2.9 0 0 1 17.5 19z', fill: 'currentColor', 'fill-opacity': '0.12' });
                 } else if (kind === 'fog') {
-                    add('path', { d: 'M4 10h16M4 14h16M6 18h12' });
+                    add('path', { d: 'M4 9h16M3 13.5h18M5.5 18h13' });
                 } else if (kind === 'rain') {
-                    add('path', { d: 'M16 14H8a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 16 14z' });
-                    add('path', { d: 'M8 19l1-2M12 20l1-2M16 19l1-2' });
+                    add('path', { d: 'M16.5 14H8a3.8 3.8 0 0 1-.45-7.57 4.9 4.9 0 0 1 9.3 1.87A2.9 2.9 0 0 1 16.5 14z', fill: 'currentColor', 'fill-opacity': '0.15' });
+                    add('path', { d: 'M8.5 17.5l-1 3M12.5 17.5l-1 3M16.5 17.5l-1 3' });
                 } else if (kind === 'snow') {
-                    add('path', { d: 'M16 14H8a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 16 14z' });
-                    add('circle', { cx: '8.5', cy: '18.5', r: '1', fill: 'currentColor' });
-                    add('circle', { cx: '12', cy: '19.5', r: '1', fill: 'currentColor' });
-                    add('circle', { cx: '15.5', cy: '18.5', r: '1', fill: 'currentColor' });
+                    add('path', { d: 'M16.5 14H8a3.8 3.8 0 0 1-.45-7.57 4.9 4.9 0 0 1 9.3 1.87A2.9 2.9 0 0 1 16.5 14z', fill: 'currentColor', 'fill-opacity': '0.15' });
+                    add('circle', { cx: '8.5', cy: '18.2', r: '1.1', fill: 'currentColor' });
+                    add('circle', { cx: '12.2', cy: '19.8', r: '1.1', fill: 'currentColor' });
+                    add('circle', { cx: '16', cy: '18.2', r: '1.1', fill: 'currentColor' });
                 } else if (kind === 'storm') {
-                    add('path', { d: 'M16 14H8a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 16 14z' });
+                    add('path', { d: 'M16.5 14H8a3.8 3.8 0 0 1-.45-7.57 4.9 4.9 0 0 1 9.3 1.87A2.9 2.9 0 0 1 16.5 14z', fill: 'currentColor', 'fill-opacity': '0.15' });
                     add('path', { d: 'M13 14l-2 4h3l-2 4' });
                 } else {
-                    add('path', { d: 'M17.5 19H9a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 17.5 19z' });
+                    add('path', { d: 'M17.5 18.5H8.5a4 4 0 0 1-.5-7.97 5 5 0 0 1 9.5 1.97A3 3 0 0 1 17.5 18.5z', fill: 'currentColor', 'fill-opacity': '0.16' });
                 }
+                return svg;
+            }
+
+            function createDropletSvg() {
+                var ns = 'http://www.w3.org/2000/svg';
+                var svg = document.createElementNS(ns, 'svg');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('fill', 'currentColor');
+                svg.setAttribute('fill-opacity', '0.25');
+                svg.setAttribute('stroke', 'currentColor');
+                svg.setAttribute('stroke-width', '2');
+                svg.setAttribute('aria-hidden', 'true');
+                var p = document.createElementNS(ns, 'path');
+                p.setAttribute('d', 'M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z');
+                svg.appendChild(p);
                 return svg;
             }
 
@@ -581,10 +597,17 @@
 
                     var metaDiv = document.createElement('div');
                     metaDiv.className = 'tv-weather-now-meta';
-                    var line1 = [info.label];
+
+                    var l1 = document.createElement('div');
+                    var condStrong = document.createElement('span');
+                    condStrong.className = 'tv-weather-now-cond';
+                    condStrong.textContent = info.label;
+                    l1.appendChild(condStrong);
                     if (typeof cur.apparent_temperature === 'number') {
-                        line1.push('відч. ' + formatDeg(cur.apparent_temperature));
+                        l1.appendChild(document.createTextNode(' · відч. ' + formatDeg(cur.apparent_temperature)));
                     }
+                    metaDiv.appendChild(l1);
+
                     var line2 = [];
                     if (typeof cur.wind_speed_10m === 'number') {
                         line2.push('вітер ' + Math.round(cur.wind_speed_10m) + ' км/год');
@@ -592,9 +615,6 @@
                     if (typeof cur.relative_humidity_2m === 'number') {
                         line2.push('волог. ' + Math.round(cur.relative_humidity_2m) + '%');
                     }
-                    var l1 = document.createElement('div');
-                    l1.textContent = line1.join(' · ');
-                    metaDiv.appendChild(l1);
                     if (line2.length) {
                         var l2 = document.createElement('div');
                         l2.textContent = line2.join(' · ');
@@ -635,15 +655,20 @@
                         dateLabel = String(d).padStart(2, '0') + '.' + String(m).padStart(2, '0');
                     }
 
+                    var dateBox = document.createElement('div');
+                    dateBox.className = 'tv-w-datebox';
+
                     var dayEl = document.createElement('span');
                     dayEl.className = 'tv-w-day';
                     dayEl.textContent = dayName;
-                    tile.appendChild(dayEl);
+                    dateBox.appendChild(dayEl);
 
                     var dateEl = document.createElement('span');
                     dateEl.className = 'tv-w-date';
                     dateEl.textContent = dateLabel;
-                    tile.appendChild(dateEl);
+                    dateBox.appendChild(dateEl);
+
+                    tile.appendChild(dateBox);
 
                     var wCode = daily.weather_code ? daily.weather_code[idx] : 3;
                     var wInfo = wmoToInfo(wCode);
@@ -651,22 +676,45 @@
                     svgIcon.setAttribute('title', wInfo.label);
                     tile.appendChild(svgIcon);
 
-                    var tempsEl = document.createElement('span');
+                    var popPct = daily.precipitation_probability_max ? daily.precipitation_probability_max[idx] : null;
+                    var hasPop = typeof popPct === 'number' && popPct > 0;
+
+                    // Mobile-only condition description + precip row
+                    var infoCol = document.createElement('div');
+                    infoCol.className = 'tv-w-info';
+                    var descEl = document.createElement('span');
+                    descEl.className = 'tv-w-desc';
+                    descEl.textContent = wInfo.label;
+                    infoCol.appendChild(descEl);
+                    if (hasPop) {
+                        var popMobEl = document.createElement('span');
+                        popMobEl.className = 'tv-w-pop-mobile';
+                        popMobEl.appendChild(createDropletSvg());
+                        popMobEl.appendChild(document.createTextNode('Опади ' + popPct + '%'));
+                        infoCol.appendChild(popMobEl);
+                    }
+                    tile.appendChild(infoCol);
+
+                    var tempsEl = document.createElement('div');
                     tempsEl.className = 'tv-w-temps';
                     var maxVal = daily.temperature_2m_max ? daily.temperature_2m_max[idx] : null;
                     var minVal = daily.temperature_2m_min ? daily.temperature_2m_min[idx] : null;
-                    var maxText = document.createTextNode(formatDeg(maxVal) + ' ');
+                    var maxSpan = document.createElement('span');
+                    maxSpan.className = 'tv-w-max';
+                    maxSpan.textContent = formatDeg(maxVal);
                     var minSpan = document.createElement('span');
                     minSpan.className = 'tv-w-min';
                     minSpan.textContent = formatDeg(minVal);
-                    tempsEl.appendChild(maxText);
+                    tempsEl.appendChild(maxSpan);
                     tempsEl.appendChild(minSpan);
                     tile.appendChild(tempsEl);
 
-                    var popPct = daily.precipitation_probability_max ? daily.precipitation_probability_max[idx] : null;
                     var popEl = document.createElement('span');
                     popEl.className = 'tv-w-pop';
-                    popEl.textContent = (typeof popPct === 'number' && popPct > 0) ? ('💧 ' + popPct + '%') : '';
+                    if (hasPop) {
+                        popEl.appendChild(createDropletSvg());
+                        popEl.appendChild(document.createTextNode(popPct + '%'));
+                    }
                     tile.appendChild(popEl);
 
                     weekGrid.appendChild(tile);
